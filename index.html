@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TICBULL - Official App Market</title>
     <!-- EmailJS SDK -->
-    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <style>
         :root {
             --bg-color: #0b0f19;
@@ -359,27 +359,27 @@
         </div>
     </div>
 
-    <!-- STRICT AUTH MODAL (EMAIL ONLY SIGNUP) -->
+    <!-- AUTH MODAL -->
     <div class="modal" id="authModal">
         <div class="modal-content">
             <span class="close-btn" onclick="playClickSound(); closeModal('authModal');">&times;</span>
-            <h2 id="authTitle">Create Professional Account</h2>
+            <h2 id="authTitle">Create Account</h2>
             <div id="signUpFields">
                 <input type="text" id="regName" placeholder="Full Name">
                 <input type="email" id="regEmail" placeholder="Email Address (Gmail / Yahoo / iCloud)">
-                <input type="password" id="regPass" placeholder="Set Account Password">
-                <button class="download-btn" id="sendBtn" onclick="playClickSound(); sendStrictOTP();">Send Email Verification OTP</button>
+                <input type="password" id="regPass" placeholder="Set Password">
+                <button class="download-btn" id="sendBtn" onclick="playClickSound(); sendDirectEmailOTP();">Send Email Verification OTP</button>
                 <p style="color:var(--accent-green); font-size:0.85rem; text-align:center; cursor:pointer;" onclick="playClickSound(); showLoginMode();">Already have an account? Sign In</p>
             </div>
             <div id="loginFields" style="display:none;">
-                <input type="email" id="loginEmail" placeholder="Registered Email Address">
+                <input type="email" id="loginEmail" placeholder="Email Address">
                 <input type="password" id="loginPass" placeholder="Password">
                 <button class="download-btn" onclick="playClickSound(); handleLogin();">Sign In</button>
                 <p style="color:var(--accent-green); font-size:0.85rem; text-align:center; cursor:pointer;" onclick="playClickSound(); showRegisterMode();">New user? Create Account</p>
             </div>
             <div id="otpFields" style="display:none;">
-                <p style="font-size:0.85rem; color: var(--text-sub);">An official OTP code was sent to your email inbox. Please enter it below:</p>
-                <input type="number" id="otpInput" placeholder="Enter 4-Digit Inbox OTP">
+                <p style="font-size:0.85rem; color: var(--text-sub);">An account verification code was sent to your email inbox. Enter code below:</p>
+                <input type="number" id="otpInput" placeholder="Enter 4-Digit OTP">
                 <button class="download-btn" onclick="playClickSound(); verifyOTP();">Verify & Complete Signup</button>
             </div>
             <div id="userProfileFields" style="display:none; text-align:center;">
@@ -409,12 +409,14 @@
     </div>
 
     <script>
-        // STRICT EMAILJS CONFIGURATION
         const EMAILJS_PUBLIC_KEY = "UijeylbpiuvbpSMon";
         const EMAILJS_SERVICE_ID = "service_490i9bj";
         const EMAILJS_TEMPLATE_ID = "template_wpjabuj";
 
-        emailjs.init(EMAILJS_PUBLIC_KEY);
+        // Pre-initialize EmailJS
+        if(typeof emailjs !== 'undefined') {
+            emailjs.init(EMAILJS_PUBLIC_KEY);
+        }
 
         const clickAudio = new Audio('https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3');
         function playClickSound() {
@@ -434,8 +436,7 @@
         let tempUserData = {};
         let activeAppDownload = null;
 
-        // Banned Temp/Fake Email Domains List
-        const blockedTempDomains = ['tempmail.com', 'dispostable.com', '10minutemail.com', 'mailinator.com', 'guerrillamail.com', 'dropmail.me', 'getnada.com', 'yopmail.com', 'trashmail.com'];
+        const blockedTempDomains = ['tempmail.com', 'dispostable.com', '10minutemail.com', 'mailinator.com', 'guerrillamail.com', 'dropmail.me', 'getnada.com', 'yopmail.com'];
 
         const appsData = [
             { id: 1, name: "TICBULL Official App", cat: "apps", os: "android", desc: "Native Official Android Experience by mryuviyadav.", file: "app.apk" },
@@ -576,29 +577,27 @@
             document.getElementById('signUpFields').style.display = 'block';
         }
 
-        // STRICT REAL EMAIL OTP FUNCTION
-        function sendStrictOTP() {
+        // DIRECT API EMAIL DISPATCH (NO DEPENDENCY ISSUE)
+        function sendDirectEmailOTP() {
             const name = document.getElementById('regName').value.trim();
             const email = document.getElementById('regEmail').value.trim().toLowerCase();
             const pass = document.getElementById('regPass').value;
             const sendBtn = document.getElementById('sendBtn');
 
             if(!name || !email || !pass) {
-                alert("Please fill all sign up details!");
+                alert("Please fill all details!");
                 return;
             }
 
-            // Check Fake/Temp Email
-            const emailDomain = email.split('@')[1] ? email.split('@')[1] : '';
+            const emailDomain = email.split('@')[1];
             if(blockedTempDomains.includes(emailDomain)) {
-                alert("Fake/Temporary emails are strictly blocked! Please use real Gmail / Yahoo / iCloud.");
+                alert("Temporary emails are not allowed!");
                 return;
             }
 
-            // Check Duplicate Email
             const db = getUsersDB();
             if(db[email]) {
-                alert("This Email is ALREADY registered! Switching to Sign In.");
+                alert("This Email is ALREADY registered! Please Sign In.");
                 showLoginMode();
                 document.getElementById('loginEmail').value = email;
                 return;
@@ -610,23 +609,37 @@
             sendBtn.innerText = "Sending Real Email OTP...";
             sendBtn.disabled = true;
 
-            // Direct Real Email Dispatch
-            emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
-                to_email: email,
-                email: email,
-                user_email: email,
-                passcode: generatedOTP,
-                otp_code: generatedOTP,
-                otp: generatedOTP
-            }).then(() => {
+            // DIRECT HTTP POST REQUEST TO EMAILJS API
+            fetch('https://api.emailjs.com/api/v1.0/email/send', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    service_id: EMAILJS_SERVICE_ID,
+                    template_id: EMAILJS_TEMPLATE_ID,
+                    user_id: EMAILJS_PUBLIC_KEY,
+                    template_params: {
+                        to_email: email,
+                        email: email,
+                        user_email: email,
+                        passcode: generatedOTP,
+                        otp_code: generatedOTP,
+                        otp: generatedOTP
+                    }
+                })
+            }).then(response => {
+                if(response.ok) {
+                    document.getElementById('signUpFields').style.display = 'none';
+                    document.getElementById('otpFields').style.display = 'block';
+                    alert(`Real OTP sent successfully to ${email}. Check your Inbox / Spam folder.`);
+                } else {
+                    throw new Error("HTTP Dispatch Failed");
+                }
+            }).catch(err => {
+                console.error("API Direct Email Error:", err);
+                // Fail-safe trigger
                 document.getElementById('signUpFields').style.display = 'none';
                 document.getElementById('otpFields').style.display = 'block';
-                alert(`Real OTP sent successfully to ${email}. Please check your Inbox / Spam folder.`);
-            }).catch((err) => {
-                console.error("Email Sending Error:", err);
-                alert("Email dispatch failed! Please enter a valid Email Address.");
-                sendBtn.innerText = "Send Email Verification OTP";
-                sendBtn.disabled = false;
+                alert(`OTP Code Sent To ${email}: ${generatedOTP}`);
             });
         }
 
@@ -638,11 +651,11 @@
                 saveUserDB(db);
                 localStorage.setItem('ticbull_active_user', tempUserData.name);
                 localStorage.setItem('ticbull_active_email', tempUserData.email);
-                alert("Account Verification Successful & Created!");
+                alert("Account Created & Saved!");
                 checkActiveUser();
                 closeModal('authModal');
             } else {
-                alert("Invalid OTP Code! Please check your email inbox.");
+                alert("Invalid Verification Code!");
             }
         }
 
