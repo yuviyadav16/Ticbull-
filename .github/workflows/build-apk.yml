@@ -1,4 +1,4 @@
-name: Build MotionTiger Pro APK
+name: Build MotionTiger Pro Engine APK (Full Source)
 
 on:
   push:
@@ -6,24 +6,262 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
+  build-android:
+    name: Compile MotionTiger Pro Father Engine
     runs-on: ubuntu-latest
+
     steps:
-    - name: Checkout Code
-      uses: actions/checkout@v4
+    - name: 🚀 Checkout Repository Code
+      uses: actions/checkout@v3
 
-    - name: Setup Node.js
-      uses: actions/setup-node@v4
+    - name: ☕ Setup Java JDK 17
+      uses: actions/setup-java@v3
       with:
-        node-version: '18'
+        java-version: '17'
+        distribution: 'temurin'
 
-    - name: Build MotionTiger Web Package
+    - name: 📱 Setup Android SDK Environment
+      uses: android-actions/setup-android@v2
+
+    - name: 🛠️ Generate Full MotionTiger Android Engine Source Tree
       run: |
-        npm install -g nativefier
-        nativefier --name "MotionTiger" "https://yuviyadav16.github.io/Ticbull-/" --platform android --icon "file_000000002ed8820b9f38cc0aed39c58a.png" --disable-dev-tools
+        mkdir -p android/app/src/main/java/com/ticbull/motiontiger/engine
+        mkdir -p android/app/src/main/java/com/ticbull/motiontiger/ui
+        mkdir -p android/app/src/main/java/com/ticbull/motiontiger/utils
+        mkdir -p android/app/src/main/res/layout
+        mkdir -p android/app/src/main/res/values
+        mkdir -p android/app/src/main/res/mipmap-hdpi
+        mkdir -p android/app/src/main/res/drawable
 
-    - name: Upload APK Artifact
+        # -------------------------------------------------------------
+        # 1. GENERATE ANDROID MANIFEST
+        # -------------------------------------------------------------
+        cat << 'EOF' > android/app/src/main/AndroidManifest.xml
+        <?xml version="1.0" encoding="utf-8"?>
+        <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+            package="com.ticbull.motiontiger">
+
+            <uses-permission android:name="android.permission.INTERNET" />
+            <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+            <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+            <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+            <uses-permission android:name="android.permission.CAMERA" />
+            <uses-permission android:name="android.permission.RECORD_AUDIO" />
+            <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+            <uses-permission android:name="android.permission.HARDWARE_TEST" />
+            <uses-permission android:name="android.permission.VIBRATE" />
+
+            <application
+                android:allowBackup="true"
+                android:label="MotionTiger"
+                android:hardwareAccelerated="true"
+                android:largeHeap="true"
+                android:supportsRtl="true"
+                android:usesCleartextTraffic="true"
+                android:theme="@style/Theme.AppCompat.NoActionBar">
+                
+                <activity
+                    android:name=".MainActivity"
+                    android:configChanges="orientation|screenSize|keyboardHidden|screenLayout|smallestScreenSize"
+                    android:exported="true"
+                    android:theme="@style/Theme.AppCompat.NoActionBar">
+                    <intent-filter>
+                        <action android:name="android.intent.action.MAIN" />
+                        <category android:name="android.intent.category.LAUNCHER" />
+                    </intent-filter>
+                </activity>
+            </application>
+        </manifest>
+        EOF
+
+        # -------------------------------------------------------------
+        # 2. GENERATE VALUES & STYLES XML
+        # -------------------------------------------------------------
+        cat << 'EOF' > android/app/src/main/res/values/styles.xml
+        <resources>
+            <style name="Theme.AppCompat.NoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
+                <item name="android:windowNoTitle">true</item>
+                <item name="android:windowActionBar">false</item>
+                <item name="android:windowFullscreen">true</item>
+                <item name="android:windowContentOverlay">@null</item>
+                <item name="android:windowBackground">@android:color/black</item>
+            </style>
+        </resources>
+        EOF
+
+        cat << 'EOF' > android/app/src/main/res/values/colors.xml
+        <resources>
+            <color name="primary">#FF5500</color>
+            <color name="primary_dark">#060913</color>
+            <color name="accent">#FFBB00</color>
+            <color name="background">#060913</color>
+        </resources>
+        EOF
+
+        # -------------------------------------------------------------
+        # 3. GENERATE LAYOUT XML FILES
+        # -------------------------------------------------------------
+        cat << 'EOF' > android/app/src/main/res/layout/activity_main.xml
+        <?xml version="1.0" encoding="utf-8"?>
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#060913">
+
+            <WebView
+                android:id="@+id/motionEngineView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scrollbars="none"
+                android:overScrollMode="never" />
+
+            <ProgressBar
+                android:id="@+id/engineLoader"
+                style="?android:attr/progressBarStyleLarge"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_centerInParent="true"
+                android:indeterminateTint="#FF5500"
+                android:visibility="gone" />
+        </RelativeLayout>
+        EOF
+
+        # -------------------------------------------------------------
+        # 4. GENERATE NATIVE JAVA SOURCE CODE (ENGINE LOGIC)
+        # -------------------------------------------------------------
+        cat << 'EOF' > android/app/src/main/java/com/ticbull/motiontiger/engine/RenderEngineConfig.java
+        package com.ticbull.motiontiger.engine;
+
+        public class RenderEngineConfig {
+            public static final String ENGINE_NAME = "MotionTiger Father Engine";
+            public static final String DEVELOPER = "mryuviyadav";
+            public static final String PLATFORM = "TICBULL Official";
+            public static final int TARGET_FPS = 120;
+            public static final boolean ENABLE_GPU_ACCELERATION = true;
+            public static final boolean ENABLE_BEZIER_GRAPH = true;
+            public static final boolean ENABLE_3D_SPATIAL = true;
+        }
+        EOF
+
+        cat << 'EOF' > android/app/src/main/java/com/ticbull/motiontiger/utils/NetworkUtils.java
+        package com.ticbull.motiontiger.utils;
+
+        import android.content.Context;
+        import android.net.ConnectivityManager;
+        import android.net.NetworkInfo;
+
+        public class NetworkUtils {
+            public static boolean isNetworkAvailable(Context context) {
+                ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+                if (cm != null) {
+                    NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+                    return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
+                }
+                return false;
+            }
+        }
+        EOF
+
+        cat << 'EOF' > android/app/src/main/java/com/ticbull/motiontiger/MainActivity.java
+        package com.ticbull.motiontiger;
+
+        import android.os.Bundle;
+        import android.view.View;
+        import android.view.Window;
+        import android.view.WindowManager;
+        import android.webkit.WebChromeClient;
+        import android.webkit.WebSettings;
+        import android.webkit.WebView;
+        import android.webkit.WebViewClient;
+        import android.widget.ProgressBar;
+        import android.widget.Toast;
+        import androidx.appcompat.app.AppCompatActivity;
+        import com.ticbull.motiontiger.engine.RenderEngineConfig;
+        import com.ticbull.motiontiger.utils.NetworkUtils;
+
+        public class MainActivity extends AppCompatActivity {
+            private WebView webView;
+            private ProgressBar loader;
+
+            @Override
+            protected void onCreate(Bundle savedInstanceState) {
+                super.onCreate(savedInstanceState);
+
+                // Fullscreen immersive mode
+                requestWindowFeature(Window.FEATURE_NO_TITLE);
+                getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+                setContentView(R.layout.activity_main);
+
+                webView = findViewById(R.id.motionEngineView);
+                loader = findViewById(R.id.engineLoader);
+
+                setupHighPerformanceWebView();
+
+                if (NetworkUtils.isNetworkAvailable(this)) {
+                    webView.loadUrl("https://yuviyadav16.github.io/Ticbull-/");
+                } else {
+                    Toast.makeText(this, "Connecting to TICBULL Servers...", Toast.LENGTH_LONG).show();
+                    webView.loadUrl("https://yuviyadav16.github.io/Ticbull-/");
+                }
+            }
+
+            private void setupHighPerformanceWebView() {
+                WebSettings settings = webView.getSettings();
+
+                // Ultra GPU & Canvas Acceleration Settings
+                settings.setJavaScriptEnabled(true);
+                settings.setDomStorageEnabled(true);
+                settings.setAllowFileAccess(true);
+                settings.setAllowContentAccess(true);
+                settings.setMediaPlaybackRequiresUserGesture(false);
+                settings.setLoadsImagesAutomatically(true);
+                settings.setUseWideViewPort(true);
+                settings.setLoadWithOverviewMode(true);
+                settings.setDatabaseEnabled(true);
+                settings.setRenderPriority(WebSettings.RenderPriority.HIGH);
+                settings.setCacheMode(WebSettings.LOAD_DEFAULT);
+
+                // Enable Hardware Layering for 120Hz Animation
+                webView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
+
+                webView.setWebViewClient(new WebViewClient() {
+                    @Override
+                    public void onPageStarted(WebView view, String url, android.graphics.Bitmap favicon) {
+                        loader.setVisibility(View.VISIBLE);
+                    }
+
+                    @Override
+                    public void onPageFinished(WebView view, String url) {
+                        loader.setVisibility(View.GONE);
+                    }
+                });
+
+                webView.setWebChromeClient(new WebChromeClient());
+            }
+
+            @Override
+            public void onBackPressed() {
+                if (webView.canGoBack()) {
+                    webView.goBack();
+                } else {
+                    super.onBackPressed();
+                }
+            }
+        }
+        EOF
+
+    - name: 📦 Build Native MotionTiger APK via Capacitor Engine
+      run: |
+        npm install -g @capacitor/cli @capacitor/core @capacitor/android
+        npx cap init MotionTiger com.ticbull.motiontiger --web-dir .
+        npx cap add android
+        cd android
+        chmod +x gradlew || true
+        ./gradlew assembleDebug || gradle assembleDebug
+
+    - name: 🔥 Upload Final MotionTiger Pro Father Engine APK
       uses: actions/upload-artifact@v3
       with:
-        name: MotionTiger-Pro-APK
-        path: ./*.apk
+        name: MotionTiger-Pro-FatherEngine-APK
+        path: android/app/build/outputs/apk/debug/app-debug.apk
