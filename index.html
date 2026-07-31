@@ -38,7 +38,7 @@
             min-height: 100vh;
         }
 
-        /* PERFECT SPLASH SCREEN & ALIGNED PRIME RING */
+        /* 15-SECOND SPLASH SCREEN WITH ASLI GITHUB LOGO */
         #splashScreen {
             position: fixed;
             top: 0; left: 0; width: 100vw; height: 100vh;
@@ -53,49 +53,28 @@
         }
 
         .prime-logo-container {
-            position: relative;
-            width: 130px; height: 130px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 25px;
+            position: relative; width: 130px; height: 130px;
+            display: flex; align-items: center; justify-content: center; margin-bottom: 25px;
         }
 
-        /* Perfectly Centered Spinning Ring */
         .prime-ring {
-            position: absolute;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            border-radius: 50%;
-            border: 3px solid transparent;
-            border-top: 3px solid var(--accent-green);
-            border-bottom: 3px solid var(--accent-green);
-            animation: spinPrime 2.5s linear infinite;
-            box-sizing: border-box;
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            border-radius: 50%; border: 3px solid transparent;
+            border-top: 3px solid var(--accent-green); border-bottom: 3px solid var(--accent-green);
+            animation: spinPrime 2.5s linear infinite; box-sizing: border-box;
             filter: drop-shadow(0 0 10px var(--accent-green));
         }
 
-        @keyframes spinPrime {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
+        @keyframes spinPrime { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
         .splash-bull-img {
-            width: 90px; height: 90px;
-            border-radius: 20px;
-            object-fit: cover;
-            box-shadow: 0 0 20px rgba(0, 230, 118, 0.4);
-            border: 1px solid var(--accent-green);
-            z-index: 2;
+            width: 90px; height: 90px; border-radius: 20px;
+            object-fit: cover; box-shadow: 0 0 20px rgba(0, 230, 118, 0.4);
+            border: 1px solid var(--accent-green); z-index: 2;
         }
 
-        /* Animated Glowing Text */
         .splash-title {
-            font-size: 2.2rem;
-            font-weight: 900;
-            letter-spacing: 2px;
-            color: #fff;
-            margin: 0;
+            font-size: 2.2rem; font-weight: 900; letter-spacing: 2px; color: #fff; margin: 0;
             animation: textGlow 2s ease-in-out infinite alternate;
         }
 
@@ -104,24 +83,8 @@
             100% { text-shadow: 0 0 20px var(--accent-green); }
         }
 
-        .splash-dev-sub {
-            font-size: 0.95rem;
-            color: #a1a1a1;
-            margin-top: 8px;
-            font-weight: 500;
-            animation: fadeInText 1.5s ease;
-        }
-
-        .splash-dev-name {
-            color: var(--accent-green);
-            font-weight: 700;
-            animation: pulseDev 1.5s ease-in-out infinite alternate;
-        }
-
-        @keyframes pulseDev {
-            0% { transform: scale(1); opacity: 0.8; }
-            100% { transform: scale(1.05); opacity: 1; }
-        }
+        .splash-dev-sub { font-size: 0.95rem; color: #a1a1a1; margin-top: 8px; font-weight: 500; }
+        .splash-dev-name { color: var(--accent-green); font-weight: 700; }
 
         .splash-loader-bar {
             margin-top: 30px; width: 200px; height: 4px;
@@ -160,8 +123,7 @@
         .brand-header { display: flex; align-items: center; gap: 15px; }
 
         .brand-logo-img {
-            width: 60px; height: 60px; border-radius: 14px;
-            object-fit: cover;
+            width: 60px; height: 60px; border-radius: 14px; object-fit: cover;
             border: 1px solid var(--border-color); box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
         }
 
@@ -274,7 +236,7 @@
 </head>
 <body>
 
-    <!-- 15-SECOND SPLASH SCREEN WITH FIXED CIRCULAR RING AND ANIMATED TEXT -->
+    <!-- 15-SECOND SPLASH SCREEN -->
     <div id="splashScreen">
         <div class="prime-logo-container">
             <div class="prime-ring"></div>
@@ -453,8 +415,9 @@
     </div>
 
     <script>
+        // CORRECTED EMAILJS CREDENTIALS
         const EMAILJS_PUBLIC_KEY = "UijeylbpiuvbpSMon";
-        const EMAILJS_SERVICE_ID = "service_490l9bj";
+        const EMAILJS_SERVICE_ID = "service_490i9bj"; // Fixed letter 'i'
         const EMAILJS_TEMPLATE_ID = "template_wpjabuj";
 
         emailjs.init(EMAILJS_PUBLIC_KEY);
@@ -646,7 +609,7 @@
                 alert(`OTP sent successfully to ${email}`);
             }).catch((err) => {
                 console.error("EmailJS Error:", err);
-                alert("Failed to send OTP!");
+                alert("Failed to send OTP! Check EmailJS dashboard.");
                 sendBtn.innerText = "Send Email Verification OTP";
                 sendBtn.disabled = false;
             });
