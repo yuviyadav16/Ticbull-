@@ -3,454 +3,630 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TICBULL - Next-Gen App & Game Store</title>
+    <title>TICBULL - Official Android & iOS App Market</title>
+    <!-- EmailJS SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
-        body { background-color: #0b0f17; color: #f0f6fc; padding: 20px 15px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; overflow-x: hidden; }
-        .container { width: 100%; max-width: 480px; position: relative; }
-
-        /* --- 15-SECOND SPLASH SCREEN --- */
-        #splash-screen {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100vw; height: 100vh;
-            background: radial-gradient(circle, #161b22 0%, #0b0f17 100%);
-            display: flex; flex-direction: column;
-            justify-content: center; align-items: center;
-            z-index: 99999;
-            transition: opacity 1s ease, visibility 1s ease;
+        :root {
+            --bg-color: #0b0f19;
+            --card-bg: #151c2c;
+            --accent-green: #00e676;
+            --accent-red: #ff0055;
+            --text-main: #ffffff;
+            --text-sub: #94a3b8;
+            --input-bg: rgba(0,0,0,0.3);
+            --border-color: rgba(255,255,255,0.1);
         }
 
-        .splash-logo-wrapper { position: relative; width: 120px; height: 120px; margin-bottom: 25px; display: flex; align-items: center; justify-content: center; }
-        .splash-ring { position: absolute; width: 100%; height: 100%; border-radius: 35px; border: 3px solid transparent; border-top-color: #00e699; border-bottom-color: #00e699; animation: spinRing 2s linear infinite; }
-        @keyframes spinRing { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        body.light-mode {
+            --bg-color: #f4f6f9;
+            --card-bg: #ffffff;
+            --text-main: #0f172a;
+            --text-sub: #64748b;
+            --input-bg: #e2e8f0;
+            --border-color: #cbd5e1;
+        }
 
-        .splash-logo { width: 90px; height: 90px; border-radius: 22px; overflow: hidden; border: 2px solid #30363d; box-shadow: 0 0 25px rgba(0, 230, 153, 0.4); animation: pulseLogo 2.5s infinite ease-in-out; }
-        .splash-logo img { width: 100%; height: 100%; object-fit: cover; }
-        @keyframes pulseLogo { 0% { transform: scale(0.92); } 50% { transform: scale(1.08); } 100% { transform: scale(0.92); } }
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Roboto, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            transition: 0.3s background-color, 0.3s color;
+        }
 
-        .brand-title-splash { font-size: 1.8rem; font-weight: 900; letter-spacing: 3px; color: #ffffff; margin-bottom: 8px; opacity: 0; animation: fadeInText 1s ease forwards 0.5s; }
-        @keyframes fadeInText { to { opacity: 1; } }
+        /* Top Announcement Ticker */
+        .ticker-wrap {
+            width: 100%;
+            background: rgba(0, 230, 118, 0.1);
+            border-bottom: 1px solid rgba(0, 230, 118, 0.2);
+            color: var(--accent-green);
+            font-size: 0.8rem;
+            padding: 6px 0;
+            text-align: center;
+            font-weight: 600;
+        }
 
-        .animated-text { color: #8b949e; font-size: 0.88rem; font-weight: 600; text-align: center; max-width: 85%; line-height: 1.5; min-height: 40px; margin-bottom: 20px; }
-        .animated-text span { color: #00e699; font-weight: 800; }
+        header {
+            width: 100%;
+            max-width: 500px;
+            padding: 12px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-sizing: border-box;
+        }
 
-        .loader-bar { width: 180px; height: 4px; background: #161b22; border-radius: 10px; overflow: hidden; border: 1px solid #30363d; }
-        .loader-progress { width: 0%; height: 100%; background: linear-gradient(90deg, #00e699, #00b377); border-radius: 10px; animation: load15Sec 15s linear forwards; }
-        @keyframes load15Sec { 0% { width: 0%; } 100% { width: 100%; } }
+        .header-actions { display: flex; align-items: center; gap: 10px; }
 
-        /* --- UI COMPONENTS --- */
-        .top-navbar { display: flex; justify-content: space-between; align-items: center; width: 100%; padding: 10px 0; margin-bottom: 10px; }
-        .user-badge { display: flex; align-items: center; gap: 8px; background: #161b22; border: 1px solid #30363d; padding: 6px 14px; border-radius: 20px; font-size: 0.82rem; font-weight: 600; cursor: pointer; color: #00e699; }
-        .three-dots-btn { background: #161b22; border: 1px solid #30363d; color: #fff; font-size: 1.3rem; width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+        .user-badge {
+            background: rgba(0, 230, 118, 0.1);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            color: var(--accent-green);
+            border: 1px solid rgba(0, 230, 118, 0.3);
+            cursor: pointer;
+            font-weight: 600;
+        }
 
-        .header { text-align: center; padding: 10px 0 20px; }
-        .logo-box { width: 90px; height: 90px; margin: 0 auto 10px; border-radius: 20px; overflow: hidden; background: #161b22; border: 1px solid #30363d; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 24px rgba(0,0,0,0.6); }
-        .logo-box img { width: 100%; height: 100%; object-fit: cover; }
-        h1 { font-size: 2rem; font-weight: 800; letter-spacing: 2px; color: #ffffff; }
-        p.tagline { color: #8b949e; font-size: 0.85rem; font-weight: 500; margin-top: 4px; }
+        .theme-btn, .menu-btn {
+            background: none; border: none; color: var(--text-main); font-size: 1.3rem; cursor: pointer;
+        }
 
-        .search-box { position: relative; margin-bottom: 18px; }
-        .search-box input { width: 100%; padding: 13px 20px; background-color: #161b22; border: 1px solid #30363d; border-radius: 25px; color: #fff; font-size: 0.9rem; outline: none; }
+        .hero { text-align: center; margin: 10px 0; }
 
-        .category-title { font-size: 0.82rem; text-transform: uppercase; letter-spacing: 1px; color: #8b949e; margin-bottom: 10px; font-weight: 700; }
-        .categories { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 10px; margin-bottom: 20px; scrollbar-width: none; }
-        .cat-btn { background: #161b22; color: #c9d1d9; padding: 8px 16px; border-radius: 20px; border: 1px solid #30363d; white-space: nowrap; font-size: 0.82rem; font-weight: 600; cursor: pointer; }
-        .cat-btn.active { background: #00e699; color: #000; border-color: #00e699; font-weight: 700; }
+        .logo {
+            width: 75px; height: 75px;
+            background: #000;
+            border-radius: 20px;
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 8px auto;
+            box-shadow: 0 0 25px rgba(0, 230, 118, 0.2);
+            border: 1px solid var(--border-color);
+        }
 
-        .app-card { background: #161b22; border: 1px solid #30363d; border-radius: 20px; padding: 18px; margin-bottom: 15px; }
-        .app-header { display: flex; align-items: center; gap: 14px; margin-bottom: 12px; }
-        .app-icon { width: 55px; height: 55px; border-radius: 14px; object-fit: cover; border: 1px solid #30363d; }
-        .app-details h3 { font-size: 1.05rem; font-weight: 700; color: #ffffff; margin-bottom: 3px; }
-        .app-details p { font-size: 0.8rem; color: #8b949e; }
+        .title { font-size: 1.7rem; font-weight: 800; letter-spacing: 1px; margin: 0; }
+        .subtitle { font-size: 0.8rem; color: var(--text-sub); margin-top: 3px; }
+
+        .search-box { width: 90%; max-width: 400px; margin: 10px 0; position: relative; }
+        .search-input {
+            width: 100%; padding: 12px 16px 12px 40px;
+            background: var(--card-bg); border: 1px solid var(--border-color);
+            border-radius: 14px; color: var(--text-main); box-sizing: border-box; font-size: 0.9rem;
+        }
+        .search-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--text-sub); }
+
+        .os-selector { display: flex; gap: 12px; margin: 8px 0; width: 90%; max-width: 400px; }
+        .os-btn {
+            flex: 1; padding: 10px; border-radius: 12px; border: 1px solid var(--border-color);
+            background: var(--card-bg); color: var(--text-main); font-weight: 600; cursor: pointer;
+            display: flex; align-items: center; justify-content: center; gap: 8px; transition: 0.3s;
+        }
+        .os-btn.active { border-color: var(--accent-green); background: rgba(0, 230, 118, 0.15); color: var(--accent-green); }
+
+        .category-nav { display: flex; gap: 10px; margin-bottom: 15px; overflow-x: auto; width: 90%; max-width: 400px; }
+        .cat-chip {
+            padding: 6px 14px; background: var(--card-bg); border: 1px solid var(--border-color);
+            border-radius: 20px; font-size: 0.8rem; color: var(--text-sub); cursor: pointer; white-space: nowrap;
+        }
+        .cat-chip.active { background: var(--accent-green); color: #000; font-weight: 700; border-color: var(--accent-green); }
+
+        .app-card {
+            width: 90%; max-width: 400px; background: var(--card-bg);
+            border-radius: 16px; padding: 16px; box-sizing: border-box;
+            border: 1px solid var(--border-color); margin-bottom: 15px;
+        }
+        .app-meta { display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem; color: var(--text-sub); margin-top: 8px; }
+
+        .download-btn {
+            width: 100%; padding: 12px; background: var(--accent-green);
+            color: #000; border: none; border-radius: 10px; font-weight: 700;
+            cursor: pointer; margin-top: 12px; transition: 0.2s;
+        }
+
+        /* Modal Popups */
+        .modal {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85); backdrop-filter: blur(6px);
+            display: none; justify-content: center; align-items: center; z-index: 1000;
+        }
+
+        .modal-content {
+            background: var(--card-bg); width: 90%; max-width: 400px;
+            border-radius: 20px; padding: 24px; box-sizing: border-box;
+            border: 1px solid var(--border-color); position: relative; max-height: 90vh; overflow-y: auto; color: var(--text-main);
+        }
+
+        .close-btn { position: absolute; top: 15px; right: 20px; color: var(--text-sub); font-size: 1.5rem; cursor: pointer; }
+
+        input, select {
+            width: 100%; padding: 12px; margin: 8px 0; background: var(--input-bg);
+            border: 1px solid var(--border-color); border-radius: 10px; color: var(--text-main); box-sizing: border-box;
+        }
+
+        /* Red 'Y' Symbol Download Progress Styling */
+        .progress-box {
+            display: flex; flex-direction: column; align-items: center; justify-content: center; margin: 20px 0;
+        }
+
+        .y-symbol-ring {
+            position: relative; width: 110px; height: 110px; display: flex; align-items: center; justify-content: center;
+        }
+
+        .y-symbol-ring svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+        .y-symbol-ring circle {
+            fill: none; stroke-width: 8; stroke-linecap: round;
+        }
+        .y-symbol-ring .bg-circle { stroke: rgba(255, 255, 255, 0.1); }
+        .y-symbol-ring .progress-circle {
+            stroke: var(--accent-red);
+            stroke-dasharray: 283;
+            stroke-dashoffset: 283;
+            transition: stroke-dashoffset 0.1s linear;
+            filter: drop-shadow(0 0 8px var(--accent-red));
+        }
+
+        .y-logo-inner {
+            position: absolute; font-size: 2.2rem; font-weight: 900; color: var(--accent-red);
+            text-shadow: 0 0 12px rgba(255, 0, 85, 0.6);
+        }
+
+        .download-stats { font-size: 0.9rem; color: var(--text-sub); margin-top: 10px; text-align: center; }
+
+        .toggle-auth { color: var(--accent-green); font-size: 0.85rem; text-align: center; margin-top: 12px; cursor: pointer; text-decoration: underline; }
         
-        /* EXACT BUTTON FORMAT MATCHING YOUR IMAGE */
-        .download-actions-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 100%; }
-        .btn-download-action { text-align: center; font-weight: 700; padding: 12px 10px; border-radius: 14px; text-decoration: none; font-size: 0.82rem; display: flex; align-items: center; justify-content: center; gap: 6px; border: none; cursor: pointer; }
-        .btn-apk { background: #00e699; color: #000000; }
-        .btn-ios { background: #21262d; color: #ffffff; border: 1px solid #30363d; }
-
-        .not-found-card, .coming-soon-card { background: #161b22; border: 1px dashed #00e699; border-radius: 20px; padding: 25px; text-align: center; display: none; margin-bottom: 20px; }
-
-        .social-card, .support-card { background: #161b22; border: 1px solid #30363d; border-radius: 20px; padding: 18px; margin-bottom: 20px; }
-        .social-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px; }
-        .social-btn { text-align: center; font-weight: 600; padding: 10px; border-radius: 12px; text-decoration: none; font-size: 0.82rem; display: flex; align-items: center; justify-content: center; gap: 6px; color: #ffffff; background: #21262d; border: 1px solid #30363d; }
-        .btn-yt { border-color: #ff0000; color: #ff4d4d; }
-        .btn-tg { border-color: #0088cc; color: #33b5e5; }
-        .btn-insta { border-color: #e1306c; color: #ff6699; }
-        .btn-x { border-color: #ffffff; color: #ffffff; }
-        .btn-fb { border-color: #1877f2; color: #4267B2; }
-        .btn-support { width: 100%; text-align: center; font-weight: 700; padding: 12px; border-radius: 14px; text-decoration: none; font-size: 0.88rem; display: flex; align-items: center; justify-content: center; gap: 8px; background: #21262d; color: #00e699; border: 1px solid #00e699; margin-top: 10px; }
-
-        /* MODALS */
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.85); display: none; justify-content: center; align-items: center; z-index: 9999; padding: 15px; }
-        .modal-box { background: #161b22; border: 1px solid #30363d; border-radius: 24px; width: 100%; max-width: 400px; padding: 22px; position: relative; color: #fff; max-height: 90vh; overflow-y: auto; }
-        .close-btn { position: absolute; top: 15px; right: 18px; font-size: 1.4rem; color: #8b949e; cursor: pointer; }
-        .modal-title { font-size: 1.2rem; font-weight: 800; color: #ffffff; margin-bottom: 15px; }
-        
-        .form-group { margin-bottom: 12px; }
-        .form-group label { font-size: 0.78rem; color: #8b949e; display: block; margin-bottom: 5px; font-weight: 600; }
-        .form-group input, .form-group select { width: 100%; padding: 10px 12px; background: #0b0f17; border: 1px solid #30363d; border-radius: 12px; color: #fff; outline: none; font-size: 0.88rem; }
-        .setting-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #21262d; font-size: 0.88rem; }
-
-        .chat-box { background: #0b0f17; border: 1px solid #30363d; border-radius: 14px; padding: 12px; height: 150px; overflow-y: auto; margin-bottom: 12px; font-size: 0.82rem; color: #8b949e; }
-        .chat-msg { margin-bottom: 8px; line-height: 1.4; }
-        .chat-msg b { color: #00e699; }
-
-        .footer { text-align: center; margin-top: 25px; padding-top: 15px; border-top: 1px solid #21262d; color: #8b949e; font-size: 0.82rem; }
-        .footer span { color: #00e699; font-weight: 700; }
+        .chat-box {
+            height: 180px; background: var(--input-bg); border-radius: 10px; padding: 10px; overflow-y: auto; margin: 10px 0; display: flex; flex-direction: column; gap: 8px;
+        }
+        .msg { padding: 8px 12px; border-radius: 10px; font-size: 0.85rem; max-width: 80%; }
+        .msg.bot { background: rgba(0, 230, 118, 0.15); color: var(--accent-green); align-self: flex-start; }
+        .msg.user { background: var(--border-color); color: var(--text-main); align-self: flex-end; }
     </style>
 </head>
 <body>
 
-    <!-- 15-SECOND SPLASH SCREEN -->
-    <div id="splash-screen" onclick="playOpeningMusic()">
-        <div class="splash-logo-wrapper">
-            <div class="splash-ring"></div>
-            <div class="splash-logo">
-                <img src="file_0000000051ac82068c717a63b34c9d7b.png" alt="Ticbull Logo">
-            </div>
+    <div class="ticker-wrap">
+        🚀 TICBULL Store v2.5 Updated | Developed by mryuviyadav
+    </div>
+
+    <header>
+        <div class="user-badge" id="userBadge" onclick="openAuthModal()">👤 Sign In</div>
+        <div class="header-actions">
+            <button class="theme-btn" onclick="toggleTheme()">🌙</button>
+            <button class="menu-btn" onclick="openSettings()">⋮</button>
         </div>
-        <div class="brand-title-splash">TICBULL</div>
-        <div class="animated-text" id="typing-text"></div>
-        <div class="loader-bar">
-            <div class="loader-progress"></div>
+    </header>
+
+    <div class="hero">
+        <div class="logo">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#00e676" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+        </div>
+        <h1 class="title">TICBULL</h1>
+        <div class="subtitle">Official Next-Gen App Market</div>
+    </div>
+
+    <!-- Search Bar -->
+    <div class="search-box">
+        <span class="search-icon">🔍</span>
+        <input type="text" class="search-input" id="searchInput" placeholder="Search apps, games, education..." oninput="handleSearch()">
+    </div>
+
+    <!-- OS Selection Filter -->
+    <div class="os-selector">
+        <button class="os-btn active" id="btnAndroid" onclick="selectOS('android')">🤖 Android</button>
+        <button class="os-btn" id="btnIos" onclick="selectOS('ios')">🍎 iOS (iPhone)</button>
+    </div>
+
+    <!-- Category Filter -->
+    <div class="category-nav">
+        <div class="cat-chip active" onclick="filterCat('all')">All</div>
+        <div class="cat-chip" onclick="filterCat('apps')">Apps</div>
+        <div class="cat-chip" onclick="filterCat('games')">Games</div>
+        <div class="cat-chip" onclick="filterCat('education')">Education</div>
+    </div>
+
+    <!-- App Store Container -->
+    <div id="storeContent"></div>
+
+    <!-- App Detail & Red Y Symbol Download Modal -->
+    <div class="modal" id="downloadModal">
+        <div class="modal-content" style="text-align:center;">
+            <span class="close-btn" onclick="closeModal('downloadModal')">&times;</span>
+            <h2 id="modalAppName" style="margin-bottom:2px;">App Name</h2>
+            <p id="modalAppDesc" style="font-size:0.85rem; color:var(--text-sub); margin-top:0;">Description</p>
+            <div style="font-size:0.8rem; color:var(--accent-green); margin-bottom:15px;">🛡️ Verified 100% Malware Free</div>
+
+            <!-- RED 'Y' SYMBOL PROGRESS RING -->
+            <div class="progress-box">
+                <div class="y-symbol-ring">
+                    <svg>
+                        <circle class="bg-circle" cx="55" cy="55" r="45"></circle>
+                        <circle class="progress-circle" id="redProgressRing" cx="55" cy="55" r="45"></circle>
+                    </svg>
+                    <div class="y-logo-inner">Y</div>
+                </div>
+                <div class="download-stats">
+                    <div id="progressPercent" style="font-size:1.4rem; font-weight:800; color:var(--accent-red);">0%</div>
+                    <div id="downloadSpeed" style="font-size:0.8rem; margin-top:2px;">Starting network stream...</div>
+                </div>
+            </div>
+
+            <button class="download-btn" id="startDownloadBtn" onclick="startRedYDownload()">Start Download</button>
         </div>
     </div>
 
-    <!-- MAIN CONTAINER -->
-    <div class="container">
-        
-        <!-- TOP NAV BAR -->
-        <div class="top-navbar">
-            <div class="user-badge" onclick="openAuthModal()" id="user-badge-text">
-                👤 Login / Account
-            </div>
-            <div class="three-dots-btn" onclick="openSettingsModal()">⋮</div>
-        </div>
-
-        <!-- HEADER -->
-        <div class="header">
-            <div class="logo-box">
-                <img src="file_0000000051ac82068c717a63b34c9d7b.png" alt="Ticbull Logo">
-            </div>
-            <h1>TICBULL</h1>
-            <p class="tagline">Official Android & iOS App Hub</p>
-        </div>
-
-        <!-- SEARCH -->
-        <div class="search-box">
-            <input type="text" id="app-search-input" placeholder="Search Apps, Games, Education..." onkeyup="filterApps()">
-        </div>
-
-        <!-- CATEGORIES -->
-        <div class="category-title">Categories</div>
-        <div class="categories">
-            <div class="cat-btn active" onclick="selectCategory('all', this)">All Apps</div>
-            <div class="cat-btn" onclick="selectCategory('android', this)">🤖 Android Apps</div>
-            <div class="cat-btn" onclick="selectCategory('ios', this)">🍎 iPhone (iOS)</div>
-            <div class="cat-btn" onclick="selectCategory('education', this)">📚 Education</div>
-            <div class="cat-btn" onclick="selectCategory('games', this)">🎮 Games</div>
-        </div>
-
-        <div class="not-found-card" id="not-found-box">
-            <h3 style="color:#ff4d4d; margin-bottom:4px;">❌ Not Available / Coming Soon</h3>
-            <p style="color:#8b949e; font-size:0.82rem;">This app is currently not available. Stay tuned!</p>
-        </div>
-
-        <div class="coming-soon-card" id="coming-soon-box">
-            <h3 style="color:#00e699; margin-bottom:4px;">🚀 Coming Soon</h3>
-            <p style="color:#8b949e; font-size:0.82rem;">New applications are being developed by <b>mryuviyadav</b>.</p>
-        </div>
-
-        <!-- DOWNLOAD STORE CARD (EXACT MATCH TO YOUR PHOTO) -->
-        <div class="category-title">Download & Install Store</div>
-        <div id="apps-container">
-            <div class="app-card app-item" data-category="all android ios">
-                <div class="app-header">
-                    <img src="file_0000000051ac82068c717a63b34c9d7b.png" class="app-icon" alt="TICBULL Store">
-                    <div class="app-details">
-                        <h3>TICBULL App Store</h3>
-                        <p>Direct Download & Install Options</p>
-                    </div>
-                </div>
-                
-                <div class="download-actions-grid">
-                    <a href="app.apk" download class="btn-download-action btn-apk">📥 Download Android APK File</a>
-                    <button onclick="installIosWebApp()" class="btn-download-action btn-ios">🍎 Open iPhone Web App</button>
-                </div>
-
-                <div style="background: rgba(0, 230, 153, 0.05); border: 1px dashed #00e699; padding: 12px; border-radius: 12px; margin-top: 12px; text-align: center; font-size: 0.8rem; color: #8b949e;">
-                    🚀 New Apps, Education & Gaming applications by <b>mryuviyadav</b> coming soon!
-                </div>
-            </div>
-        </div>
-
-        <!-- SOCIAL LINKS -->
-        <div class="category-title">Follow Owner (mryuviyadav)</div>
-        <div class="social-card">
-            <p style="font-size: 0.85rem; color: #c9d1d9;">Follow us for latest updates & announcements!</p>
-            <div class="social-grid">
-                <a href="https://youtube.com/@mryuviyadav" target="_blank" class="social-btn btn-yt">▶️ YouTube</a>
-                <a href="https://t.me/mryuviyadav" target="_blank" class="social-btn btn-tg">✈️ Telegram</a>
-                <a href="https://www.instagram.com/mryuvi_yadav" target="_blank" class="social-btn btn-insta">📸 Instagram</a>
-                <a href="https://x.com/mryuviyadav" target="_blank" class="social-btn btn-x">𝕏 Twitter / X</a>
-                <a href="https://facebook.com/mryuviyadav" target="_blank" class="social-btn btn-fb" style="grid-column: span 2;">📘 Facebook Page</a>
-            </div>
-        </div>
-
-        <!-- SUPPORT -->
-        <div class="category-title">Customer Support & Help</div>
-        <div class="support-card">
-            <p style="font-size: 0.85rem; color: #c9d1d9;">Need help or have questions? Email us directly!</p>
-            <a href="mailto:Ticbull.support@gmail.com" class="btn-support">✉️ Email Help (Ticbull.support@gmail.com)</a>
-        </div>
-
-        <div class="footer">
-            <p>© 2026 <b>TICBULL Store</b>. All rights reserved.</p>
-            <p style="margin-top: 5px;">Developed by <span>mryuviyadav</span></p>
-        </div>
-
-    </div>
-
-    <!-- SETTINGS & DETAILS MODAL -->
-    <div class="modal-overlay" id="settings-modal">
-        <div class="modal-box">
-            <span class="close-btn" onclick="closeSettingsModal()">✕</span>
-            <div class="modal-title">⚙️ Store Settings & Info</div>
+    <!-- Auth Modal -->
+    <div class="modal" id="authModal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('authModal')">&times;</span>
+            <h2 id="authTitle">Create Account</h2>
             
-            <div class="setting-item">
-                <span>🔊 App Opening Music</span>
-                <input type="checkbox" id="sound-toggle" checked style="width: 20px; height: 20px; accent-color: #00e699;">
+            <div id="signUpFields">
+                <input type="text" id="regName" placeholder="Full Name">
+                <input type="email" id="regEmail" placeholder="Email Address (Gmail / iCloud)">
+                <input type="date" id="regDob">
+                <select id="regGender">
+                    <option value="">Select Gender</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
+                </select>
+                <input type="password" id="regPass" placeholder="Password">
+                <button class="download-btn" id="sendBtn" onclick="sendOTP()">Send Email Verification OTP</button>
+                <div class="toggle-auth" onclick="showLoginMode()">Already have an account? Sign In</div>
             </div>
 
-            <div class="setting-item">
-                <span>📦 Store Cache Used</span>
-                <span style="color: #00e699;">14.2 MB</span>
+            <div id="loginFields" style="display:none;">
+                <input type="email" id="loginEmail" placeholder="Email Address">
+                <input type="password" id="loginPass" placeholder="Password">
+                <button class="download-btn" onclick="handleLogin()">Sign In</button>
+                <div class="toggle-auth" onclick="showRegisterMode()">New user? Create Account</div>
             </div>
 
-            <div class="setting-item">
-                <span>🔄 App Version</span>
-                <span style="color: #00e699;">v1.0 (Latest)</span>
-            </div>
-            
-            <div class="setting-item" onclick="closeSettingsModal(); openAuthModal();" style="cursor: pointer; color: #00e699;">
-                <span>👤 Account Profile</span>
-                <span>➔</span>
+            <div id="otpFields" style="display:none;">
+                <p style="font-size:0.85rem; color: var(--text-sub);">Verification code sent to your email inbox! Please enter code below:</p>
+                <input type="number" id="otpInput" placeholder="Enter 4-Digit OTP">
+                <button class="download-btn" onclick="verifyOTP()">Verify & Complete Signup</button>
             </div>
 
-            <div class="category-title" style="margin-top: 15px;">💬 App Help & Chat Assistant</div>
-            <div class="chat-box" id="store-chat">
-                <div class="chat-msg"><b>TICBULL Bot:</b> Welcome to TICBULL Store! Developed by mryuviyadav.</div>
-            </div>
-            <div style="display: flex; gap: 6px;">
-                <input type="text" id="chat-input" placeholder="Type query..." style="flex:1; padding:8px; background:#0b0f17; border:1px solid #30363d; border-radius:8px; color:#fff; font-size:0.8rem;">
-                <button onclick="sendChatMessage()" style="background:#00e699; border:none; padding:8px 12px; border-radius:8px; font-weight:700; cursor:pointer;">Send</button>
-            </div>
-
-            <button onclick="closeSettingsModal()" class="btn-download-action btn-apk" style="margin-top: 15px; width: 100%;">Done</button>
-        </div>
-    </div>
-
-    <!-- LOGIN MODAL WITH DOB, GENDER & OTP -->
-    <div class="modal-overlay" id="auth-modal">
-        <div class="modal-box">
-            <span class="close-btn" onclick="closeAuthModal()">✕</span>
-            
-            <div id="auth-step-1">
-                <div class="modal-title">📧 Account Login</div>
-                <div class="form-group">
-                    <label>Full Name</label>
-                    <input type="text" id="user-name" placeholder="Enter full name">
-                </div>
-                <div class="form-group">
-                    <label>Email Address</label>
-                    <input type="email" id="user-email" placeholder="example@gmail.com">
-                </div>
-                <div class="form-group">
-                    <label>Date of Birth (DOB)</label>
-                    <input type="date" id="user-dob">
-                </div>
-                <div class="form-group">
-                    <label>Gender</label>
-                    <select id="user-gender">
-                        <option value="Male">Male</option>
-                        <option value="Female">Female</option>
-                        <option value="Other">Other</option>
-                    </select>
-                </div>
-                <button onclick="sendVerificationOTP()" class="btn-download-action btn-apk" style="width: 100%;">Send Verification OTP</button>
-            </div>
-
-            <div id="auth-step-2" style="display: none;">
-                <div class="modal-title">🔐 Enter Email OTP</div>
-                <p style="font-size: 0.8rem; color: #8b949e; margin-bottom: 12px;">OTP sent to email. (Demo OTP: <b>1234</b>)</p>
-                <div class="form-group">
-                    <label>4-Digit OTP Code</label>
-                    <input type="number" id="otp-input" placeholder="1234">
-                </div>
-                <button onclick="verifyAndLogin()" class="btn-download-action btn-apk" style="width: 100%;">Verify & Login</button>
+            <div id="userProfileFields" style="display:none; text-align:center;">
+                <h3 id="profileNameDisplay" style="color:var(--accent-green); margin-bottom:5px;"></h3>
+                <p id="profileEmailDisplay" style="font-size:0.85rem; color:var(--text-sub); margin-top:0;"></p>
+                <button class="download-btn" style="background:var(--accent-red); color:white;" onclick="handleLogout()">Logout Account</button>
             </div>
         </div>
     </div>
 
-    <!-- JAVASCRIPT -->
+    <!-- Settings & AI Modal -->
+    <div class="modal" id="settingsModal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('settingsModal')">&times;</span>
+            <h2>⚙️ Store Settings</h2>
+            <p style="font-size: 0.85rem; color: var(--text-sub);">TICBULL Store v2.5 Ultra</p>
+            <hr style="border-color: var(--border-color);">
+            
+            <h3>🤖 TICBULL AI Assistant</h3>
+            <div class="chat-box" id="chatBox">
+                <div class="msg bot">Hello! Main TICBULL AI Assistant hoon. Poochiye jo poochna hai!</div>
+            </div>
+            <div style="display:flex; gap:5px;">
+                <input type="text" id="chatInput" placeholder="Ask AI something..." style="margin:0;">
+                <button style="background:var(--accent-green); border:none; padding:10px 15px; border-radius:10px; font-weight:bold; cursor:pointer;" onclick="sendAiMsg()">Send</button>
+            </div>
+        </div>
+    </div>
+
     <script>
-        const textToType = "TICBULL App & iOS Store Developed by mryuviyadav";
-        const textElement = document.getElementById("typing-text");
-        let index = 0;
+        const EMAILJS_PUBLIC_KEY = "UijeylbpiuvbpSMon";
+        const EMAILJS_SERVICE_ID = "service_490l9bj";
+        const EMAILJS_TEMPLATE_ID = "template_wpjabuj";
 
-        function typeEffect() {
-            if (index < textToType.length) {
-                if(textToType.substring(index, index+11) === "mryuviyadav") {
-                    textElement.innerHTML += "<span>mryuviyadav</span>";
-                    index += 11;
-                } else {
-                    textElement.innerHTML += textToType.charAt(index);
-                    index++;
-                }
-                setTimeout(typeEffect, 45);
-            }
-        }
+        emailjs.init(EMAILJS_PUBLIC_KEY);
 
-        function playOpeningMusic() {
-            if(!document.getElementById('sound-toggle').checked) return;
-            try {
-                const ctx = new (window.AudioContext || window.webkitAudioContext)();
-                const notes = [440, 554.37, 659.25, 880];
-                notes.forEach((freq, i) => {
-                    const osc = ctx.createOscillator();
-                    const gain = ctx.createGain();
-                    osc.type = 'triangle';
-                    osc.frequency.setValueAtTime(freq, ctx.currentTime + (i * 0.12));
-                    gain.gain.setValueAtTime(0.15, ctx.currentTime + (i * 0.12));
-                    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + (i * 0.12) + 0.4);
-                    osc.connect(gain);
-                    gain.connect(ctx.destination);
-                    osc.start(ctx.currentTime + (i * 0.12));
-                    osc.stop(ctx.currentTime + (i * 0.12) + 0.4);
-                });
-            } catch(e) {}
-        }
+        let currentOS = 'android';
+        let currentCategory = 'all';
+        let generatedOTP = null;
+        let tempUserData = {};
+        let activeAppDownload = null;
 
-        window.addEventListener('load', () => {
-            typeEffect();
-            playOpeningMusic();
-            checkSavedUser();
-            setTimeout(() => {
-                const splash = document.getElementById("splash-screen");
-                splash.style.opacity = "0";
-                splash.style.visibility = "hidden";
-            }, 15000);
-        });
+        const blockedDomains = ['tempmail.com', 'dispostable.com', '10minutemail.com', 'mailinator.com', 'guerrillamail.com', 'dropmail.me', 'getnada.com'];
 
-        function filterApps() {
-            const query = document.getElementById('app-search-input').value.toLowerCase().trim();
-            const appItems = document.querySelectorAll('.app-item');
-            const notFoundBox = document.getElementById('not-found-box');
-            let foundCount = 0;
+        const appsData = [
+            { id: 1, name: "TICBULL Official App", cat: "apps", os: "android", desc: "Native Android App Store Experience.", rating: "4.9 ⭐", downloads: "25k+", file: "app.apk" },
+            { id: 2, name: "TicbullEdu Pro", cat: "education", os: "android", desc: "Interactive Learning & Skill Development.", rating: "4.8 ⭐", downloads: "10k+", file: "app.apk" },
+            { id: 3, name: "BullRider 3D", cat: "games", os: "android", desc: "High Graphics Racing Game.", rating: "4.7 ⭐", downloads: "50k+", file: "app.apk" },
+            { id: 4, name: "TICBULL iOS WebApp", cat: "apps", os: "ios", desc: "Add to Home Screen Web Experience for iPhone.", rating: "4.9 ⭐", downloads: "18k+", link: "#" },
+            { id: 5, name: "iOS Smart Learn", cat: "education", os: "ios", desc: "Apple Safari optimized education suite.", rating: "4.6 ⭐", downloads: "8k+", link: "#" }
+        ];
 
-            appItems.forEach(item => {
-                const title = item.querySelector('h3').innerText.toLowerCase();
-                if (title.includes(query)) {
-                    item.style.display = 'block';
-                    foundCount++;
-                } else {
-                    item.style.display = 'none';
-                }
+        function getUsersDB() { return JSON.parse(localStorage.getItem('ticbull_users') || '{}'); }
+        function saveUserDB(users) { localStorage.setItem('ticbull_users', JSON.stringify(users)); }
+
+        function renderStore() {
+            const container = document.getElementById('storeContent');
+            const searchQuery = document.getElementById('searchInput').value.toLowerCase();
+            container.innerHTML = '';
+
+            const filtered = appsData.filter(app => {
+                const matchOS = app.os === currentOS;
+                const matchCat = currentCategory === 'all' || app.cat === currentCategory;
+                const matchSearch = app.name.toLowerCase().includes(searchQuery) || app.desc.toLowerCase().includes(searchQuery);
+                return matchOS && matchCat && matchSearch;
             });
 
-            if (foundCount === 0 && query !== "") {
-                notFoundBox.style.display = 'block';
-            } else {
-                notFoundBox.style.display = 'none';
+            if(filtered.length === 0) {
+                container.innerHTML = `<p style="color:var(--text-sub); text-align:center; margin-top:20px;">No results found.</p>`;
+                return;
             }
-        }
 
-        function selectCategory(cat, btn) {
-            document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-
-            const appItems = document.querySelectorAll('.app-item');
-            const comingSoonBox = document.getElementById('coming-soon-box');
-            let foundCount = 0;
-
-            appItems.forEach(item => {
-                const itemCats = item.getAttribute('data-category');
-                if (cat === 'all' || itemCats.includes(cat)) {
-                    item.style.display = 'block';
-                    foundCount++;
-                } else {
-                    item.style.display = 'none';
-                }
+            filtered.forEach(app => {
+                const card = document.createElement('div');
+                card.className = 'app-card';
+                card.innerHTML = `
+                    <h3 style="margin:0 0 4px 0;">${app.name}</h3>
+                    <p style="margin:0; font-size:0.85rem; color:var(--text-sub);">${app.desc}</p>
+                    <div class="app-meta">
+                        <span>Rating: ${app.rating}</span>
+                        <span>Downloads: ${app.downloads}</span>
+                    </div>
+                    <button class="download-btn" onclick="openDownloadModal(${app.id})">
+                        ${currentOS === 'android' ? '📥 Download APK' : '🍎 Get iOS App'}
+                    </button>
+                `;
+                container.appendChild(card);
             });
-
-            if (foundCount === 0) {
-                comingSoonBox.style.display = 'block';
-            } else {
-                comingSoonBox.style.display = 'none';
-            }
         }
 
-        function openSettingsModal() { document.getElementById('settings-modal').style.display = 'flex'; }
-        function closeSettingsModal() { document.getElementById('settings-modal').style.display = 'none'; }
-        function openAuthModal() { document.getElementById('auth-modal').style.display = 'flex'; }
-        function closeAuthModal() { document.getElementById('auth-modal').style.display = 'none'; }
+        function openDownloadModal(appId) {
+            if(currentOS === 'ios') {
+                alert("🍎 iPhone Installation Guide:\n\n1. Tap Safari 'Share' button at bottom.\n2. Select 'Add to Home Screen'.\n3. Enjoy TICBULL Native WebApp!");
+                return;
+            }
 
-        let tempUser = {};
-        function sendVerificationOTP() {
-            const name = document.getElementById('user-name').value.trim();
-            const email = document.getElementById('user-email').value.trim();
-            const dob = document.getElementById('user-dob').value;
-            const gender = document.getElementById('user-gender').value;
-
-            if(!name || !email || !dob) { alert('Please fill Name, Email and DOB!'); return; }
-
-            tempUser = { name, email, dob, gender };
-            alert("📧 VERIFICATION EMAIL SENT TO: " + email + "\n\nVerification Code: 1234\nAccount Verification for TICBULL Store.\nDeveloped by mryuviyadav.");
+            activeAppDownload = appsData.find(a => a.id === appId);
+            document.getElementById('modalAppName').innerText = activeAppDownload.name;
+            document.getElementById('modalAppDesc').innerText = activeAppDownload.desc;
             
-            document.getElementById('auth-step-1').style.display = 'none';
-            document.getElementById('auth-step-2').style.display = 'block';
+            // Reset Progress Ring
+            updateRedRing(0);
+            document.getElementById('progressPercent').innerText = "0%";
+            document.getElementById('downloadSpeed').innerText = "Click Start to Download";
+            document.getElementById('startDownloadBtn').style.display = 'block';
+
+            document.getElementById('downloadModal').style.display = 'flex';
         }
 
-        function verifyAndLogin() {
-            const otp = document.getElementById('otp-input').value.trim();
-            if(otp === "1234") {
-                localStorage.setItem('ticbull_user', JSON.stringify(tempUser));
-                alert('🎉 Account Verified Successfully!');
-                checkSavedUser();
-                closeAuthModal();
+        function updateRedRing(percent) {
+            const ring = document.getElementById('redProgressRing');
+            const circumference = 283;
+            const offset = circumference - (percent / 100) * circumference;
+            ring.style.strokeDashoffset = offset;
+        }
+
+        function startRedYDownload() {
+            const btn = document.getElementById('startDownloadBtn');
+            btn.style.display = 'none';
+
+            let progress = 0;
+            const interval = setInterval(() => {
+                const speed = (Math.random() * 2 + 1.5).toFixed(1); // 1.5 to 3.5 MB/s
+                progress += Math.floor(Math.random() * 8) + 4;
+
+                if (progress >= 100) {
+                    progress = 100;
+                    clearInterval(interval);
+                    updateRedRing(100);
+                    document.getElementById('progressPercent').innerText = "100%";
+                    document.getElementById('progressPercent').style.color = "var(--accent-green)";
+                    document.getElementById('downloadSpeed').innerText = "✅ Download Complete! Starting Installation...";
+                    
+                    setTimeout(() => {
+                        window.location.href = activeAppDownload.file;
+                        closeModal('downloadModal');
+                    }, 1200);
+                } else {
+                    updateRedRing(progress);
+                    document.getElementById('progressPercent').innerText = `${progress}%`;
+                    document.getElementById('downloadSpeed').innerText = `Speed: ${speed} MB/s | Downloading APK...`;
+                }
+            }, 250);
+        }
+
+        function handleSearch() { renderStore(); }
+
+        function selectOS(os) {
+            currentOS = os;
+            document.getElementById('btnAndroid').classList.toggle('active', os === 'android');
+            document.getElementById('btnIos').classList.toggle('active', os === 'ios');
+            renderStore();
+        }
+
+        function filterCat(cat) {
+            currentCategory = cat;
+            document.querySelectorAll('.cat-chip').forEach(el => el.classList.remove('active'));
+            event.target.classList.add('active');
+            renderStore();
+        }
+
+        function toggleTheme() {
+            document.body.classList.toggle('light-mode');
+            const isLight = document.body.classList.contains('light-mode');
+            document.querySelector('.theme-btn').innerText = isLight ? '☀️' : '🌙';
+        }
+
+        function openAuthModal() {
+            const activeUser = localStorage.getItem('ticbull_active_user');
+            const activeEmail = localStorage.getItem('ticbull_active_email');
+
+            if(activeUser) {
+                document.getElementById('authTitle').innerText = "User Profile";
+                document.getElementById('signUpFields').style.display = 'none';
+                document.getElementById('loginFields').style.display = 'none';
+                document.getElementById('otpFields').style.display = 'none';
+                document.getElementById('userProfileFields').style.display = 'block';
+
+                document.getElementById('profileNameDisplay').innerText = `👤 ${activeUser}`;
+                document.getElementById('profileEmailDisplay').innerText = activeEmail || 'Registered User';
             } else {
-                alert('Invalid OTP! Enter demo code: 1234');
+                showRegisterMode();
+            }
+            document.getElementById('authModal').style.display = 'flex';
+        }
+
+        function openSettings() { document.getElementById('settingsModal').style.display = 'flex'; }
+        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+
+        function showLoginMode() {
+            document.getElementById('authTitle').innerText = "Sign In";
+            document.getElementById('signUpFields').style.display = 'none';
+            document.getElementById('userProfileFields').style.display = 'none';
+            document.getElementById('otpFields').style.display = 'none';
+            document.getElementById('loginFields').style.display = 'block';
+        }
+
+        function showRegisterMode() {
+            document.getElementById('authTitle').innerText = "Create Account";
+            document.getElementById('loginFields').style.display = 'none';
+            document.getElementById('userProfileFields').style.display = 'none';
+            document.getElementById('otpFields').style.display = 'none';
+            document.getElementById('signUpFields').style.display = 'block';
+        }
+
+        function sendOTP() {
+            const name = document.getElementById('regName').value;
+            const email = document.getElementById('regEmail').value.trim().toLowerCase();
+            const dob = document.getElementById('regDob').value;
+            const gender = document.getElementById('regGender').value;
+            const pass = document.getElementById('regPass').value;
+            const sendBtn = document.getElementById('sendBtn');
+
+            if(!name || !email || !dob || !gender || !pass) {
+                alert("Please fill all sign-up fields!");
+                return;
+            }
+
+            const db = getUsersDB();
+            if(db[email]) {
+                alert("This Email is ALREADY registered!");
+                showLoginMode();
+                document.getElementById('loginEmail').value = email;
+                return;
+            }
+
+            const domain = email.split('@')[1] ? email.split('@')[1].toLowerCase() : '';
+            if(blockedDomains.includes(domain)) {
+                alert("Fake/Temp emails are NOT allowed!");
+                return;
+            }
+
+            generatedOTP = Math.floor(1000 + Math.random() * 9000);
+            tempUserData = { name, email, dob, gender, pass };
+
+            sendBtn.innerText = "Sending OTP...";
+            sendBtn.disabled = true;
+
+            emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+                email: email,
+                passcode: generatedOTP
+            }).then(() => {
+                document.getElementById('signUpFields').style.display = 'none';
+                document.getElementById('otpFields').style.display = 'block';
+                alert(`OTP sent successfully to ${email}`);
+            }).catch((err) => {
+                alert("Failed to send OTP!");
+                sendBtn.innerText = "Send Email Verification OTP";
+                sendBtn.disabled = false;
+            });
+        }
+
+        function verifyOTP() {
+            const input = document.getElementById('otpInput').value;
+            if(parseInt(input) === generatedOTP) {
+                const db = getUsersDB();
+                db[tempUserData.email] = tempUserData;
+                saveUserDB(db);
+
+                localStorage.setItem('ticbull_active_user', tempUserData.name);
+                localStorage.setItem('ticbull_active_email', tempUserData.email);
+
+                alert("Account Created & Saved!");
+                checkActiveUser();
+                closeModal('authModal');
+            } else {
+                alert("Invalid OTP!");
             }
         }
 
-        function checkSavedUser() {
-            const saved = localStorage.getItem('ticbull_user');
-            if(saved) {
-                const user = JSON.parse(saved);
-                document.getElementById('user-badge-text').innerHTML = '🟢 ' + user.name;
+        function handleLogin() {
+            const email = document.getElementById('loginEmail').value.trim().toLowerCase();
+            const pass = document.getElementById('loginPass').value;
+
+            const db = getUsersDB();
+            const user = db[email];
+
+            if(!user) {
+                alert("No account found!");
+                showRegisterMode();
+                return;
+            }
+
+            if(user.pass === pass) {
+                localStorage.setItem('ticbull_active_user', user.name);
+                localStorage.setItem('ticbull_active_email', user.email);
+                checkActiveUser();
+                alert(`Welcome back, ${user.name}!`);
+                closeModal('authModal');
+            } else {
+                alert("Incorrect Password!");
             }
         }
 
-        function installIosWebApp() {
-            alert("🍎 iPhone Installation Guide:\n\n1. Open this page in Safari.\n2. Tap the 'Share' icon at bottom.\n3. Tap 'Add to Home Screen'.\n\nTICBULL App will appear on your iPhone screen without Chrome bar!");
+        function handleLogout() {
+            localStorage.removeItem('ticbull_active_user');
+            localStorage.removeItem('ticbull_active_email');
+            document.getElementById('userBadge').innerText = `👤 Sign In`;
+            closeModal('authModal');
+            alert("Logged out successfully.");
         }
 
-        function sendChatMessage() {
-            const input = document.getElementById('chat-input');
-            const chatBox = document.getElementById('store-chat');
-            const txt = input.value.trim();
-            if(!txt) return;
+        function checkActiveUser() {
+            const activeUser = localStorage.getItem('ticbull_active_user');
+            if(activeUser) {
+                document.getElementById('userBadge').innerText = `👤 ${activeUser}`;
+            }
+        }
 
-            chatBox.innerHTML += `<div class="chat-msg" style="color:#fff;"><b>You:</b> ${txt}</div>`;
+        function sendAiMsg() {
+            const input = document.getElementById('chatInput');
+            const box = document.getElementById('chatBox');
+            if(!input.value) return;
+
+            const userText = input.value;
+            box.innerHTML += `<div class="msg user">${userText}</div>`;
             input.value = '';
 
             setTimeout(() => {
-                chatBox.innerHTML += `<div class="chat-msg"><b>TICBULL Bot:</b> TICBULL Store v1.0 developed by mryuviyadav. Enjoy seamless app downloads!</div>`;
-                chatBox.scrollTop = chatBox.scrollHeight;
-            }, 400);
+                let botReply = "TICBULL Store is a high-grade app market built for fast Android & iOS apps.";
+                const query = userText.toLowerCase();
+
+                if(query.includes('who') || query.includes('owner') || query.includes('maker') || query.includes('banya')) {
+                    botReply = "TICBULL Store was designed and developed by mryuviyadav!";
+                } else if(query.includes('how') || query.includes('work')) {
+                    botReply = "Select Android or iOS, choose your category (Apps, Games, Education), and tap Download to get direct APKs.";
+                }
+
+                box.innerHTML += `<div class="msg bot">${botReply}</div>`;
+                box.scrollTop = box.scrollHeight;
+            }, 500);
         }
+
+        checkActiveUser();
+        renderStore();
     </script>
 </body>
 </html>
