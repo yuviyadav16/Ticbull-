@@ -6,63 +6,140 @@
     <title>TICBULL - Official App & Game Store</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
-        body { background-color: #0b0f17; color: #f0f6fc; padding: 20px 15px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
+        body { background-color: #0b0f17; color: #f0f6fc; padding: 20px 15px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; overflow-x: hidden; }
         .container { width: 100%; max-width: 480px; }
-        
-        /* Header Section */
+
+        /* --- SPLASH SCREEN ANIMATION STYLES --- */
+        #splash-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: #0b0f17;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 99999;
+            transition: opacity 0.8s ease, visibility 0.8s ease;
+        }
+
+        .splash-logo {
+            width: 120px;
+            height: 120px;
+            border-radius: 28px;
+            overflow: hidden;
+            border: 2px solid #00e699;
+            box-shadow: 0 0 30px rgba(0, 230, 153, 0.4);
+            animation: pulse 2s infinite ease-in-out;
+            margin-bottom: 25px;
+        }
+
+        .splash-logo img { width: 100%; height: 100%; object-fit: cover; }
+
+        @keyframes pulse {
+            0% { transform: scale(0.95); box-shadow: 0 0 15px rgba(0, 230, 153, 0.3); }
+            50% { transform: scale(1.05); box-shadow: 0 0 35px rgba(0, 230, 153, 0.7); }
+            100% { transform: scale(0.95); box-shadow: 0 0 15px rgba(0, 230, 153, 0.3); }
+        }
+
+        .animated-text {
+            color: #ffffff;
+            font-size: 0.95rem;
+            font-weight: 600;
+            text-align: center;
+            max-width: 80%;
+            line-height: 1.5;
+            min-height: 48px;
+        }
+
+        .animated-text span {
+            color: #00e699;
+            font-weight: 800;
+        }
+
+        .loader-bar {
+            width: 140px;
+            height: 4px;
+            background: #161b22;
+            border-radius: 10px;
+            margin-top: 20px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .loader-progress {
+            width: 0%;
+            height: 100%;
+            background: #00e699;
+            border-radius: 10px;
+            animation: load 3.2s forwards;
+        }
+
+        @keyframes load {
+            0% { width: 0%; }
+            100% { width: 100%; }
+        }
+
+        /* --- MAIN STORE STYLES --- */
         .header { text-align: center; padding: 20px 0; margin-bottom: 15px; }
         .logo-box { width: 100px; height: 100px; margin: 0 auto 12px; border-radius: 22px; overflow: hidden; background: #161b22; border: 1px solid #30363d; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 24px rgba(0,0,0,0.6); }
         .logo-box img { width: 100%; height: 100%; object-fit: cover; }
         h1 { font-size: 2.2rem; font-weight: 800; letter-spacing: 2px; color: #ffffff; }
         p.tagline { color: #8b949e; font-size: 0.9rem; font-weight: 500; margin-top: 4px; }
         
-        /* Search Bar */
         .search-box { position: relative; margin-bottom: 20px; }
         .search-box input { width: 100%; padding: 14px 20px; background-color: #161b22; border: 1px solid #30363d; border-radius: 25px; color: #fff; font-size: 0.95rem; outline: none; }
 
-        /* Categories Section */
         .category-title { font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; color: #8b949e; margin-bottom: 10px; font-weight: 700; }
         .categories { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 10px; margin-bottom: 20px; scrollbar-width: none; }
         .cat-btn { background: #161b22; color: #c9d1d9; padding: 8px 16px; border-radius: 20px; border: 1px solid #30363d; white-space: nowrap; font-size: 0.85rem; font-weight: 600; }
         .cat-btn.active { background: #00e699; color: #000; border-color: #00e699; font-weight: 700; }
 
-        /* Main Store Card */
         .app-card { background: #161b22; border: 1px solid #30363d; border-radius: 20px; padding: 18px; margin-bottom: 20px; }
         .app-header { display: flex; align-items: center; gap: 14px; margin-bottom: 15px; }
         .app-icon { width: 60px; height: 60px; border-radius: 16px; object-fit: cover; border: 1px solid #30363d; }
         .app-details h3 { font-size: 1.1rem; font-weight: 700; color: #ffffff; margin-bottom: 4px; }
         .app-details p { font-size: 0.82rem; color: #8b949e; }
         
-        /* Buttons */
         .download-actions { display: flex; flex-direction: column; gap: 10px; width: 100%; }
         .btn-download { text-align: center; font-weight: 700; padding: 12px; border-radius: 14px; text-decoration: none; font-size: 0.9rem; display: flex; align-items: center; justify-content: center; gap: 8px; border: none; cursor: pointer; }
         .btn-install { background: #00e699; color: #000000; }
+        .btn-ios { background: #21262d; color: #ffffff; border: 1px solid #30363d; }
 
-        /* Social Links Grid */
         .social-card { background: #161b22; border: 1px solid #30363d; border-radius: 20px; padding: 18px; margin-bottom: 20px; }
         .social-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px; }
         .social-btn { text-align: center; font-weight: 600; padding: 10px; border-radius: 12px; text-decoration: none; font-size: 0.85rem; display: flex; align-items: center; justify-content: center; gap: 6px; color: #ffffff; background: #21262d; border: 1px solid #30363d; transition: 0.2s; }
-        .social-btn:hover { border-color: #00e699; }
         .btn-yt { border-color: #ff0000; color: #ff4d4d; }
         .btn-tg { border-color: #0088cc; color: #33b5e5; }
         .btn-insta { border-color: #e1306c; color: #ff6699; }
         .btn-x { border-color: #ffffff; color: #ffffff; }
         .btn-fb { border-color: #1877f2; color: #4267B2; }
 
-        /* Customer Support Section */
         .support-card { background: #161b22; border: 1px solid #30363d; border-radius: 20px; padding: 18px; margin-bottom: 20px; }
         .btn-support { width: 100%; text-align: center; font-weight: 700; padding: 12px; border-radius: 14px; text-decoration: none; font-size: 0.9rem; display: flex; align-items: center; justify-content: center; gap: 8px; background: #21262d; color: #00e699; border: 1px solid #00e699; margin-top: 10px; }
 
-        /* Notice Box */
         .notice-box { background: rgba(0, 230, 153, 0.05); border: 1px dashed #00e699; padding: 12px; border-radius: 12px; margin-top: 15px; text-align: center; font-size: 0.8rem; color: #8b949e; }
 
-        /* Footer */
         .footer { text-align: center; margin-top: 30px; padding-top: 20px; border-top: 1px solid #21262d; color: #8b949e; font-size: 0.85rem; }
         .footer span { color: #00e699; font-weight: 700; }
     </style>
 </head>
 <body>
 
+    <!-- APP OPENING SPLASH SCREEN -->
+    <div id="splash-screen">
+        <div class="splash-logo">
+            <img src="file_0000000051ac82068c717a63b34c9d7b.png" alt="Ticbull Logo">
+        </div>
+        <div class="animated-text" id="typing-text"></div>
+        <div class="loader-bar">
+            <div class="loader-progress"></div>
+        </div>
+    </div>
+
+    <!-- MAIN APP INTERFACE -->
     <div class="container">
         <!-- Branding -->
         <div class="header">
@@ -89,22 +166,23 @@
         </div>
 
         <!-- Official Store Downloader -->
-        <div class="category-title">Install Store App</div>
+        <div class="category-title">Download & Install Store</div>
         <div class="app-card">
             <div class="app-header">
                 <img src="file_0000000051ac82068c717a63b34c9d7b.png" class="app-icon" alt="TICBULL App">
                 <div class="app-details">
                     <h3>TICBULL App Store</h3>
-                    <p>Install Store on Android & iPhone</p>
+                    <p>Direct Download & Install Options</p>
                 </div>
             </div>
             
             <div class="download-actions">
-                <button onclick="installApp()" class="btn-download btn-install">📱 Install TICBULL App on Phone</button>
+                <a href="https://drive.google.com/drive/u/0/" target="_blank" class="btn-download btn-install">📥 Download Android APK File</a>
+                <a href="https://yuviyadav16.github.io/Ticbull-" target="_blank" class="btn-download btn-ios">🍎 Open iPhone Web App</a>
             </div>
 
             <div class="notice-box">
-                💡 <b>iPhone users:</b> Tap Share Icon ➔ 'Add to Home Screen' to install instantly!
+                🚀 New Apps, Education & Gaming applications by <b>mryuviyadav</b> coming soon!
             </div>
         </div>
 
@@ -135,26 +213,37 @@
         </div>
     </div>
 
+    <!-- ANIMATION SCRIPT -->
     <script>
-        let deferredPrompt;
-        window.addEventListener('beforeinstallprompt', (e) => {
-            e.preventDefault();
-            deferredPrompt = e;
-        });
+        // Typing Animation Text
+        const textToType = "TICBULL App & iOS Store Developed by mryuviyadav";
+        const textElement = document.getElementById("typing-text");
+        let index = 0;
 
-        function installApp() {
-            if (deferredPrompt) {
-                deferredPrompt.prompt();
-                deferredPrompt.userChoice.then((choiceResult) => {
-                    if (choiceResult.outcome === 'accepted') {
-                        alert('TICBULL App Installed Successfully!');
-                    }
-                    deferredPrompt = null;
-                });
-            } else {
-                alert("To Install on Android:\n1. Tap Chrome 3 dots (⋮) top-right\n2. Click 'Add to Home screen' or 'Install App'\n\nTo Install on iPhone:\n1. Tap Share button\n2. Click 'Add to Home Screen'");
+        function typeEffect() {
+            if (index < textToType.length) {
+                if(textToType.substring(index, index+11) === "mryuviyadav") {
+                    textElement.innerHTML += "<span>mryuviyadav</span>";
+                    index += 11;
+                } else {
+                    textElement.innerHTML += textToType.charAt(index);
+                    index++;
+                }
+                setTimeout(typeEffect, 35);
             }
         }
+
+        // Start typing on page load
+        window.addEventListener('load', () => {
+            typeEffect();
+            
+            // Hide Splash Screen after 3.2 seconds
+            setTimeout(() => {
+                const splash = document.getElementById("splash-screen");
+                splash.style.opacity = "0";
+                splash.style.visibility = "hidden";
+            }, 3400);
+        });
     </script>
 
 </body>
