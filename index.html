@@ -33,11 +33,25 @@
         .app-details h3 { font-size: 1.1rem; font-weight: 700; color: #ffffff; margin-bottom: 4px; }
         .app-details p { font-size: 0.82rem; color: #8b949e; }
         
-        /* Download Buttons */
+        /* Buttons */
         .download-actions { display: flex; flex-direction: column; gap: 10px; width: 100%; }
         .btn-download { text-align: center; font-weight: 700; padding: 12px; border-radius: 14px; text-decoration: none; font-size: 0.9rem; display: flex; align-items: center; justify-content: center; gap: 8px; border: none; cursor: pointer; }
-        .btn-android { background: #00e699; color: #000000; }
-        .btn-ios { background: #21262d; color: #ffffff; border: 1px solid #30363d; }
+        .btn-install { background: #00e699; color: #000000; }
+
+        /* Social Links Grid */
+        .social-card { background: #161b22; border: 1px solid #30363d; border-radius: 20px; padding: 18px; margin-bottom: 20px; }
+        .social-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px; }
+        .social-btn { text-align: center; font-weight: 600; padding: 10px; border-radius: 12px; text-decoration: none; font-size: 0.85rem; display: flex; align-items: center; justify-content: center; gap: 6px; color: #ffffff; background: #21262d; border: 1px solid #30363d; transition: 0.2s; }
+        .social-btn:hover { border-color: #00e699; }
+        .btn-yt { border-color: #ff0000; color: #ff4d4d; }
+        .btn-tg { border-color: #0088cc; color: #33b5e5; }
+        .btn-insta { border-color: #e1306c; color: #ff6699; }
+        .btn-x { border-color: #ffffff; color: #ffffff; }
+        .btn-fb { border-color: #1877f2; color: #4267B2; }
+
+        /* Customer Support Section */
+        .support-card { background: #161b22; border: 1px solid #30363d; border-radius: 20px; padding: 18px; margin-bottom: 20px; }
+        .btn-support { width: 100%; text-align: center; font-weight: 700; padding: 12px; border-radius: 14px; text-decoration: none; font-size: 0.9rem; display: flex; align-items: center; justify-content: center; gap: 8px; background: #21262d; color: #00e699; border: 1px solid #00e699; margin-top: 10px; }
 
         /* Notice Box */
         .notice-box { background: rgba(0, 230, 153, 0.05); border: 1px dashed #00e699; padding: 12px; border-radius: 12px; margin-top: 15px; text-align: center; font-size: 0.8rem; color: #8b949e; }
@@ -50,7 +64,7 @@
 <body>
 
     <div class="container">
-        <!-- Main Store Branding -->
+        <!-- Branding -->
         <div class="header">
             <div class="logo-box">
                 <img src="file_0000000051ac82068c717a63b34c9d7b.png" alt="Ticbull Logo">
@@ -64,43 +78,84 @@
             <input type="text" placeholder="Search Apps, Education & Games...">
         </div>
 
-        <!-- Categories Filter -->
+        <!-- Categories -->
         <div class="category-title">Categories</div>
         <div class="categories">
             <div class="cat-btn active">All Apps</div>
-            <div class="cat-btn">🤖 Android (.APK)</div>
+            <div class="cat-btn">🤖 Android Apps</div>
             <div class="cat-btn">🍎 iPhone (iOS)</div>
             <div class="cat-btn">📚 Education</div>
             <div class="cat-btn">🎮 Games</div>
         </div>
 
-        <!-- Official TICBULL App Store Downloader -->
-        <div class="category-title">Official Store App</div>
+        <!-- Official Store Downloader -->
+        <div class="category-title">Install Store App</div>
         <div class="app-card">
             <div class="app-header">
                 <img src="file_0000000051ac82068c717a63b34c9d7b.png" class="app-icon" alt="TICBULL App">
                 <div class="app-details">
-                    <h3>TICBULL Store App</h3>
-                    <p>Download Official App Store for Mobile</p>
+                    <h3>TICBULL App Store</h3>
+                    <p>Install Store on Android & iPhone</p>
                 </div>
             </div>
             
             <div class="download-actions">
-                <a href="file_0000000051ac82068c717a63b34c9d7b.png" download="TICBULL_Store.png" class="btn-download btn-android">🤖 Download Android App (.APK)</a>
-                <a href="https://yuviyadav16.github.io/Ticbull-" class="btn-download btn-ios">🍎 Install on iPhone (Add to Home Screen)</a>
+                <button onclick="installApp()" class="btn-download btn-install">📱 Install TICBULL App on Phone</button>
             </div>
 
             <div class="notice-box">
-                🚀 New Education & Gaming apps developed by <b>mryuviyadav</b> will be published here soon!
+                💡 <b>iPhone users:</b> Tap Share Icon ➔ 'Add to Home Screen' to install instantly!
             </div>
         </div>
 
-        <!-- Footer Credit -->
+        <!-- Follow Owner / Social Links -->
+        <div class="category-title">Follow Owner (mryuviyadav)</div>
+        <div class="social-card">
+            <p style="font-size: 0.88rem; color: #c9d1d9;">Follow us for latest app updates, features & announcements!</p>
+            <div class="social-grid">
+                <a href="https://youtube.com/@mryuviyadav" target="_blank" class="social-btn btn-yt">▶️ YouTube</a>
+                <a href="https://t.me/mryuviyadav" target="_blank" class="social-btn btn-tg">✈️ Telegram</a>
+                <a href="https://www.instagram.com/mryuvi_yadav" target="_blank" class="social-btn btn-insta">📸 Instagram</a>
+                <a href="https://x.com/mryuviyadav" target="_blank" class="social-btn btn-x">𝕏 Twitter / X</a>
+                <a href="https://facebook.com/mryuviyadav" target="_blank" class="social-btn btn-fb" style="grid-column: span 2;">📘 Facebook Page</a>
+            </div>
+        </div>
+
+        <!-- Customer Support Section -->
+        <div class="category-title">Customer Support & Help</div>
+        <div class="support-card">
+            <p style="font-size: 0.88rem; color: #c9d1d9;">Need help, facing issues or have questions about TICBULL apps? Email us directly!</p>
+            <a href="mailto:Ticbull.support@gmail.com" class="btn-support">✉️ Email Help (Ticbull.support@gmail.com)</a>
+        </div>
+
+        <!-- Footer -->
         <div class="footer">
             <p>© 2026 <b>TICBULL</b>. All rights reserved.</p>
             <p style="margin-top: 6px;">Developed by <span>mryuviyadav</span></p>
         </div>
     </div>
+
+    <script>
+        let deferredPrompt;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+        });
+
+        function installApp() {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then((choiceResult) => {
+                    if (choiceResult.outcome === 'accepted') {
+                        alert('TICBULL App Installed Successfully!');
+                    }
+                    deferredPrompt = null;
+                });
+            } else {
+                alert("To Install on Android:\n1. Tap Chrome 3 dots (⋮) top-right\n2. Click 'Add to Home screen' or 'Install App'\n\nTo Install on iPhone:\n1. Tap Share button\n2. Click 'Add to Home Screen'");
+            }
+        }
+    </script>
 
 </body>
 </html>
