@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TICBULL - Official App & Game Store</title>
+    <title>TICBULL - Next-Gen App & Game Store</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
         body { background-color: #0b0f17; color: #f0f6fc; padding: 20px 15px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; overflow-x: hidden; }
-        .container { width: 100%; max-width: 480px; }
+        .container { width: 100%; max-width: 480px; position: relative; }
 
         /* --- 15-SECOND PROFESSIONAL SPLASH SCREEN --- */
         #splash-screen {
@@ -27,15 +27,14 @@
 
         .splash-logo-wrapper {
             position: relative;
-            width: 130px;
-            height: 130px;
-            margin-bottom: 30px;
+            width: 120px;
+            height: 120px;
+            margin-bottom: 25px;
             display: flex;
             align-items: center;
             justify-content: center;
         }
 
-        /* Glowing Rotating Ring Effect */
         .splash-ring {
             position: absolute;
             width: 100%;
@@ -53,9 +52,9 @@
         }
 
         .splash-logo {
-            width: 100px;
-            height: 100px;
-            border-radius: 25px;
+            width: 90px;
+            height: 90px;
+            border-radius: 22px;
             overflow: hidden;
             border: 2px solid #30363d;
             box-shadow: 0 0 25px rgba(0, 230, 153, 0.4);
@@ -80,30 +79,24 @@
             animation: fadeInText 1s ease forwards 0.5s;
         }
 
-        @keyframes fadeInText {
-            to { opacity: 1; }
-        }
+        @keyframes fadeInText { to { opacity: 1; } }
 
         .animated-text {
             color: #8b949e;
-            font-size: 0.9rem;
+            font-size: 0.88rem;
             font-weight: 600;
             text-align: center;
             max-width: 85%;
             line-height: 1.5;
             min-height: 40px;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
         }
 
-        .animated-text span {
-            color: #00e699;
-            font-weight: 800;
-        }
+        .animated-text span { color: #00e699; font-weight: 800; }
 
-        /* Smooth 15-Second Progress Bar */
         .loader-bar {
-            width: 200px;
-            height: 5px;
+            width: 180px;
+            height: 4px;
             background: #161b22;
             border-radius: 10px;
             overflow: hidden;
@@ -115,62 +108,76 @@
             height: 100%;
             background: linear-gradient(90deg, #00e699, #00b377);
             border-radius: 10px;
-            /* 15 Seconds Duration */
             animation: load15Sec 15s linear forwards;
         }
 
-        @keyframes load15Sec {
-            0% { width: 0%; }
-            100% { width: 100%; }
-        }
+        @keyframes load15Sec { 0% { width: 0%; } 100% { width: 100%; } }
 
-        /* --- MAIN STORE STYLES --- */
-        .header { text-align: center; padding: 20px 0; margin-bottom: 15px; }
-        .logo-box { width: 100px; height: 100px; margin: 0 auto 12px; border-radius: 22px; overflow: hidden; background: #161b22; border: 1px solid #30363d; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 24px rgba(0,0,0,0.6); }
+        /* --- TOP NAV BAR & 3 DOTS MENU --- */
+        .top-navbar { display: flex; justify-content: space-between; align-items: center; width: 100%; padding: 10px 0; margin-bottom: 10px; }
+        .user-badge { display: flex; align-items: center; gap: 8px; background: #161b22; border: 1px solid #30363d; padding: 6px 14px; border-radius: 20px; font-size: 0.82rem; font-weight: 600; cursor: pointer; color: #00e699; }
+        .three-dots-btn { background: #161b22; border: 1px solid #30363d; color: #fff; font-size: 1.3rem; width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+
+        /* --- HEADER --- */
+        .header { text-align: center; padding: 10px 0 20px; }
+        .logo-box { width: 90px; height: 90px; margin: 0 auto 10px; border-radius: 20px; overflow: hidden; background: #161b22; border: 1px solid #30363d; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 24px rgba(0,0,0,0.6); }
         .logo-box img { width: 100%; height: 100%; object-fit: cover; }
-        h1 { font-size: 2.2rem; font-weight: 800; letter-spacing: 2px; color: #ffffff; }
-        p.tagline { color: #8b949e; font-size: 0.9rem; font-weight: 500; margin-top: 4px; }
-        
-        .search-box { position: relative; margin-bottom: 20px; }
-        .search-box input { width: 100%; padding: 14px 20px; background-color: #161b22; border: 1px solid #30363d; border-radius: 25px; color: #fff; font-size: 0.95rem; outline: none; }
+        h1 { font-size: 2rem; font-weight: 800; letter-spacing: 2px; color: #ffffff; }
+        p.tagline { color: #8b949e; font-size: 0.85rem; font-weight: 500; margin-top: 4px; }
 
-        .category-title { font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; color: #8b949e; margin-bottom: 10px; font-weight: 700; }
+        /* --- SEARCH & CATEGORIES --- */
+        .search-box { position: relative; margin-bottom: 18px; }
+        .search-box input { width: 100%; padding: 13px 20px; background-color: #161b22; border: 1px solid #30363d; border-radius: 25px; color: #fff; font-size: 0.9rem; outline: none; transition: 0.2s; }
+        .search-box input:focus { border-color: #00e699; }
+
+        .category-title { font-size: 0.82rem; text-transform: uppercase; letter-spacing: 1px; color: #8b949e; margin-bottom: 10px; font-weight: 700; }
         .categories { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 10px; margin-bottom: 20px; scrollbar-width: none; }
-        .cat-btn { background: #161b22; color: #c9d1d9; padding: 8px 16px; border-radius: 20px; border: 1px solid #30363d; white-space: nowrap; font-size: 0.85rem; font-weight: 600; }
+        .cat-btn { background: #161b22; color: #c9d1d9; padding: 8px 16px; border-radius: 20px; border: 1px solid #30363d; white-space: nowrap; font-size: 0.82rem; font-weight: 600; cursor: pointer; transition: 0.2s; }
         .cat-btn.active { background: #00e699; color: #000; border-color: #00e699; font-weight: 700; }
 
-        .app-card { background: #161b22; border: 1px solid #30363d; border-radius: 20px; padding: 18px; margin-bottom: 20px; }
-        .app-header { display: flex; align-items: center; gap: 14px; margin-bottom: 15px; }
-        .app-icon { width: 60px; height: 60px; border-radius: 16px; object-fit: cover; border: 1px solid #30363d; }
-        .app-details h3 { font-size: 1.1rem; font-weight: 700; color: #ffffff; margin-bottom: 4px; }
-        .app-details p { font-size: 0.82rem; color: #8b949e; }
+        /* --- CARDS & LISTS --- */
+        .app-card { background: #161b22; border: 1px solid #30363d; border-radius: 20px; padding: 18px; margin-bottom: 15px; }
+        .app-header { display: flex; align-items: center; gap: 14px; margin-bottom: 12px; }
+        .app-icon { width: 55px; height: 55px; border-radius: 14px; object-fit: cover; border: 1px solid #30363d; }
+        .app-details h3 { font-size: 1.05rem; font-weight: 700; color: #ffffff; margin-bottom: 3px; }
+        .app-details p { font-size: 0.8rem; color: #8b949e; }
         
-        .download-actions { display: flex; flex-direction: column; gap: 10px; width: 100%; }
-        .btn-download { text-align: center; font-weight: 700; padding: 12px; border-radius: 14px; text-decoration: none; font-size: 0.9rem; display: flex; align-items: center; justify-content: center; gap: 8px; border: none; cursor: pointer; }
+        .download-actions { display: flex; flex-direction: column; gap: 8px; width: 100%; }
+        .btn-download { text-align: center; font-weight: 700; padding: 11px; border-radius: 12px; text-decoration: none; font-size: 0.85rem; display: flex; align-items: center; justify-content: center; gap: 8px; border: none; cursor: pointer; width: 100%; }
         .btn-install { background: #00e699; color: #000000; }
-        .btn-ios { background: #21262d; color: #ffffff; border: 1px solid #30363d; }
+        .btn-secondary { background: #21262d; color: #ffffff; border: 1px solid #30363d; }
 
-        .social-card { background: #161b22; border: 1px solid #30363d; border-radius: 20px; padding: 18px; margin-bottom: 20px; }
+        .social-card, .support-card { background: #161b22; border: 1px solid #30363d; border-radius: 20px; padding: 18px; margin-bottom: 20px; }
         .social-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px; }
-        .social-btn { text-align: center; font-weight: 600; padding: 10px; border-radius: 12px; text-decoration: none; font-size: 0.85rem; display: flex; align-items: center; justify-content: center; gap: 6px; color: #ffffff; background: #21262d; border: 1px solid #30363d; transition: 0.2s; }
+        .social-btn { text-align: center; font-weight: 600; padding: 10px; border-radius: 12px; text-decoration: none; font-size: 0.82rem; display: flex; align-items: center; justify-content: center; gap: 6px; color: #ffffff; background: #21262d; border: 1px solid #30363d; }
         .btn-yt { border-color: #ff0000; color: #ff4d4d; }
         .btn-tg { border-color: #0088cc; color: #33b5e5; }
         .btn-insta { border-color: #e1306c; color: #ff6699; }
         .btn-x { border-color: #ffffff; color: #ffffff; }
         .btn-fb { border-color: #1877f2; color: #4267B2; }
 
-        .support-card { background: #161b22; border: 1px solid #30363d; border-radius: 20px; padding: 18px; margin-bottom: 20px; }
-        .btn-support { width: 100%; text-align: center; font-weight: 700; padding: 12px; border-radius: 14px; text-decoration: none; font-size: 0.9rem; display: flex; align-items: center; justify-content: center; gap: 8px; background: #21262d; color: #00e699; border: 1px solid #00e699; margin-top: 10px; }
+        .btn-support { width: 100%; text-align: center; font-weight: 700; padding: 12px; border-radius: 14px; text-decoration: none; font-size: 0.88rem; display: flex; align-items: center; justify-content: center; gap: 8px; background: #21262d; color: #00e699; border: 1px solid #00e699; margin-top: 10px; }
 
-        .notice-box { background: rgba(0, 230, 153, 0.05); border: 1px dashed #00e699; padding: 12px; border-radius: 12px; margin-top: 15px; text-align: center; font-size: 0.8rem; color: #8b949e; }
+        /* --- MODAL POPUPS (SETTINGS & LOGIN) --- */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.85); display: none; justify-content: center; align-items: center; z-index: 9999; padding: 15px; }
+        .modal-box { background: #161b22; border: 1px solid #30363d; border-radius: 24px; width: 100%; max-width: 400px; padding: 22px; position: relative; color: #fff; }
+        .close-btn { position: absolute; top: 15px; right: 18px; font-size: 1.4rem; color: #8b949e; cursor: pointer; }
+        .modal-title { font-size: 1.2rem; font-weight: 800; color: #ffffff; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; }
+        
+        .form-group { margin-bottom: 14px; }
+        .form-group label { font-size: 0.8rem; color: #8b949e; display: block; margin-bottom: 6px; font-weight: 600; }
+        .form-group input, .form-group select { width: 100%; padding: 12px; background: #0b0f17; border: 1px solid #30363d; border-radius: 12px; color: #fff; outline: none; font-size: 0.9rem; }
+        .form-group input:focus { border-color: #00e699; }
 
-        .footer { text-align: center; margin-top: 30px; padding-top: 20px; border-top: 1px solid #21262d; color: #8b949e; font-size: 0.85rem; }
+        .setting-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #21262d; font-size: 0.9rem; }
+
+        .footer { text-align: center; margin-top: 25px; padding-top: 15px; border-top: 1px solid #21262d; color: #8b949e; font-size: 0.82rem; }
         .footer span { color: #00e699; font-weight: 700; }
     </style>
 </head>
 <body>
 
-    <!-- 15-SECOND PROFESSIONAL SPLASH SCREEN -->
+    <!-- 15-SECOND SPLASH SCREEN -->
     <div id="splash-screen">
         <div class="splash-logo-wrapper">
             <div class="splash-ring"></div>
@@ -185,57 +192,92 @@
         </div>
     </div>
 
-    <!-- MAIN APP INTERFACE -->
+    <!-- MAIN CONTAINER -->
     <div class="container">
-        <!-- Branding -->
+        
+        <!-- TOP NAV BAR -->
+        <div class="top-navbar">
+            <div class="user-badge" onclick="openAuthModal()" id="user-badge-text">
+                👤 Login / Sign Up
+            </div>
+            <div class="three-dots-btn" onclick="openSettingsModal()">⋮</div>
+        </div>
+
+        <!-- BRANDING HEADER -->
         <div class="header">
             <div class="logo-box">
                 <img src="file_0000000051ac82068c717a63b34c9d7b.png" alt="Ticbull Logo">
             </div>
             <h1>TICBULL</h1>
-            <p class="tagline">Official Android & iOS App Hub</p>
+            <p class="tagline">Next-Gen Android & iOS App Store</p>
         </div>
 
-        <!-- Search Bar -->
+        <!-- SEARCH BAR -->
         <div class="search-box">
-            <input type="text" placeholder="Search Apps, Education & Games...">
+            <input type="text" id="app-search-input" placeholder="Search Apps, Games, Education..." onkeyup="filterApps()">
         </div>
 
-        <!-- Categories -->
+        <!-- CATEGORIES -->
         <div class="category-title">Categories</div>
         <div class="categories">
-            <div class="cat-btn active">All Apps</div>
-            <div class="cat-btn">🤖 Android Apps</div>
-            <div class="cat-btn">🍎 iPhone (iOS)</div>
-            <div class="cat-btn">📚 Education</div>
-            <div class="cat-btn">🎮 Games</div>
+            <div class="cat-btn active" onclick="selectCategory('all', this)">All Apps</div>
+            <div class="cat-btn" onclick="selectCategory('android', this)">🤖 Android Apps</div>
+            <div class="cat-btn" onclick="selectCategory('ios', this)">🍎 iPhone (iOS)</div>
+            <div class="cat-btn" onclick="selectCategory('education', this)">📚 Education</div>
+            <div class="cat-btn" onclick="selectCategory('games', this)">🎮 Games</div>
         </div>
 
-        <!-- Official Store Downloader -->
-        <div class="category-title">Download & Install Store</div>
-        <div class="app-card">
-            <div class="app-header">
-                <img src="file_0000000051ac82068c717a63b34c9d7b.png" class="app-icon" alt="TICBULL App">
-                <div class="app-details">
-                    <h3>TICBULL App Store</h3>
-                    <p>Direct Download & Install Options</p>
+        <!-- DYNAMIC APPS CONTAINER -->
+        <div id="apps-container">
+            
+            <!-- Store App Card -->
+            <div class="app-card app-item" data-category="android ios">
+                <div class="app-header">
+                    <img src="file_0000000051ac82068c717a63b34c9d7b.png" class="app-icon" alt="TICBULL Store">
+                    <div class="app-details">
+                        <h3>TICBULL Store App</h3>
+                        <p>Official Store • v2.0 • Free</p>
+                    </div>
+                </div>
+                <div class="download-actions">
+                    <button onclick="playNotificationSound(); installStoreApp();" class="btn-download btn-install">📥 Download / Install Official App</button>
                 </div>
             </div>
-            
-            <div <a href="app.apk" download class="btn-download btn-install">📥 Download Android APK File</a>
 
-                <a href="https://yuviyadav16.github.io/Ticbull-" target="_blank" class="btn-download btn-ios">🍎 Open iPhone Web App</a>
+            <!-- Education App -->
+            <div class="app-card app-item" data-category="education android ios">
+                <div class="app-header">
+                    <div class="app-icon" style="background:#1f293d; display:flex; align-items:center; justify-content:center; font-size:1.8rem;">📚</div>
+                    <div class="app-details">
+                        <h3>TICBULL Edu-Master Pro</h3>
+                        <p>Education & Learning • Pro Edition</p>
+                    </div>
+                </div>
+                <div class="download-actions">
+                    <button onclick="playNotificationSound(); alert('Ticbull Edu-Master Downloading...');" class="btn-download btn-secondary">📥 Download APK (v1.0)</button>
+                </div>
             </div>
 
-            <div class="notice-box">
-                🚀 New Apps, Education & Gaming applications by <b>mryuviyadav</b> coming soon!
+            <!-- Gaming App -->
+            <div class="app-card app-item" data-category="games android">
+                <div class="app-header">
+                    <div class="app-icon" style="background:#2d1f3d; display:flex; align-items:center; justify-content:center; font-size:1.8rem;">🎮</div>
+                    <div class="app-details">
+                        <h3>Bull Runner 3D Game</h3>
+                        <p>Action & Gaming • High Graphics</p>
+                    </div>
+                </div>
+                <div class="download-actions">
+                    <button onclick="playNotificationSound(); alert('Bull Runner 3D Game Downloading...');" class="btn-download btn-secondary">🎮 Play / Install Game</button>
+                </div>
             </div>
+
         </div>
 
-        <!-- Follow Owner / Social Links -->
+        <!-- FOLLOW OWNER / SOCIAL LINKS -->
         <div class="category-title">Follow Owner (mryuviyadav)</div>
         <div class="social-card">
-            <p style="font-size: 0.88rem; color: #c9d1d9;">Follow us for latest app updates, features & announcements!</p>
+            <p style="font-size: 0.85rem; color: #c9d1d9;">Follow us for latest app updates, features & announcements!</p>
             <div class="social-grid">
                 <a href="https://youtube.com/@mryuviyadav" target="_blank" class="social-btn btn-yt">▶️ YouTube</a>
                 <a href="https://t.me/mryuviyadav" target="_blank" class="social-btn btn-tg">✈️ Telegram</a>
@@ -245,22 +287,105 @@
             </div>
         </div>
 
-        <!-- Customer Support Section -->
+        <!-- SUPPORT -->
         <div class="category-title">Customer Support & Help</div>
         <div class="support-card">
-            <p style="font-size: 0.88rem; color: #c9d1d9;">Need help, facing issues or have questions about TICBULL apps? Email us directly!</p>
+            <p style="font-size: 0.85rem; color: #c9d1d9;">Need help or have questions about TICBULL apps? Email us directly!</p>
             <a href="mailto:Ticbull.support@gmail.com" class="btn-support">✉️ Email Help (Ticbull.support@gmail.com)</a>
         </div>
 
-        <!-- Footer -->
+        <!-- FOOTER -->
         <div class="footer">
-            <p>© 2026 <b>TICBULL</b>. All rights reserved.</p>
-            <p style="margin-top: 6px;">Developed by <span>mryuviyadav</span></p>
+            <p>© 2026 <b>TICBULL Store</b>. All rights reserved.</p>
+            <p style="margin-top: 5px;">Developed by <span>mryuviyadav</span></p>
+        </div>
+
+    </div>
+
+    <!-- SETTINGS MODAL -->
+    <div class="modal-overlay" id="settings-modal">
+        <div class="modal-box">
+            <span class="close-btn" onclick="closeSettingsModal()">✕</span>
+            <div class="modal-title">⚙️ Store Settings</div>
+            
+            <div class="setting-item">
+                <span>🔊 Update Notification Sound</span>
+                <input type="checkbox" id="sound-toggle" checked style="width: 20px; height: 20px; accent-color: #00e699;">
+            </div>
+            
+            <div class="setting-item" onclick="closeSettingsModal(); openAuthModal();" style="cursor: pointer; color: #00e699;">
+                <span>👤 User Account & Profile</span>
+                <span>➔</span>
+            </div>
+
+            <div class="setting-item">
+                <span>👑 Owner / Developer</span>
+                <span style="color: #8b949e;">mryuviyadav</span>
+            </div>
+
+            <div class="setting-item">
+                <span>✉️ Official Support</span>
+                <span style="color: #8b949e;">Ticbull.support</span>
+            </div>
+
+            <button onclick="closeSettingsModal()" class="btn-download btn-install" style="margin-top: 15px;">Done</button>
         </div>
     </div>
 
-    <!-- PROFESSIONAL 15-SECOND ANIMATION SCRIPT -->
+    <!-- AUTH & PROFILE MODAL -->
+    <div class="modal-overlay" id="auth-modal">
+        <div class="modal-box">
+            <span class="close-btn" onclick="closeAuthModal()">✕</span>
+            
+            <!-- Step 1: Email Form -->
+            <div id="auth-step-1">
+                <div class="modal-title">📧 Email Login / OTP</div>
+                <div class="form-group">
+                    <label>Enter Email Address</label>
+                    <input type="email" id="user-email" placeholder="example@gmail.com">
+                </div>
+                <button onclick="sendOTP()" class="btn-download btn-install">Get Verification OTP</button>
+            </div>
+
+            <!-- Step 2: OTP Form -->
+            <div id="auth-step-2" style="display: none;">
+                <div class="modal-title">🔐 Enter OTP</div>
+                <p style="font-size: 0.8rem; color: #8b949e; margin-bottom: 12px;">OTP sent to your email. (Use demo OTP: <b>1234</b>)</p>
+                <div class="form-group">
+                    <label>4-Digit OTP Code</label>
+                    <input type="number" id="otp-code" placeholder="1234">
+                </div>
+                <button onclick="verifyOTP()" class="btn-download btn-install">Verify & Continue</button>
+            </div>
+
+            <!-- Step 3: Profile Setup -->
+            <div id="auth-step-3" style="display: none;">
+                <div class="modal-title">👤 Complete Profile</div>
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" id="user-name" placeholder="Your Name">
+                </div>
+                <div class="form-group">
+                    <label>Date of Birth (DOB)</label>
+                    <input type="date" id="user-dob">
+                </div>
+                <div class="form-group">
+                    <label>Gender</label>
+                    <select id="user-gender">
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <button onclick="saveUserProfile()" class="btn-download btn-install">Save Account Profile</button>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT CODE -->
     <script>
+        // --- 15-SECOND SPLASH SCREEN ANIMATION ---
         const textToType = "TICBULL App & iOS Store Developed by mryuviyadav";
         const textElement = document.getElementById("typing-text");
         let index = 0;
@@ -280,15 +405,148 @@
 
         window.addEventListener('load', () => {
             typeEffect();
-            
-            // Exactly 15 Seconds (15000 milliseconds) Splash Screen Timer
+            checkSavedUser();
             setTimeout(() => {
                 const splash = document.getElementById("splash-screen");
                 splash.style.opacity = "0";
                 splash.style.visibility = "hidden";
             }, 15000);
         });
-    </script>
 
+        // --- AUDIO NOTIFICATION SOUND API ---
+        function playNotificationSound() {
+            if(!document.getElementById('sound-toggle').checked) return;
+            try {
+                const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(587.33, ctx.currentTime); // D5
+                osc.frequency.setValueAtTime(880, ctx.currentTime + 0.1); // A5
+                gain.gain.setValueAtTime(0.2, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.3);
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.start();
+                osc.stop(ctx.currentTime + 0.3);
+            } catch(e) { console.log(e); }
+        }
+
+        // --- CATEGORY & SEARCH FILTERS ---
+        function selectCategory(cat, btn) {
+            playNotificationSound();
+            document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            const appItems = document.querySelectorAll('.app-item');
+            appItems.forEach(item => {
+                const itemCats = item.getAttribute('data-category');
+                if (cat === 'all' || itemCats.includes(cat)) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        }
+
+        function filterApps() {
+            const query = document.getElementById('app-search-input').value.toLowerCase();
+            const appItems = document.querySelectorAll('.app-item');
+            appItems.forEach(item => {
+                const title = item.querySelector('h3').innerText.toLowerCase();
+                if (title.includes(query)) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        }
+
+        // --- MODAL CONTROLS ---
+        function openSettingsModal() {
+            playNotificationSound();
+            document.getElementById('settings-modal').style.display = 'flex';
+        }
+        function closeSettingsModal() {
+            document.getElementById('settings-modal').style.display = 'none';
+        }
+        function openAuthModal() {
+            playNotificationSound();
+            document.getElementById('auth-modal').style.display = 'flex';
+        }
+        function closeAuthModal() {
+            document.getElementById('auth-modal').style.display = 'none';
+        }
+
+        // --- OTP & PROFILE SYSTEM ---
+        function sendOTP() {
+            const email = document.getElementById('user-email').value;
+            if(!email.includes('@')) {
+                alert('Please enter a valid email address!');
+                return;
+            }
+            playNotificationSound();
+            alert('Verification OTP sent to ' + email + '!\n(Demo OTP: 1234)');
+            document.getElementById('auth-step-1').style.display = 'none';
+            document.getElementById('auth-step-2').style.display = 'block';
+        }
+
+        function verifyOTP() {
+            const otp = document.getElementById('otp-code').value;
+            if(otp === "1234" || otp.length === 4) {
+                playNotificationSound();
+                alert('Email verified successfully!');
+                document.getElementById('auth-step-2').style.display = 'none';
+                document.getElementById('auth-step-3').style.display = 'block';
+            } else {
+                alert('Invalid OTP! Please enter 1234');
+            }
+        }
+
+        function saveUserProfile() {
+            const name = document.getElementById('user-name').value;
+            const dob = document.getElementById('user-dob').value;
+            const gender = document.getElementById('user-gender').value;
+
+            if(!name) { alert('Please enter your name!'); return; }
+
+            const userData = { name, dob, gender };
+            localStorage.setItem('ticbull_user', JSON.stringify(userData));
+            
+            playNotificationSound();
+            alert('Profile Created Successfully! Welcome ' + name + ' 🎉');
+            checkSavedUser();
+            closeAuthModal();
+        }
+
+        function checkSavedUser() {
+            const saved = localStorage.getItem('ticbull_user');
+            if(saved) {
+                const user = JSON.parse(saved);
+                document.getElementById('user-badge-text').innerHTML = '🟢 ' + user.name;
+            }
+        }
+
+        // --- APP INSTALLATION HANDLER ---
+        let deferredPrompt;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+        });
+
+        function installStoreApp() {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then((choiceResult) => {
+                    if (choiceResult.outcome === 'accepted') {
+                        alert('TICBULL Store Installed Successfully!');
+                    }
+                    deferredPrompt = null;
+                });
+            } else {
+                alert("To Install App on Phone:\n\n1. Click Chrome 3 dots (⋮) top-right\n2. Tap 'Add to Home screen' or 'Install App'\n\nOn iPhone:\n1. Tap Share icon\n2. Tap 'Add to Home Screen'");
+            }
+        }
+    </script>
 </body>
 </html>
