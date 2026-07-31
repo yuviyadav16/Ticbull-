@@ -36,66 +36,42 @@
             flex-direction: column;
             align-items: center;
             min-height: 100vh;
+            overflow-x: hidden;
         }
 
-        /* 15-SECOND SPLASH SCREEN WITH ASLI GITHUB LOGO */
-        #splashScreen {
-            position: fixed;
-            top: 0; left: 0; width: 100vw; height: 100vh;
-            background: #0b0f19;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-            text-align: center;
-            transition: opacity 0.5s ease;
+        /* 🔒 GATEKEEPER EMAIL ACCESS LOCK OVERLAY */
+        #gatekeeperLock {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(11, 15, 25, 0.96); backdrop-filter: blur(12px);
+            display: flex; justify-content: center; align-items: center; z-index: 10000;
         }
 
-        .prime-logo-container {
-            position: relative; width: 130px; height: 130px;
-            display: flex; align-items: center; justify-content: center; margin-bottom: 25px;
+        .lock-card {
+            background: var(--card-bg); width: 90%; max-width: 380px;
+            padding: 25px; border-radius: 20px; border: 1px solid var(--border-color);
+            text-align: center; box-shadow: 0 0 30px rgba(0, 230, 118, 0.2);
         }
 
-        .prime-ring {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            border-radius: 50%; border: 3px solid transparent;
-            border-top: 3px solid var(--accent-green); border-bottom: 3px solid var(--accent-green);
-            animation: spinPrime 2.5s linear infinite; box-sizing: border-box;
-            filter: drop-shadow(0 0 10px var(--accent-green));
+        .lock-logo-img {
+            width: 80px; height: 80px; border-radius: 18px; object-fit: cover;
+            border: 1px solid var(--accent-green); margin-bottom: 12px;
+            box-shadow: 0 0 15px rgba(0, 230, 118, 0.3);
         }
 
-        @keyframes spinPrime { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .lock-title { font-size: 1.8rem; font-weight: 900; margin: 0; color: #fff; }
+        .lock-sub { font-size: 0.85rem; color: var(--text-sub); margin: 6px 0 18px 0; }
 
-        .splash-bull-img {
-            width: 90px; height: 90px; border-radius: 20px;
-            object-fit: cover; box-shadow: 0 0 20px rgba(0, 230, 118, 0.4);
-            border: 1px solid var(--accent-green); z-index: 2;
+        input, select {
+            width: 100%; padding: 12px; margin: 8px 0; background: var(--input-bg);
+            border: 1px solid var(--border-color); border-radius: 10px; color: var(--text-main);
+            box-sizing: border-box; font-size: 0.9rem;
         }
 
-        .splash-title {
-            font-size: 2.2rem; font-weight: 900; letter-spacing: 2px; color: #fff; margin: 0;
-            animation: textGlow 2s ease-in-out infinite alternate;
+        .lock-btn, .download-btn {
+            width: 100%; padding: 13px; background: var(--accent-green); color: #000;
+            border: none; border-radius: 10px; font-weight: 800; font-size: 1rem;
+            cursor: pointer; margin-top: 10px;
         }
-
-        @keyframes textGlow {
-            0% { text-shadow: 0 0 5px rgba(255,255,255,0.2); }
-            100% { text-shadow: 0 0 20px var(--accent-green); }
-        }
-
-        .splash-dev-sub { font-size: 0.95rem; color: #a1a1a1; margin-top: 8px; font-weight: 500; }
-        .splash-dev-name { color: var(--accent-green); font-weight: 700; }
-
-        .splash-loader-bar {
-            margin-top: 30px; width: 200px; height: 4px;
-            background: rgba(255,255,255,0.1); border-radius: 10px; overflow: hidden;
-        }
-        .splash-progress-fill {
-            width: 0%; height: 100%; background: var(--accent-green);
-            animation: loadPrime 15s linear forwards; box-shadow: 0 0 10px var(--accent-green);
-        }
-
-        @keyframes loadPrime { 0% { width: 0%; } 100% { width: 100%; } }
 
         /* HEADER & NAVBAR */
         header {
@@ -108,7 +84,7 @@
         .user-badge {
             background: rgba(0, 230, 118, 0.1); padding: 6px 14px; border-radius: 20px;
             font-size: 0.85rem; color: var(--accent-green); border: 1px solid rgba(0, 230, 118, 0.3);
-            cursor: pointer; font-weight: 600;
+            font-weight: 600; cursor: pointer;
         }
 
         .icon-btn { background: none; border: none; color: var(--text-main); font-size: 1.3rem; cursor: pointer; }
@@ -160,11 +136,6 @@
             padding: 16px; box-sizing: border-box; border: 1px solid var(--border-color); margin-bottom: 12px;
         }
 
-        .download-btn {
-            width: 100%; padding: 12px; background: var(--accent-green); color: #000;
-            border: none; border-radius: 10px; font-weight: 800; cursor: pointer; margin-top: 10px;
-        }
-
         /* SECTIONS */
         .section-box {
             width: 90%; max-width: 450px; background: var(--card-bg); border-radius: 20px;
@@ -209,11 +180,6 @@
 
         .close-btn { position: absolute; top: 12px; right: 18px; color: var(--text-sub); font-size: 1.5rem; cursor: pointer; }
 
-        input, select {
-            width: 100%; padding: 11px; margin: 6px 0; background: var(--input-bg);
-            border: 1px solid var(--border-color); border-radius: 10px; color: var(--text-main); box-sizing: border-box;
-        }
-
         /* RED 'Y' PROGRESS RING */
         .progress-box { display: flex; flex-direction: column; align-items: center; justify-content: center; margin: 15px 0; }
         .y-symbol-ring { position: relative; width: 100px; height: 100px; display: flex; align-items: center; justify-content: center; }
@@ -236,25 +202,34 @@
 </head>
 <body>
 
-    <!-- 15-SECOND SPLASH SCREEN -->
-    <div id="splashScreen">
-        <div class="prime-logo-container">
-            <div class="prime-ring"></div>
-            <img src="https://raw.githubusercontent.com/yuviyadav16/Ticbull-/main/file_0000000051ac82068c717a63b34c9d7b.png" class="splash-bull-img" alt="TICBULL Logo">
+    <!-- 🔒 WEBSITE ACCESS LOCK OVERLAY (SABSE PEHLE EMAIL VERIFICATION) -->
+    <div id="gatekeeperLock">
+        <div class="lock-card">
+            <img src="https://raw.githubusercontent.com/yuviyadav16/Ticbull-/main/file_0000000051ac82068c717a63b34c9d7b.png" class="lock-logo-img" alt="TICBULL Logo">
+            <h2 class="lock-title">TICBULL</h2>
+            <p class="lock-sub">Verify your Email to unlock TICBULL App Store.</p>
+
+            <div id="emailStep">
+                <input type="text" id="userName" placeholder="Your Name">
+                <input type="email" id="userEmail" placeholder="Your Email Address (Gmail)">
+                <button class="lock-btn" id="sendOtpBtn" onclick="sendVerificationOTP()">Send Email OTP</button>
+            </div>
+
+            <div id="otpStep" style="display:none;">
+                <p style="font-size:0.8rem; color:var(--accent-green); margin-top:0;">📩 OTP Sent to Email Inbox!</p>
+                <input type="number" id="otpInput" placeholder="Enter 4-Digit OTP">
+                <button class="lock-btn" onclick="verifySiteAccess()">Verify & Unlock Website</button>
+            </div>
         </div>
-        <h1 class="splash-title">TICBULL</h1>
-        <div class="splash-dev-sub">TICBULL App & iOS Store Developed by</div>
-        <div class="splash-dev-name">mryuviyadav</div>
-        <div class="splash-loader-bar"><div class="splash-progress-fill"></div></div>
     </div>
 
-    <!-- MAIN HEADER -->
+    <!-- MAIN NAVBAR -->
     <header>
         <div style="font-weight:800; font-size:1.1rem; color:var(--accent-green);">TICBULL Hub</div>
         <div class="header-actions">
-            <div class="user-badge" id="userBadge" onclick="playClickSound(); openAuthModal();">👤 Sign In</div>
-            <button class="icon-btn" onclick="playClickSound(); toggleTheme();">🌙</button>
-            <button class="icon-btn" onclick="playClickSound(); openSettings();">⋮</button>
+            <div class="user-badge" id="userBadge">👤 Verified Member</div>
+            <button class="icon-btn" onclick="toggleTheme()">🌙</button>
+            <button class="icon-btn" onclick="openSettings()">⋮</button>
         </div>
     </header>
 
@@ -267,7 +242,7 @@
                 <p>Install Store on Android & iPhone</p>
             </div>
         </div>
-        <button class="download-btn" onclick="playClickSound(); openDownloadModal(1);">📱 Install TICBULL App on Phone</button>
+        <button class="download-btn" onclick="openDownloadModal(1)">📱 Install TICBULL App on Phone</button>
         <div style="border: 1px dashed var(--accent-green); border-radius: 12px; padding: 10px; margin-top: 10px; font-size: 0.78rem; color: var(--text-sub); text-align: center;">
             💡 iPhone users: Tap Share Icon ➔ 'Add to Home Screen' to install!
         </div>
@@ -281,19 +256,19 @@
 
     <!-- OS SELECTOR -->
     <div class="os-selector">
-        <button class="os-btn active" id="btnAndroid" onclick="playClickSound(); selectOS('android');">🤖 Android</button>
-        <button class="os-btn" id="btnIos" onclick="playClickSound(); selectOS('ios');">🍎 iOS (iPhone)</button>
+        <button class="os-btn active" id="btnAndroid" onclick="selectOS('android')">🤖 Android</button>
+        <button class="os-btn" id="btnIos" onclick="selectOS('ios')">🍎 iOS (iPhone)</button>
     </div>
 
     <!-- CATEGORY CHIPS -->
     <div class="category-nav">
-        <div class="cat-chip active" onclick="playClickSound(); filterCat('all');">All</div>
-        <div class="cat-chip" onclick="playClickSound(); filterCat('apps');">Apps</div>
-        <div class="cat-chip" onclick="playClickSound(); filterCat('games');">Games</div>
-        <div class="cat-chip" onclick="playClickSound(); filterCat('education');">Education</div>
+        <div class="cat-chip active" onclick="filterCat('all')">All</div>
+        <div class="cat-chip" onclick="filterCat('apps')">Apps</div>
+        <div class="cat-chip" onclick="filterCat('games')">Games</div>
+        <div class="cat-chip" onclick="filterCat('education')">Education</div>
     </div>
 
-    <!-- APP STORE CARDS CONTAINER -->
+    <!-- APP CARDS CONTAINER -->
     <div id="storeContent" style="width:100%; display:flex; flex-direction:column; align-items:center;"></div>
 
     <!-- FOLLOW OWNER SECTION -->
@@ -304,16 +279,16 @@
         </p>
         <div class="social-grid">
             <div class="social-row">
-                <a href="https://youtube.com/@mryuviyadav" target="_blank" onclick="playClickSound();" class="social-item btn-yt">▶️ YouTube</a>
-                <a href="https://t.me/mryuviyadav" target="_blank" onclick="playClickSound();" class="social-item btn-tg">✈️ Telegram</a>
+                <a href="https://youtube.com/@mryuviyadav" target="_blank" class="social-item btn-yt">▶️ YouTube</a>
+                <a href="https://t.me/mryuviyadav" target="_blank" class="social-item btn-tg">✈️ Telegram</a>
             </div>
             <div class="social-row">
-                <a href="https://www.instagram.com/mryuvi_yadav" target="_blank" onclick="playClickSound();" class="social-item btn-insta">📸 Instagram</a>
-                <a href="https://x.com/mryuviyadav" target="_blank" onclick="playClickSound();" class="social-item btn-tw">𝕏 Twitter / X</a>
+                <a href="https://www.instagram.com/mryuvi_yadav" target="_blank" class="social-item btn-insta">📸 Instagram</a>
+                <a href="https://x.com/mryuviyadav" target="_blank" class="social-item btn-tw">𝕏 Twitter / X</a>
             </div>
             <div class="social-row">
-                <a href="https://t.me/ticbullteam" target="_blank" onclick="playClickSound();" class="social-item btn-tg">👥 Telegram Team</a>
-                <a href="https://facebook.com/mryuviyadav" target="_blank" onclick="playClickSound();" class="social-item btn-fb">📘 Facebook Page</a>
+                <a href="https://t.me/ticbullteam" target="_blank" class="social-item btn-tg">👥 Telegram Team</a>
+                <a href="https://facebook.com/mryuviyadav" target="_blank" class="social-item btn-fb">📘 Facebook Page</a>
             </div>
         </div>
     </div>
@@ -324,7 +299,7 @@
         <p style="font-size:0.8rem; color:var(--text-sub); margin-top:0; margin-bottom:12px;">
             Need help, facing issues or have questions about TICBULL apps? Email us directly!
         </p>
-        <a href="mailto:Ticbull.support@gmail.com" onclick="playClickSound();" class="btn-email-help">
+        <a href="mailto:Ticbull.support@gmail.com" class="btn-email-help">
             ✉️ Email Help (Ticbull.support@gmail.com)
         </a>
     </div>
@@ -337,7 +312,7 @@
     <!-- RED 'Y' DOWNLOAD MODAL -->
     <div class="modal" id="downloadModal">
         <div class="modal-content" style="text-align:center;">
-            <span class="close-btn" onclick="playClickSound(); closeModal('downloadModal');">&times;</span>
+            <span class="close-btn" onclick="closeModal('downloadModal')">&times;</span>
             <h2 id="modalAppName" style="margin-bottom:2px;">App Name</h2>
             <p id="modalAppDesc" style="font-size:0.85rem; color:var(--text-sub); margin-top:0;">Description</p>
             <div style="font-size:0.8rem; color:var(--accent-green); margin-bottom:10px;">🛡️ Verified 100% Malware Free</div>
@@ -355,45 +330,14 @@
                     <div id="downloadSpeed" style="font-size:0.8rem; color:var(--text-sub); margin-top:2px;">Click Start to Download</div>
                 </div>
             </div>
-            <button class="download-btn" id="startDownloadBtn" onclick="playClickSound(); startRedYDownload();">Start Download</button>
+            <button class="download-btn" id="startDownloadBtn" onclick="startRedYDownload()">Start Download</button>
         </div>
     </div>
 
-    <!-- AUTH MODAL -->
-    <div class="modal" id="authModal">
-        <div class="modal-content">
-            <span class="close-btn" onclick="playClickSound(); closeModal('authModal');">&times;</span>
-            <h2 id="authTitle">Create Account</h2>
-            <div id="signUpFields">
-                <input type="text" id="regName" placeholder="Full Name">
-                <input type="email" id="regEmail" placeholder="Email Address (Gmail / Yahoo / iCloud)">
-                <input type="password" id="regPass" placeholder="Set Password">
-                <button class="download-btn" id="sendBtn" onclick="playClickSound(); sendDirectEmailOTP();">Send Email Verification OTP</button>
-                <p style="color:var(--accent-green); font-size:0.85rem; text-align:center; cursor:pointer;" onclick="playClickSound(); showLoginMode();">Already have an account? Sign In</p>
-            </div>
-            <div id="loginFields" style="display:none;">
-                <input type="email" id="loginEmail" placeholder="Email Address">
-                <input type="password" id="loginPass" placeholder="Password">
-                <button class="download-btn" onclick="playClickSound(); handleLogin();">Sign In</button>
-                <p style="color:var(--accent-green); font-size:0.85rem; text-align:center; cursor:pointer;" onclick="playClickSound(); showRegisterMode();">New user? Create Account</p>
-            </div>
-            <div id="otpFields" style="display:none;">
-                <p style="font-size:0.85rem; color: var(--text-sub);">An account verification code was sent to your email inbox. Enter code below:</p>
-                <input type="number" id="otpInput" placeholder="Enter 4-Digit OTP">
-                <button class="download-btn" onclick="playClickSound(); verifyOTP();">Verify & Complete Signup</button>
-            </div>
-            <div id="userProfileFields" style="display:none; text-align:center;">
-                <h3 id="profileNameDisplay" style="color:var(--accent-green);"></h3>
-                <p id="profileEmailDisplay" style="font-size:0.85rem; color:var(--text-sub);"></p>
-                <button class="download-btn" style="background:var(--accent-red); color:white;" onclick="playClickSound(); handleLogout();">Logout Account</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- SETTINGS & AI CHAT MODAL -->
+    <!-- 3-DOT SETTINGS & AI CHAT MODAL -->
     <div class="modal" id="settingsModal">
         <div class="modal-content">
-            <span class="close-btn" onclick="playClickSound(); closeModal('settingsModal');">&times;</span>
+            <span class="close-btn" onclick="closeModal('settingsModal')">&times;</span>
             <h2>⚙️ Store Settings</h2>
             <p style="font-size: 0.85rem; color: var(--text-sub);">TICBULL Store Pro v3.0</p>
             <hr style="border-color: var(--border-color);">
@@ -403,7 +347,7 @@
             </div>
             <div style="display:flex; gap:5px;">
                 <input type="text" id="chatInput" placeholder="Ask AI something..." style="margin:0;">
-                <button style="background:var(--accent-green); border:none; padding:10px 15px; border-radius:10px; font-weight:bold; cursor:pointer;" onclick="playClickSound(); sendAiMsg();">Send</button>
+                <button style="background:var(--accent-green); border:none; padding:10px 15px; border-radius:10px; font-weight:bold; cursor:pointer;" onclick="sendAiMsg()">Send</button>
             </div>
         </div>
     </div>
@@ -413,38 +357,71 @@
         const EMAILJS_SERVICE_ID = "service_490i9bj";
         const EMAILJS_TEMPLATE_ID = "template_wpjabuj";
 
-        // Pre-initialize EmailJS
-        if(typeof emailjs !== 'undefined') {
-            emailjs.init(EMAILJS_PUBLIC_KEY);
-        }
-
-        const clickAudio = new Audio('https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3');
-        function playClickSound() {
-            clickAudio.currentTime = 0;
-            clickAudio.play().catch(() => {});
-        }
-
-        setTimeout(() => {
-            const splash = document.getElementById('splashScreen');
-            splash.style.opacity = '0';
-            setTimeout(() => splash.style.display = 'none', 500);
-        }, 15000);
+        emailjs.init(EMAILJS_PUBLIC_KEY);
 
         let currentOS = 'android';
         let currentCategory = 'all';
         let generatedOTP = null;
-        let tempUserData = {};
+        let tempUser = {};
         let activeAppDownload = null;
-
-        const blockedTempDomains = ['tempmail.com', 'dispostable.com', '10minutemail.com', 'mailinator.com', 'guerrillamail.com', 'dropmail.me', 'getnada.com', 'yopmail.com'];
 
         const appsData = [
             { id: 1, name: "TICBULL Official App", cat: "apps", os: "android", desc: "Native Official Android Experience by mryuviyadav.", file: "app.apk" },
             { id: 2, name: "TICBULL iOS WebApp", cat: "apps", os: "ios", desc: "Add to Home Screen Web Experience for iPhone.", link: "#" }
         ];
 
-        function getUsersDB() { return JSON.parse(localStorage.getItem('ticbull_users') || '{}'); }
-        function saveUserDB(users) { localStorage.setItem('ticbull_users', JSON.stringify(users)); }
+        window.onload = function() {
+            const isVerified = localStorage.getItem('ticbull_verified_access');
+            const verifiedName = localStorage.getItem('ticbull_user_name');
+            if(isVerified === 'true') {
+                document.getElementById('gatekeeperLock').style.display = 'none';
+                document.getElementById('userBadge').innerText = `👤 ${verifiedName || 'Verified Member'}`;
+            }
+        };
+
+        function sendVerificationOTP() {
+            const name = document.getElementById('userName').value.trim();
+            const email = document.getElementById('userEmail').value.trim().toLowerCase();
+            const sendBtn = document.getElementById('sendOtpBtn');
+
+            if(!name || !email) {
+                alert("Please fill Name and Email Address!");
+                return;
+            }
+
+            generatedOTP = Math.floor(1000 + Math.random() * 9000);
+            tempUser = { name, email };
+
+            sendBtn.innerText = "Sending Email OTP...";
+            sendBtn.disabled = true;
+
+            emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+                to_email: email, email: email, user_email: email,
+                passcode: generatedOTP, otp_code: generatedOTP, otp: generatedOTP
+            }).then(() => {
+                document.getElementById('emailStep').style.display = 'none';
+                document.getElementById('otpStep').style.display = 'block';
+                alert(`OTP Sent to ${email}! Check Gmail Inbox/Spam.`);
+            }).catch((err) => {
+                console.error("Email Error:", err);
+                alert("Email dispatch error! Check EmailJS dashboard.");
+                sendBtn.innerText = "Send Email OTP";
+                sendBtn.disabled = false;
+            });
+        }
+
+        function verifySiteAccess() {
+            const input = document.getElementById('otpInput').value;
+            if(parseInt(input) === generatedOTP) {
+                localStorage.setItem('ticbull_verified_access', 'true');
+                localStorage.setItem('ticbull_user_name', tempUser.name);
+                alert("🎉 Email Verified! Unlocking TICBULL Store...");
+                document.getElementById('gatekeeperLock').style.display = 'none';
+                document.getElementById('userBadge').innerText = `👤 ${tempUser.name}`;
+            } else {
+                alert("Invalid OTP! Check your email inbox.");
+            }
+        }
 
         function renderStore() {
             const container = document.getElementById('storeContent');
@@ -469,7 +446,7 @@
                 card.innerHTML = `
                     <h3 style="margin:0 0 4px 0;">${app.name}</h3>
                     <p style="margin:0; font-size:0.85rem; color:var(--text-sub);">${app.desc}</p>
-                    <button class="download-btn" onclick="playClickSound(); openDownloadModal(${app.id})">
+                    <button class="download-btn" onclick="openDownloadModal(${app.id})">
                         ${currentOS === 'android' ? '📥 Download APK' : '🍎 Get iOS App'}
                     </button>
                 `;
@@ -546,150 +523,8 @@
             }, 250);
         }
 
-        function openAuthModal() {
-            const activeUser = localStorage.getItem('ticbull_active_user');
-            const activeEmail = localStorage.getItem('ticbull_active_email');
-
-            if(activeUser) {
-                document.getElementById('authTitle').innerText = "User Profile";
-                document.getElementById('signUpFields').style.display = 'none';
-                document.getElementById('loginFields').style.display = 'none';
-                document.getElementById('otpFields').style.display = 'none';
-                document.getElementById('userProfileFields').style.display = 'block';
-                document.getElementById('profileNameDisplay').innerText = `👤 ${activeUser}`;
-                document.getElementById('profileEmailDisplay').innerText = activeEmail || 'Registered User';
-            } else {
-                showRegisterMode();
-            }
-            document.getElementById('authModal').style.display = 'flex';
-        }
-
         function openSettings() { document.getElementById('settingsModal').style.display = 'flex'; }
         function closeModal(id) { document.getElementById(id).style.display = 'none'; }
-        function showLoginMode() {
-            document.getElementById('authTitle').innerText = "Sign In";
-            document.getElementById('signUpFields').style.display = 'none';
-            document.getElementById('loginFields').style.display = 'block';
-        }
-        function showRegisterMode() {
-            document.getElementById('authTitle').innerText = "Create Account";
-            document.getElementById('loginFields').style.display = 'none';
-            document.getElementById('signUpFields').style.display = 'block';
-        }
-
-        // DIRECT API EMAIL DISPATCH (NO DEPENDENCY ISSUE)
-        function sendDirectEmailOTP() {
-            const name = document.getElementById('regName').value.trim();
-            const email = document.getElementById('regEmail').value.trim().toLowerCase();
-            const pass = document.getElementById('regPass').value;
-            const sendBtn = document.getElementById('sendBtn');
-
-            if(!name || !email || !pass) {
-                alert("Please fill all details!");
-                return;
-            }
-
-            const emailDomain = email.split('@')[1];
-            if(blockedTempDomains.includes(emailDomain)) {
-                alert("Temporary emails are not allowed!");
-                return;
-            }
-
-            const db = getUsersDB();
-            if(db[email]) {
-                alert("This Email is ALREADY registered! Please Sign In.");
-                showLoginMode();
-                document.getElementById('loginEmail').value = email;
-                return;
-            }
-
-            generatedOTP = Math.floor(1000 + Math.random() * 9000);
-            tempUserData = { name, email, pass };
-
-            sendBtn.innerText = "Sending Real Email OTP...";
-            sendBtn.disabled = true;
-
-            // DIRECT HTTP POST REQUEST TO EMAILJS API
-            fetch('https://api.emailjs.com/api/v1.0/email/send', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    service_id: EMAILJS_SERVICE_ID,
-                    template_id: EMAILJS_TEMPLATE_ID,
-                    user_id: EMAILJS_PUBLIC_KEY,
-                    template_params: {
-                        to_email: email,
-                        email: email,
-                        user_email: email,
-                        passcode: generatedOTP,
-                        otp_code: generatedOTP,
-                        otp: generatedOTP
-                    }
-                })
-            }).then(response => {
-                if(response.ok) {
-                    document.getElementById('signUpFields').style.display = 'none';
-                    document.getElementById('otpFields').style.display = 'block';
-                    alert(`Real OTP sent successfully to ${email}. Check your Inbox / Spam folder.`);
-                } else {
-                    throw new Error("HTTP Dispatch Failed");
-                }
-            }).catch(err => {
-                console.error("API Direct Email Error:", err);
-                // Fail-safe trigger
-                document.getElementById('signUpFields').style.display = 'none';
-                document.getElementById('otpFields').style.display = 'block';
-                alert(`OTP Code Sent To ${email}: ${generatedOTP}`);
-            });
-        }
-
-        function verifyOTP() {
-            const input = document.getElementById('otpInput').value;
-            if(parseInt(input) === generatedOTP) {
-                const db = getUsersDB();
-                db[tempUserData.email] = tempUserData;
-                saveUserDB(db);
-                localStorage.setItem('ticbull_active_user', tempUserData.name);
-                localStorage.setItem('ticbull_active_email', tempUserData.email);
-                alert("Account Created & Saved!");
-                checkActiveUser();
-                closeModal('authModal');
-            } else {
-                alert("Invalid Verification Code!");
-            }
-        }
-
-        function handleLogin() {
-            const email = document.getElementById('loginEmail').value.trim().toLowerCase();
-            const pass = document.getElementById('loginPass').value;
-            const db = getUsersDB();
-            const user = db[email];
-
-            if(user && user.pass === pass) {
-                localStorage.setItem('ticbull_active_user', user.name);
-                localStorage.setItem('ticbull_active_email', user.email);
-                checkActiveUser();
-                alert(`Welcome back, ${user.name}!`);
-                closeModal('authModal');
-            } else {
-                alert("Invalid Email or Password!");
-            }
-        }
-
-        function handleLogout() {
-            localStorage.removeItem('ticbull_active_user');
-            localStorage.removeItem('ticbull_active_email');
-            document.getElementById('userBadge').innerText = `👤 Sign In`;
-            closeModal('authModal');
-            alert("Logged out successfully.");
-        }
-
-        function checkActiveUser() {
-            const activeUser = localStorage.getItem('ticbull_active_user');
-            if(activeUser) {
-                document.getElementById('userBadge').innerText = `👤 ${activeUser}`;
-            }
-        }
 
         function sendAiMsg() {
             const input = document.getElementById('chatInput');
@@ -715,7 +550,6 @@
             }, 500);
         }
 
-        checkActiveUser();
         renderStore();
     </script>
 </body>
