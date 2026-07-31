@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>MotionTiger Pro - Father of CapCut & After Effects</title>
+    <style>
+        :root {
+            --bg-deep: #05070d;
+            --bg-panel: #0b101d;
+            --bg-card: #131a2e;
+            --accent-orange: #ff5500;
+            --accent-gold: #ffbb00;
+            --text-main: #ffffff;
+            --text-muted: #8b9bb4;
+            --border-color: #1e293b;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Roboto, Helvetica, sans-serif;
+            user-select: none;
+        }
+
+        body {
+            background-color: var(--bg-deep);
+            color: var(--text-main);
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* SPLASH SCREEN */
+        #splashScreen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--bg-deep);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.6s ease;
+        }
+
+        .splash-logo {
+            width: 120px;
+            height: 120px;
+            border-radius: 24px;
+            box-shadow: 0 0 30px rgba(255, 85, 0, 0.4);
+            margin-bottom: 20px;
+            animation: pulseLogo 2s infinite ease-in-out;
+            object-fit: cover;
+        }
+
+        @keyframes pulseLogo {
+            0% { transform: scale(1); box-shadow: 0 0 20px rgba(255, 85, 0, 0.3); }
+            50% { transform: scale(1.05); box-shadow: 0 0 45px rgba(255, 85, 0, 0.7); }
+            100% { transform: scale(1); box-shadow: 0 0 20px rgba(255, 85, 0, 0.3); }
+        }
+
+        .splash-title {
+            font-size: 28px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            background: linear-gradient(45deg, #ffffff, var(--accent-orange));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 6px;
+        }
+
+        .splash-credits {
+            font-size: 13px;
+            color: var(--text-muted);
+            letter-spacing: 1px;
+            text-align: center;
+            line-height: 1.6;
+        }
+
+        .splash-credits span {
+            color: var(--accent-gold);
+            font-weight: 600;
+        }
+
+        /* MAIN APP UI */
+        #appContainer {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 0.8s ease;
+        }
+
+        /* TOP NAVIGATION BAR */
+        header {
+            height: 56px;
+            background-color: var(--bg-panel);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 16px;
+        }
+
+        .brand-box {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .brand-box img {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            object-fit: cover;
+        }
+
+        .brand-box h1 {
+            font-size: 16px;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .brand-box h1 span {
+            color: var(--accent-orange);
+        }
+
+        .top-tools {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-pro {
+            background: linear-gradient(135deg, var(--accent-orange), #ff2200);
+            border: none;
+            color: white;
+            padding: 6px 14px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 12px;
+            cursor: pointer;
+            box-shadow: 0 2px 10px rgba(255, 85, 0, 0.3);
+        }
+
+        /* WORKSPACE CONTAINER */
+        .workspace {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* PREVIEW & TABS VIEWPORT */
+        .viewport-area {
+            flex: 1;
+            background-color: #030407;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .canvas-screen {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        .tab-content {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: none;
+            flex-direction: column;
+            background: var(--bg-deep);
+            padding: 16px;
+            overflow-y: auto;
+        }
+
+        .tab-content.active {
+            display: flex;
+        }
+
+        /* STUDIO EDITOR VIEW */
+        .editor-preview-box {
+            width: 90%;
+            max-width: 600px;
+            aspect-ratio: 16/9;
+            background: #000;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+        }
+
+        .preview-placeholder {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+
+        /* TIMELINE CONTROLS */
+        .timeline-section {
+            height: 160px;
+            background-color: var(--bg-panel);
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            padding: 10px;
+        }
+
+        .timeline-tools {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .timeline-tracks {
+            flex: 1;
+            background: var(--bg-deep);
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            position: relative;
+            overflow-x: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            padding: 4px;
+        }
+
+        .track-lane {
+            height: 32px;
+            background: var(--bg-card);
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            padding: 0 10px;
+            font-size: 11px;
+            color: var(--text-muted);
+            border-left: 3px solid var(--accent-orange);
+        }
+
+        /* MUSIC & SOUND SEARCH TAB */
+        .search-box {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .search-box input {
+            flex: 1;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            padding: 10px 14px;
+            border-radius: 8px;
+            color: white;
+            font-size: 14px;
+        }
+
+        .search-box button {
+            background: var(--accent-orange);
+            border: none;
+            color: white;
+            padding: 0 16px;
+            border-radius: 8px;
+            font-weight: 600;
+        }
+
+        .music-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .music-item {
+            background: var(--bg-card);
+            padding: 12px;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid var(--border-color);
+        }
+
+        .music-info h4 {
+            font-size: 13px;
+            color: white;
+            margin-bottom: 2px;
+        }
+
+        .music-info p {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        /* AI COPYRIGHT TAB */
+        .ai-scanner-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .ai-scanner-card h3 {
+            font-size: 16px;
+            margin-bottom: 8px;
+            color: var(--accent-gold);
+        }
+
+        .ai-scanner-card p {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+        }
+
+        .btn-scan {
+            background: linear-gradient(135deg, #00c6ff, #0072ff);
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+        }
+
+        /* BOTTOM NAVIGATION */
+        .bottom-nav {
+            height: 60px;
+            background-color: var(--bg-panel);
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+
+        .nav-item {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            font-size: 10px;
+            cursor: pointer;
+            flex: 1;
+        }
+
+        .nav-item.active {
+            color: var(--accent-orange);
+        }
+
+        .nav-item svg {
+            width: 20px;
+            height: 20px;
+            fill: currentColor;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- SPLASH SCREEN -->
+    <div id="splashScreen">
+        <img src="file_000000002ed8820b9f38cc0aed39c58a.png" class="splash-logo" alt="MotionTiger Logo">
+        <div class="splash-title">MOTION-TIGER</div>
+        <div class="splash-credits">
+            Powered by <span>TICBULL</span><br>
+            Developed by <span>mryuviyadav</span>
+        </div>
+    </div>
+
+    <!-- MAIN APP INTERFACE -->
+    <div id="appContainer">
+        <header>
+            <div class="brand-box">
+                <img src="file_000000002ed8820b9f38cc0aed39c58a.png" alt="Logo">
+                <h1>MOTION<span>TIGER</span></h1>
+            </div>
+            <div class="top-tools">
+                <button class="btn-pro" onclick="export4K()">⚡ Export 4K</button>
+            </div>
+        </header>
+
+        <div class="workspace">
+            <!-- TAB 1: STUDIO TIMELINE & EDITOR -->
+            <div id="tabStudio" class="tab-content active">
+                <div class="viewport-area">
+                    <div class="editor-preview-box">
+                        <div class="preview-placeholder">
+                            <p>🎬 4K Motion Canvas Ready</p>
+                            <span style="font-size: 11px; margin-top: 4px; color: #4a5568;">AE & CapCut Engine Active</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="timeline-section">
+                    <div class="timeline-tools">
+                        <span style="font-size: 12px; font-weight: 600; color: var(--text-muted);">MULTI-LAYER TIMELINE</span>
+                        <span style="font-size: 11px; color: var(--accent-orange);">120 FPS / GPU Active</span>
+                    </div>
+                    <div class="timeline-tracks">
+                        <div class="track-lane">Video Track 1 (4K 60FPS Pro Stream)</div>
+                        <div class="track-lane" style="border-left-color: var(--accent-gold);">Audio & Spectrum Visualizer Track</div>
+                        <div class="track-lane" style="border-left-color: #00c6ff;">VFX & Motion Graphics Layer</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 2: GLOBAL MUSIC & SPECTRUM SEARCH -->
+            <div id="tabMusic" class="tab-content">
+                <div class="search-box">
+                    <input type="text" id="songQuery" placeholder="Search Bhojpuri, Bollywood, Hollywood songs...">
+                    <button onclick="searchMusic()">Search</button>
+                </div>
+                <div class="music-list" id="musicResults">
+                    <div class="music-item">
+                        <div class="music-info">
+                            <h4>Bhojpuri High Bass Remix 2026</h4>
+                            <p>Bhojpuri • 3:45 • Spectrum Ready</p>
+                        </div>
+                        <button class="btn-pro" style="padding: 4px 10px; font-size: 11px;">+ Add</button>
+                    </div>
+                    <div class="music-item">
+                        <div class="music-info">
+                            <h4>Bollywood Cinematic BGM</h4>
+                            <p>Hindi • 2:30 • 4K Sync</p>
+                        </div>
+                        <button class="btn-pro" style="padding: 4px 10px; font-size: 11px;">+ Add</button>
+                    </div>
+                    <div class="music-item">
+                        <div class="music-info">
+                            <h4>Hollywood Trap Beat Pro</h4>
+                            <p>English • 3:10 • Heavy Bass</p>
+                        </div>
+                        <button class="btn-pro" style="padding: 4px 10px; font-size: 11px;">+ Add</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 3: AI COPYRIGHT & SAFETY CHECKER -->
+            <div id="tabAI" class="tab-content">
+                <div class="ai-scanner-card">
+                    <h3>🤖 AI Copyright & Policy Guard</h3>
+                    <p>Scan your timeline instantly to ensure 100% zero copyright strikes, audio claims, or platform restrictions before rendering.</p>
+                    <button class="btn-scan" onclick="runAIScan()">Run AI Safety Scan</button>
+                </div>
+                <div id="scanResult" style="margin-top: 16px; font-size: 13px; text-align: center; color: var(--accent-gold);"></div>
+            </div>
+        </div>
+
+        <!-- BOTTOM NAVIGATION BAR -->
+        <nav class="bottom-nav">
+            <button class="nav-item active" onclick="switchTab('Studio', this)">
+                <svg viewBox="0 0 24 24"><path d="M4 6H20V18H4V6M2 4V20H22V4H2Z"/></svg>
+                Studio
+            </button>
+            <button class="nav-item" onclick="switchTab('Music', this)">
+                <svg viewBox="0 0 24 24"><path d="M12 3V12.26C11.5 12.09 11 12 10.5 12C8 12 6 14 6 16.5C6 19 8 21 10.5 21C13 21 15 19 15 16.5V6H19V3H12Z"/></svg>
+                Music & SFX
+            </button>
+            <button class="nav-item" onclick="switchTab('AI', this)">
+                <svg viewBox="0 0 24 24"><path d="M12 2A10 10 0 0 0 2 12A10 10 0 0 0 12 22A10 10 0 0 0 22 12A10 10 0 0 0 12 2M12 4A8 8 0 0 1 20 12A8 8 0 0 1 12 20A8 8 0 0 1 4 12A8 8 0 0 1 12 4Z"/></svg>
+                AI Guard
+            </button>
+        </nav>
+    </div>
+
+    <script>
+        // Hide splash screen after 2.5 seconds
+        setTimeout(() => {
+            const splash = document.getElementById('splashScreen');
+            const app = document.getElementById('appContainer');
+            splash.style.opacity = '0';
+            setTimeout(() => {
+                splash.style.display = 'none';
+                app.style.opacity = '1';
+            }, 600);
+        }, 2500);
+
+        // Tab Switcher
+        function switchTab(tabName, btn) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+
+            document.getElementById('tab' + tabName).classList.add('active');
+            btn.classList.add('active');
+        }
+
+        // Music Mock Search
+        function searchMusic() {
+            const query = document.getElementById('songQuery').value;
+            alert('Searching global servers for: "' + query + '" (Bhojpuri, Bollywood, Hollywood Loaded)');
+        }
+
+        // AI Copyright Scanner Simulation
+        function runAIScan() {
+            const res = document.getElementById('scanResult');
+            res.innerHTML = "🔍 Scanning timeline layers with AI Neural Engine...";
+            setTimeout(() => {
+                res.innerHTML = "✅ **100% Safe!** No copyright matches, claims, or policy issues found. Ready for 4K Export!";
+            }, 1500);
+        }
+
+        // 4K Export Trigger
+        function export4K() {
+            alert('🚀 MotionTiger 4K Multi-Layer Engine Rendering Started! High-speed export in progress...');
+        }
+    </script>
+</body>
+</html>
