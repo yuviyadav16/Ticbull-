@@ -38,7 +38,7 @@
             min-height: 100vh;
         }
 
-        /* 15-SECOND SPLASH SCREEN WITH ASLI HD GITHUB LOGO */
+        /* PERFECT SPLASH SCREEN & ALIGNED PRIME RING */
         #splashScreen {
             position: fixed;
             top: 0; left: 0; width: 100vw; height: 100vh;
@@ -53,29 +53,75 @@
         }
 
         .prime-logo-container {
-            position: relative; width: 140px; height: 140px;
-            display: flex; align-items: center; justify-content: justify-content; margin-bottom: 25px;
+            position: relative;
+            width: 130px; height: 130px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 25px;
         }
 
+        /* Perfectly Centered Spinning Ring */
         .prime-ring {
-            position: absolute; width: 100%; height: 100%;
-            border-radius: 40%; border: 3px solid transparent;
-            border-top-color: var(--accent-green); border-bottom-color: var(--accent-green);
-            animation: spinPrime 3s linear infinite; filter: drop-shadow(0 0 10px var(--accent-green));
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            border-radius: 50%;
+            border: 3px solid transparent;
+            border-top: 3px solid var(--accent-green);
+            border-bottom: 3px solid var(--accent-green);
+            animation: spinPrime 2.5s linear infinite;
+            box-sizing: border-box;
+            filter: drop-shadow(0 0 10px var(--accent-green));
         }
 
-        @keyframes spinPrime { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        @keyframes spinPrime {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
 
         .splash-bull-img {
-            width: 100px; height: 100px; border-radius: 22px;
+            width: 90px; height: 90px;
+            border-radius: 20px;
             object-fit: cover;
             box-shadow: 0 0 20px rgba(0, 230, 118, 0.4);
             border: 1px solid var(--accent-green);
+            z-index: 2;
         }
 
-        .splash-title { font-size: 2.2rem; font-weight: 900; letter-spacing: 2px; color: #fff; margin: 0; }
-        .splash-dev-sub { font-size: 0.95rem; color: #a1a1a1; margin-top: 8px; font-weight: 500; }
-        .splash-dev-name { color: var(--accent-green); font-weight: 700; }
+        /* Animated Glowing Text */
+        .splash-title {
+            font-size: 2.2rem;
+            font-weight: 900;
+            letter-spacing: 2px;
+            color: #fff;
+            margin: 0;
+            animation: textGlow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes textGlow {
+            0% { text-shadow: 0 0 5px rgba(255,255,255,0.2); }
+            100% { text-shadow: 0 0 20px var(--accent-green); }
+        }
+
+        .splash-dev-sub {
+            font-size: 0.95rem;
+            color: #a1a1a1;
+            margin-top: 8px;
+            font-weight: 500;
+            animation: fadeInText 1.5s ease;
+        }
+
+        .splash-dev-name {
+            color: var(--accent-green);
+            font-weight: 700;
+            animation: pulseDev 1.5s ease-in-out infinite alternate;
+        }
+
+        @keyframes pulseDev {
+            0% { transform: scale(1); opacity: 0.8; }
+            100% { transform: scale(1.05); opacity: 1; }
+        }
 
         .splash-loader-bar {
             margin-top: 30px; width: 200px; height: 4px;
@@ -228,11 +274,10 @@
 </head>
 <body>
 
-    <!-- 15-SECOND SPLASH SCREEN WITH ASLI GITHUB LOGO IMAGE -->
+    <!-- 15-SECOND SPLASH SCREEN WITH FIXED CIRCULAR RING AND ANIMATED TEXT -->
     <div id="splashScreen">
         <div class="prime-logo-container">
             <div class="prime-ring"></div>
-            <!-- Direct GitHub Raw Logo Link -->
             <img src="https://raw.githubusercontent.com/yuviyadav16/Ticbull-/main/file_0000000051ac82068c717a63b34c9d7b.png" class="splash-bull-img" alt="TICBULL Logo">
         </div>
         <h1 class="splash-title">TICBULL</h1>
@@ -254,7 +299,6 @@
     <!-- HERO BANNER -->
     <div class="hero-banner">
         <div class="brand-header">
-            <!-- Direct GitHub Raw Logo Link -->
             <img src="https://raw.githubusercontent.com/yuviyadav16/Ticbull-/main/file_0000000051ac82068c717a63b34c9d7b.png" class="brand-logo-img" alt="TICBULL Logo">
             <div class="brand-text">
                 <h2>TICBULL App Store</h2>
@@ -390,7 +434,7 @@
         </div>
     </div>
 
-    <!-- SETTINGS & AI CHAT MODAL (3-Dot Menu) -->
+    <!-- SETTINGS & AI CHAT MODAL -->
     <div class="modal" id="settingsModal">
         <div class="modal-content">
             <span class="close-btn" onclick="playClickSound(); closeModal('settingsModal');">&times;</span>
@@ -415,14 +459,12 @@
 
         emailjs.init(EMAILJS_PUBLIC_KEY);
 
-        // Sound Effect Helper
         const clickAudio = new Audio('https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3');
         function playClickSound() {
             clickAudio.currentTime = 0;
             clickAudio.play().catch(() => {});
         }
 
-        // 15 Second Splash Screen Timer
         setTimeout(() => {
             const splash = document.getElementById('splashScreen');
             splash.style.opacity = '0';
@@ -435,7 +477,6 @@
         let tempUserData = {};
         let activeAppDownload = null;
 
-        // Sirf Aapka Official Real App
         const appsData = [
             { id: 1, name: "TICBULL Official App", cat: "apps", os: "android", desc: "Native Official Android Experience by mryuviyadav.", file: "app.apk" },
             { id: 2, name: "TICBULL iOS WebApp", cat: "apps", os: "ios", desc: "Add to Home Screen Web Experience for iPhone.", link: "#" }
@@ -593,13 +634,18 @@
             sendBtn.disabled = true;
 
             emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+                to_email: email,
                 email: email,
-                passcode: generatedOTP
+                user_email: email,
+                passcode: generatedOTP,
+                otp_code: generatedOTP,
+                otp: generatedOTP
             }).then(() => {
                 document.getElementById('signUpFields').style.display = 'none';
                 document.getElementById('otpFields').style.display = 'block';
                 alert(`OTP sent successfully to ${email}`);
-            }).catch(() => {
+            }).catch((err) => {
+                console.error("EmailJS Error:", err);
                 alert("Failed to send OTP!");
                 sendBtn.innerText = "Send Email Verification OTP";
                 sendBtn.disabled = false;
