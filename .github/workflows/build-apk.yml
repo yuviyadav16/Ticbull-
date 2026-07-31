@@ -21,7 +21,7 @@ jobs:
         distribution: 'temurin'
 
     - name: 📱 Setup Android SDK Environment
-      uses: android-actions/setup-android@v2
+      uses: android-actions/setup-android@v4
 
     - name: 🛠️ Generate Full MotionTiger Android Engine Source Tree
       run: |
