@@ -38,7 +38,7 @@
             min-height: 100vh;
         }
 
-        /* 15-SECOND PRIME SPLASH SCREEN */
+        /* 15-SECOND SPLASH SCREEN WITH ASLI HD GITHUB LOGO */
         #splashScreen {
             position: fixed;
             top: 0; left: 0; width: 100vw; height: 100vh;
@@ -54,7 +54,7 @@
 
         .prime-logo-container {
             position: relative; width: 140px; height: 140px;
-            display: flex; align-items: center; justify-content: center; margin-bottom: 25px;
+            display: flex; align-items: center; justify-content: justify-content; margin-bottom: 25px;
         }
 
         .prime-ring {
@@ -66,11 +66,11 @@
 
         @keyframes spinPrime { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-        .splash-bull-svg {
-            width: 90px; height: 90px; background: #000; border-radius: 20px;
-            display: flex; align-items: center; justify-content: center;
+        .splash-bull-img {
+            width: 100px; height: 100px; border-radius: 22px;
+            object-fit: cover;
+            box-shadow: 0 0 20px rgba(0, 230, 118, 0.4);
             border: 1px solid var(--accent-green);
-            box-shadow: 0 0 20px rgba(0, 230, 118, 0.3);
         }
 
         .splash-title { font-size: 2.2rem; font-weight: 900; letter-spacing: 2px; color: #fff; margin: 0; }
@@ -113,9 +113,9 @@
 
         .brand-header { display: flex; align-items: center; gap: 15px; }
 
-        .brand-logo-icon {
-            width: 60px; height: 60px; border-radius: 14px; background: #000;
-            display: flex; align-items: center; justify-content: center;
+        .brand-logo-img {
+            width: 60px; height: 60px; border-radius: 14px;
+            object-fit: cover;
             border: 1px solid var(--border-color); box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
         }
 
@@ -151,7 +151,6 @@
             width: 90%; max-width: 450px; background: var(--card-bg); border-radius: 16px;
             padding: 16px; box-sizing: border-box; border: 1px solid var(--border-color); margin-bottom: 12px;
         }
-        .app-meta { display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--text-sub); margin-top: 8px; }
 
         .download-btn {
             width: 100%; padding: 12px; background: var(--accent-green); color: #000;
@@ -229,19 +228,12 @@
 </head>
 <body>
 
-    <!-- 15-SECOND SPLASH SCREEN WITH ORIGINAL BULL LOGO -->
+    <!-- 15-SECOND SPLASH SCREEN WITH ASLI GITHUB LOGO IMAGE -->
     <div id="splashScreen">
         <div class="prime-logo-container">
             <div class="prime-ring"></div>
-            <div class="splash-bull-svg">
-                <!-- Exact White Bull Logo Vector -->
-                <svg width="60" height="60" viewBox="0 0 500 500" fill="none">
-                    <path d="M250 300 C230 280 200 240 180 200 C160 170 140 120 120 110 C140 130 170 160 190 170 C210 180 240 190 250 190 C260 190 290 180 310 170 C330 160 360 130 380 110 C360 120 340 170 320 200 C300 240 270 280 250 300 Z" fill="#ffffff"/>
-                    <path d="M120 110 C100 80 120 40 170 70 C200 90 220 130 230 160 C200 150 150 130 120 110 Z" fill="#ffffff"/>
-                    <path d="M380 110 C400 80 380 40 330 70 C300 90 280 130 270 160 C300 150 350 130 380 110 Z" fill="#ffffff"/>
-                    <path d="M220 230 L200 270 L230 280 L250 240 L270 280 L300 270 L280 230 Z" fill="#ffffff"/>
-                </svg>
-            </div>
+            <!-- Direct GitHub Raw Logo Link -->
+            <img src="https://raw.githubusercontent.com/yuviyadav16/Ticbull-/main/file_0000000051ac82068c717a63b34c9d7b.png" class="splash-bull-img" alt="TICBULL Logo">
         </div>
         <h1 class="splash-title">TICBULL</h1>
         <div class="splash-dev-sub">TICBULL App & iOS Store Developed by</div>
@@ -253,29 +245,23 @@
     <header>
         <div style="font-weight:800; font-size:1.1rem; color:var(--accent-green);">TICBULL Hub</div>
         <div class="header-actions">
-            <div class="user-badge" id="userBadge" onclick="openAuthModal()">👤 Sign In</div>
-            <button class="icon-btn" onclick="toggleTheme()">🌙</button>
-            <button class="icon-btn" onclick="openSettings()">⋮</button>
+            <div class="user-badge" id="userBadge" onclick="playClickSound(); openAuthModal();">👤 Sign In</div>
+            <button class="icon-btn" onclick="playClickSound(); toggleTheme();">🌙</button>
+            <button class="icon-btn" onclick="playClickSound(); openSettings();">⋮</button>
         </div>
     </header>
 
     <!-- HERO BANNER -->
     <div class="hero-banner">
         <div class="brand-header">
-            <div class="brand-logo-icon">
-                <!-- Exact White Bull Logo Icon -->
-                <svg width="40" height="40" viewBox="0 0 500 500" fill="none">
-                    <path d="M250 300 C230 280 200 240 180 200 C160 170 140 120 120 110 C140 130 170 160 190 170 C210 180 240 190 250 190 C260 190 290 180 310 170 C330 160 360 130 380 110 C360 120 340 170 320 200 C300 240 270 280 250 300 Z" fill="#ffffff"/>
-                    <path d="M120 110 C100 80 120 40 170 70 C200 90 220 130 230 160 C200 150 150 130 120 110 Z" fill="#ffffff"/>
-                    <path d="M380 110 C400 80 380 40 330 70 C300 90 280 130 270 160 C300 150 350 130 380 110 Z" fill="#ffffff"/>
-                </svg>
-            </div>
+            <!-- Direct GitHub Raw Logo Link -->
+            <img src="https://raw.githubusercontent.com/yuviyadav16/Ticbull-/main/file_0000000051ac82068c717a63b34c9d7b.png" class="brand-logo-img" alt="TICBULL Logo">
             <div class="brand-text">
                 <h2>TICBULL App Store</h2>
                 <p>Install Store on Android & iPhone</p>
             </div>
         </div>
-        <button class="download-btn" onclick="openDownloadModal(1)">📱 Install TICBULL App on Phone</button>
+        <button class="download-btn" onclick="playClickSound(); openDownloadModal(1);">📱 Install TICBULL App on Phone</button>
         <div style="border: 1px dashed var(--accent-green); border-radius: 12px; padding: 10px; margin-top: 10px; font-size: 0.78rem; color: var(--text-sub); text-align: center;">
             💡 iPhone users: Tap Share Icon ➔ 'Add to Home Screen' to install!
         </div>
@@ -284,21 +270,21 @@
     <!-- SEARCH BAR -->
     <div class="search-box">
         <span class="search-icon">🔍</span>
-        <input type="text" class="search-input" id="searchInput" placeholder="Search apps, games, education..." oninput="handleSearch()">
+        <input type="text" class="search-input" id="searchInput" placeholder="Search categories..." oninput="handleSearch()">
     </div>
 
     <!-- OS SELECTOR -->
     <div class="os-selector">
-        <button class="os-btn active" id="btnAndroid" onclick="selectOS('android')">🤖 Android</button>
-        <button class="os-btn" id="btnIos" onclick="selectOS('ios')">🍎 iOS (iPhone)</button>
+        <button class="os-btn active" id="btnAndroid" onclick="playClickSound(); selectOS('android');">🤖 Android</button>
+        <button class="os-btn" id="btnIos" onclick="playClickSound(); selectOS('ios');">🍎 iOS (iPhone)</button>
     </div>
 
     <!-- CATEGORY CHIPS -->
     <div class="category-nav">
-        <div class="cat-chip active" onclick="filterCat('all')">All</div>
-        <div class="cat-chip" onclick="filterCat('apps')">Apps</div>
-        <div class="cat-chip" onclick="filterCat('games')">Games</div>
-        <div class="cat-chip" onclick="filterCat('education')">Education</div>
+        <div class="cat-chip active" onclick="playClickSound(); filterCat('all');">All</div>
+        <div class="cat-chip" onclick="playClickSound(); filterCat('apps');">Apps</div>
+        <div class="cat-chip" onclick="playClickSound(); filterCat('games');">Games</div>
+        <div class="cat-chip" onclick="playClickSound(); filterCat('education');">Education</div>
     </div>
 
     <!-- APP STORE CARDS CONTAINER -->
@@ -312,16 +298,16 @@
         </p>
         <div class="social-grid">
             <div class="social-row">
-                <a href="https://youtube.com/@mryuviyadav" target="_blank" class="social-item btn-yt">▶️ YouTube</a>
-                <a href="https://t.me/mryuviyadav" target="_blank" class="social-item btn-tg">✈️ Telegram</a>
+                <a href="https://youtube.com/@mryuviyadav" target="_blank" onclick="playClickSound();" class="social-item btn-yt">▶️ YouTube</a>
+                <a href="https://t.me/mryuviyadav" target="_blank" onclick="playClickSound();" class="social-item btn-tg">✈️ Telegram</a>
             </div>
             <div class="social-row">
-                <a href="https://www.instagram.com/mryuvi_yadav" target="_blank" class="social-item btn-insta">📸 Instagram</a>
-                <a href="https://x.com/mryuviyadav" target="_blank" class="social-item btn-tw">𝕏 Twitter / X</a>
+                <a href="https://www.instagram.com/mryuvi_yadav" target="_blank" onclick="playClickSound();" class="social-item btn-insta">📸 Instagram</a>
+                <a href="https://x.com/mryuviyadav" target="_blank" onclick="playClickSound();" class="social-item btn-tw">𝕏 Twitter / X</a>
             </div>
             <div class="social-row">
-                <a href="https://t.me/ticbullteam" target="_blank" class="social-item btn-tg">👥 Telegram Team</a>
-                <a href="https://facebook.com/mryuviyadav" target="_blank" class="social-item btn-fb">📘 Facebook Page</a>
+                <a href="https://t.me/ticbullteam" target="_blank" onclick="playClickSound();" class="social-item btn-tg">👥 Telegram Team</a>
+                <a href="https://facebook.com/mryuviyadav" target="_blank" onclick="playClickSound();" class="social-item btn-fb">📘 Facebook Page</a>
             </div>
         </div>
     </div>
@@ -332,7 +318,7 @@
         <p style="font-size:0.8rem; color:var(--text-sub); margin-top:0; margin-bottom:12px;">
             Need help, facing issues or have questions about TICBULL apps? Email us directly!
         </p>
-        <a href="mailto:Ticbull.support@gmail.com" class="btn-email-help">
+        <a href="mailto:Ticbull.support@gmail.com" onclick="playClickSound();" class="btn-email-help">
             ✉️ Email Help (Ticbull.support@gmail.com)
         </a>
     </div>
@@ -345,7 +331,7 @@
     <!-- RED 'Y' DOWNLOAD MODAL -->
     <div class="modal" id="downloadModal">
         <div class="modal-content" style="text-align:center;">
-            <span class="close-btn" onclick="closeModal('downloadModal')">&times;</span>
+            <span class="close-btn" onclick="playClickSound(); closeModal('downloadModal');">&times;</span>
             <h2 id="modalAppName" style="margin-bottom:2px;">App Name</h2>
             <p id="modalAppDesc" style="font-size:0.85rem; color:var(--text-sub); margin-top:0;">Description</p>
             <div style="font-size:0.8rem; color:var(--accent-green); margin-bottom:10px;">🛡️ Verified 100% Malware Free</div>
@@ -363,14 +349,14 @@
                     <div id="downloadSpeed" style="font-size:0.8rem; color:var(--text-sub); margin-top:2px;">Click Start to Download</div>
                 </div>
             </div>
-            <button class="download-btn" id="startDownloadBtn" onclick="startRedYDownload()">Start Download</button>
+            <button class="download-btn" id="startDownloadBtn" onclick="playClickSound(); startRedYDownload();">Start Download</button>
         </div>
     </div>
 
     <!-- AUTH MODAL -->
     <div class="modal" id="authModal">
         <div class="modal-content">
-            <span class="close-btn" onclick="closeModal('authModal')">&times;</span>
+            <span class="close-btn" onclick="playClickSound(); closeModal('authModal');">&times;</span>
             <h2 id="authTitle">Create Account</h2>
             <div id="signUpFields">
                 <input type="text" id="regName" placeholder="Full Name">
@@ -382,24 +368,24 @@
                     <option value="Female">Female</option>
                 </select>
                 <input type="password" id="regPass" placeholder="Password">
-                <button class="download-btn" id="sendBtn" onclick="sendOTP()">Send Email Verification OTP</button>
-                <p style="color:var(--accent-green); font-size:0.85rem; text-align:center; cursor:pointer;" onclick="showLoginMode()">Already have an account? Sign In</p>
+                <button class="download-btn" id="sendBtn" onclick="playClickSound(); sendOTP();">Send Email Verification OTP</button>
+                <p style="color:var(--accent-green); font-size:0.85rem; text-align:center; cursor:pointer;" onclick="playClickSound(); showLoginMode();">Already have an account? Sign In</p>
             </div>
             <div id="loginFields" style="display:none;">
                 <input type="email" id="loginEmail" placeholder="Email Address">
                 <input type="password" id="loginPass" placeholder="Password">
-                <button class="download-btn" onclick="handleLogin()">Sign In</button>
-                <p style="color:var(--accent-green); font-size:0.85rem; text-align:center; cursor:pointer;" onclick="showRegisterMode()">New user? Create Account</p>
+                <button class="download-btn" onclick="playClickSound(); handleLogin();">Sign In</button>
+                <p style="color:var(--accent-green); font-size:0.85rem; text-align:center; cursor:pointer;" onclick="playClickSound(); showRegisterMode();">New user? Create Account</p>
             </div>
             <div id="otpFields" style="display:none;">
                 <p style="font-size:0.85rem; color: var(--text-sub);">Verification code sent to your email inbox!</p>
                 <input type="number" id="otpInput" placeholder="Enter 4-Digit OTP">
-                <button class="download-btn" onclick="verifyOTP()">Verify & Complete Signup</button>
+                <button class="download-btn" onclick="playClickSound(); verifyOTP();">Verify & Complete Signup</button>
             </div>
             <div id="userProfileFields" style="display:none; text-align:center;">
                 <h3 id="profileNameDisplay" style="color:var(--accent-green);"></h3>
                 <p id="profileEmailDisplay" style="font-size:0.85rem; color:var(--text-sub);"></p>
-                <button class="download-btn" style="background:var(--accent-red); color:white;" onclick="handleLogout()">Logout Account</button>
+                <button class="download-btn" style="background:var(--accent-red); color:white;" onclick="playClickSound(); handleLogout();">Logout Account</button>
             </div>
         </div>
     </div>
@@ -407,7 +393,7 @@
     <!-- SETTINGS & AI CHAT MODAL (3-Dot Menu) -->
     <div class="modal" id="settingsModal">
         <div class="modal-content">
-            <span class="close-btn" onclick="closeModal('settingsModal')">&times;</span>
+            <span class="close-btn" onclick="playClickSound(); closeModal('settingsModal');">&times;</span>
             <h2>⚙️ Store Settings</h2>
             <p style="font-size: 0.85rem; color: var(--text-sub);">TICBULL Store Pro v3.0</p>
             <hr style="border-color: var(--border-color);">
@@ -417,7 +403,7 @@
             </div>
             <div style="display:flex; gap:5px;">
                 <input type="text" id="chatInput" placeholder="Ask AI something..." style="margin:0;">
-                <button style="background:var(--accent-green); border:none; padding:10px 15px; border-radius:10px; font-weight:bold; cursor:pointer;" onclick="sendAiMsg()">Send</button>
+                <button style="background:var(--accent-green); border:none; padding:10px 15px; border-radius:10px; font-weight:bold; cursor:pointer;" onclick="playClickSound(); sendAiMsg();">Send</button>
             </div>
         </div>
     </div>
@@ -428,6 +414,13 @@
         const EMAILJS_TEMPLATE_ID = "template_wpjabuj";
 
         emailjs.init(EMAILJS_PUBLIC_KEY);
+
+        // Sound Effect Helper
+        const clickAudio = new Audio('https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3');
+        function playClickSound() {
+            clickAudio.currentTime = 0;
+            clickAudio.play().catch(() => {});
+        }
 
         // 15 Second Splash Screen Timer
         setTimeout(() => {
@@ -442,12 +435,10 @@
         let tempUserData = {};
         let activeAppDownload = null;
 
+        // Sirf Aapka Official Real App
         const appsData = [
-            { id: 1, name: "TICBULL Official App", cat: "apps", os: "android", desc: "Native Android App Store Experience by mryuviyadav.", rating: "5.0 ⭐", downloads: "100k+", file: "app.apk" },
-            { id: 2, name: "TicbullEdu Pro", cat: "education", os: "android", desc: "Interactive Learning & Skill Development Suite.", rating: "4.8 ⭐", downloads: "10k+", file: "app.apk" },
-            { id: 3, name: "BullRider 3D", cat: "games", os: "android", desc: "High Graphics Racing & Riding Game.", rating: "4.7 ⭐", downloads: "50k+", file: "app.apk" },
-            { id: 4, name: "TICBULL iOS WebApp", cat: "apps", os: "ios", desc: "Add to Home Screen Web Experience for iPhone.", rating: "5.0 ⭐", downloads: "50k+", link: "#" },
-            { id: 5, name: "iOS Smart Learn", cat: "education", os: "ios", desc: "Apple Safari optimized education suite.", rating: "4.6 ⭐", downloads: "8k+", link: "#" }
+            { id: 1, name: "TICBULL Official App", cat: "apps", os: "android", desc: "Native Official Android Experience by mryuviyadav.", file: "app.apk" },
+            { id: 2, name: "TICBULL iOS WebApp", cat: "apps", os: "ios", desc: "Add to Home Screen Web Experience for iPhone.", link: "#" }
         ];
 
         function getUsersDB() { return JSON.parse(localStorage.getItem('ticbull_users') || '{}'); }
@@ -466,7 +457,7 @@
             });
 
             if(filtered.length === 0) {
-                container.innerHTML = `<p style="color:var(--text-sub); text-align:center; margin:20px;">No items found in this category.</p>`;
+                container.innerHTML = `<p style="color:var(--text-sub); text-align:center; margin:20px;">No app in this category yet.</p>`;
                 return;
             }
 
@@ -476,11 +467,7 @@
                 card.innerHTML = `
                     <h3 style="margin:0 0 4px 0;">${app.name}</h3>
                     <p style="margin:0; font-size:0.85rem; color:var(--text-sub);">${app.desc}</p>
-                    <div class="app-meta">
-                        <span>Rating: ${app.rating}</span>
-                        <span>Downloads: ${app.downloads}</span>
-                    </div>
-                    <button class="download-btn" onclick="openDownloadModal(${app.id})">
+                    <button class="download-btn" onclick="playClickSound(); openDownloadModal(${app.id})">
                         ${currentOS === 'android' ? '📥 Download APK' : '🍎 Get iOS App'}
                     </button>
                 `;
