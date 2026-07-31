@@ -9,49 +9,90 @@
         body { background-color: #0b0f17; color: #f0f6fc; padding: 20px 15px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; overflow-x: hidden; }
         .container { width: 100%; max-width: 480px; }
 
-        /* --- SPLASH SCREEN ANIMATION STYLES --- */
+        /* --- 15-SECOND PROFESSIONAL SPLASH SCREEN --- */
         #splash-screen {
             position: fixed;
             top: 0;
             left: 0;
             width: 100vw;
             height: 100vh;
-            background-color: #0b0f17;
+            background: radial-gradient(circle, #161b22 0%, #0b0f17 100%);
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             z-index: 99999;
-            transition: opacity 0.8s ease, visibility 0.8s ease;
+            transition: opacity 1s ease, visibility 1s ease;
+        }
+
+        .splash-logo-wrapper {
+            position: relative;
+            width: 130px;
+            height: 130px;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Glowing Rotating Ring Effect */
+        .splash-ring {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 35px;
+            border: 3px solid transparent;
+            border-top-color: #00e699;
+            border-bottom-color: #00e699;
+            animation: spinRing 2s linear infinite;
+        }
+
+        @keyframes spinRing {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
         .splash-logo {
-            width: 120px;
-            height: 120px;
-            border-radius: 28px;
+            width: 100px;
+            height: 100px;
+            border-radius: 25px;
             overflow: hidden;
-            border: 2px solid #00e699;
-            box-shadow: 0 0 30px rgba(0, 230, 153, 0.4);
-            animation: pulse 2s infinite ease-in-out;
-            margin-bottom: 25px;
+            border: 2px solid #30363d;
+            box-shadow: 0 0 25px rgba(0, 230, 153, 0.4);
+            animation: pulseLogo 2.5s infinite ease-in-out;
         }
 
         .splash-logo img { width: 100%; height: 100%; object-fit: cover; }
 
-        @keyframes pulse {
-            0% { transform: scale(0.95); box-shadow: 0 0 15px rgba(0, 230, 153, 0.3); }
-            50% { transform: scale(1.05); box-shadow: 0 0 35px rgba(0, 230, 153, 0.7); }
-            100% { transform: scale(0.95); box-shadow: 0 0 15px rgba(0, 230, 153, 0.3); }
+        @keyframes pulseLogo {
+            0% { transform: scale(0.92); box-shadow: 0 0 10px rgba(0, 230, 153, 0.2); }
+            50% { transform: scale(1.08); box-shadow: 0 0 40px rgba(0, 230, 153, 0.8); }
+            100% { transform: scale(0.92); box-shadow: 0 0 10px rgba(0, 230, 153, 0.2); }
+        }
+
+        .brand-title-splash {
+            font-size: 1.8rem;
+            font-weight: 900;
+            letter-spacing: 3px;
+            color: #ffffff;
+            margin-bottom: 8px;
+            opacity: 0;
+            animation: fadeInText 1s ease forwards 0.5s;
+        }
+
+        @keyframes fadeInText {
+            to { opacity: 1; }
         }
 
         .animated-text {
-            color: #ffffff;
-            font-size: 0.95rem;
+            color: #8b949e;
+            font-size: 0.9rem;
             font-weight: 600;
             text-align: center;
-            max-width: 80%;
+            max-width: 85%;
             line-height: 1.5;
-            min-height: 48px;
+            min-height: 40px;
+            margin-bottom: 25px;
         }
 
         .animated-text span {
@@ -59,25 +100,26 @@
             font-weight: 800;
         }
 
+        /* Smooth 15-Second Progress Bar */
         .loader-bar {
-            width: 140px;
-            height: 4px;
+            width: 200px;
+            height: 5px;
             background: #161b22;
             border-radius: 10px;
-            margin-top: 20px;
             overflow: hidden;
-            position: relative;
+            border: 1px solid #30363d;
         }
 
         .loader-progress {
             width: 0%;
             height: 100%;
-            background: #00e699;
+            background: linear-gradient(90deg, #00e699, #00b377);
             border-radius: 10px;
-            animation: load 3.2s forwards;
+            /* 15 Seconds Duration */
+            animation: load15Sec 15s linear forwards;
         }
 
-        @keyframes load {
+        @keyframes load15Sec {
             0% { width: 0%; }
             100% { width: 100%; }
         }
@@ -128,11 +170,15 @@
 </head>
 <body>
 
-    <!-- APP OPENING SPLASH SCREEN -->
+    <!-- 15-SECOND PROFESSIONAL SPLASH SCREEN -->
     <div id="splash-screen">
-        <div class="splash-logo">
-            <img src="file_0000000051ac82068c717a63b34c9d7b.png" alt="Ticbull Logo">
+        <div class="splash-logo-wrapper">
+            <div class="splash-ring"></div>
+            <div class="splash-logo">
+                <img src="file_0000000051ac82068c717a63b34c9d7b.png" alt="Ticbull Logo">
+            </div>
         </div>
+        <div class="brand-title-splash">TICBULL</div>
         <div class="animated-text" id="typing-text"></div>
         <div class="loader-bar">
             <div class="loader-progress"></div>
@@ -213,9 +259,8 @@
         </div>
     </div>
 
-    <!-- ANIMATION SCRIPT -->
+    <!-- PROFESSIONAL 15-SECOND ANIMATION SCRIPT -->
     <script>
-        // Typing Animation Text
         const textToType = "TICBULL App & iOS Store Developed by mryuviyadav";
         const textElement = document.getElementById("typing-text");
         let index = 0;
@@ -229,20 +274,19 @@
                     textElement.innerHTML += textToType.charAt(index);
                     index++;
                 }
-                setTimeout(typeEffect, 35);
+                setTimeout(typeEffect, 45);
             }
         }
 
-        // Start typing on page load
         window.addEventListener('load', () => {
             typeEffect();
             
-            // Hide Splash Screen after 3.2 seconds
+            // Exactly 15 Seconds (15000 milliseconds) Splash Screen Timer
             setTimeout(() => {
                 const splash = document.getElementById("splash-screen");
                 splash.style.opacity = "0";
                 splash.style.visibility = "hidden";
-            }, 3400);
+            }, 15000);
         });
     </script>
 
