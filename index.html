@@ -3,87 +3,96 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TICBULL - App Store</title>
+    <title>TICBULL - Official App & Game Store</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
-        body { background-color: #0d1117; color: #f0f6fc; padding: 20px 15px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
+        body { background-color: #0b0f17; color: #f0f6fc; padding: 20px 15px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
         .container { width: 100%; max-width: 480px; }
         
         /* Header Section */
         .header { text-align: center; padding: 20px 0; margin-bottom: 15px; }
-        .logo-box { width: 95px; height: 95px; margin: 0 auto 12px; border-radius: 22px; overflow: hidden; background: #161b22; border: 1px solid #30363d; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 24px rgba(0,0,0,0.5); }
+        .logo-box { width: 100px; height: 100px; margin: 0 auto 12px; border-radius: 22px; overflow: hidden; background: #161b22; border: 1px solid #30363d; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 24px rgba(0,0,0,0.6); }
         .logo-box img { width: 100%; height: 100%; object-fit: cover; }
         h1 { font-size: 2.2rem; font-weight: 800; letter-spacing: 2px; color: #ffffff; }
-        p.tagline { color: #8b949e; font-size: 0.88rem; font-weight: 500; margin-top: 4px; }
+        p.tagline { color: #8b949e; font-size: 0.9rem; font-weight: 500; margin-top: 4px; }
         
         /* Search Bar */
         .search-box { position: relative; margin-bottom: 20px; }
-        .search-box input { width: 100%; padding: 14px 20px; background-color: #161b22; border: 1px solid #30363d; border-radius: 25px; color: #fff; font-size: 0.95rem; outline: none; transition: 0.3s; }
-        .search-box input:focus { border-color: #2ea043; box-shadow: 0 0 10px rgba(46,160,67,0.3); }
+        .search-box input { width: 100%; padding: 14px 20px; background-color: #161b22; border: 1px solid #30363d; border-radius: 25px; color: #fff; font-size: 0.95rem; outline: none; }
 
         /* Categories Section */
         .category-title { font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; color: #8b949e; margin-bottom: 10px; font-weight: 700; }
         .categories { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 10px; margin-bottom: 20px; scrollbar-width: none; }
-        .cat-btn { background: #161b22; color: #c9d1d9; padding: 8px 16px; border-radius: 20px; border: 1px solid #30363d; white-space: nowrap; font-size: 0.85rem; font-weight: 600; cursor: pointer; }
-        .cat-btn.active { background: #2ea043; color: #ffffff; border-color: #2ea043; }
+        .cat-btn { background: #161b22; color: #c9d1d9; padding: 8px 16px; border-radius: 20px; border: 1px solid #30363d; white-space: nowrap; font-size: 0.85rem; font-weight: 600; }
+        .cat-btn.active { background: #00e699; color: #000; border-color: #00e699; font-weight: 700; }
 
-        /* App Cards */
-        .app-card { background: #161b22; border: 1px solid #30363d; border-radius: 18px; padding: 16px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
-        .app-info { display: flex; align-items: center; gap: 14px; }
-        .app-icon { width: 56px; height: 56px; border-radius: 14px; object-fit: cover; border: 1px solid #30363d; }
-        .app-details h3 { font-size: 1.05rem; font-weight: 700; color: #ffffff; margin-bottom: 4px; }
-        .app-details p { font-size: 0.8rem; color: #8b949e; }
-        .badge { display: inline-block; background: #21262d; color: #58a6ff; font-size: 0.7rem; font-weight: 600; padding: 2px 8px; border-radius: 10px; margin-top: 4px; }
+        /* Main Store Card */
+        .app-card { background: #161b22; border: 1px solid #30363d; border-radius: 20px; padding: 18px; margin-bottom: 20px; }
+        .app-header { display: flex; align-items: center; gap: 14px; margin-bottom: 15px; }
+        .app-icon { width: 60px; height: 60px; border-radius: 16px; object-fit: cover; border: 1px solid #30363d; }
+        .app-details h3 { font-size: 1.1rem; font-weight: 700; color: #ffffff; margin-bottom: 4px; }
+        .app-details p { font-size: 0.82rem; color: #8b949e; }
+        
+        /* Download Buttons */
+        .download-actions { display: flex; flex-direction: column; gap: 10px; width: 100%; }
+        .btn-download { text-align: center; font-weight: 700; padding: 12px; border-radius: 14px; text-decoration: none; font-size: 0.9rem; display: flex; align-items: center; justify-content: center; gap: 8px; border: none; cursor: pointer; }
+        .btn-android { background: #00e699; color: #000000; }
+        .btn-ios { background: #21262d; color: #ffffff; border: 1px solid #30363d; }
 
-        .btn-download { background: #2ea043; color: #ffffff; font-weight: 700; padding: 10px 18px; border-radius: 20px; text-decoration: none; font-size: 0.85rem; border: none; cursor: pointer; }
-        .btn-download:hover { background: #3fb950; }
+        /* Notice Box */
+        .notice-box { background: rgba(0, 230, 153, 0.05); border: 1px dashed #00e699; padding: 12px; border-radius: 12px; margin-top: 15px; text-align: center; font-size: 0.8rem; color: #8b949e; }
 
         /* Footer */
-        .footer { text-align: center; margin-top: 35px; padding-top: 20px; border-top: 1px solid #21262d; color: #8b949e; font-size: 0.85rem; }
-        .footer span { color: #58a6ff; font-weight: 600; }
+        .footer { text-align: center; margin-top: 30px; padding-top: 20px; border-top: 1px solid #21262d; color: #8b949e; font-size: 0.85rem; }
+        .footer span { color: #00e699; font-weight: 700; }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <!-- Main Branding -->
+        <!-- Main Store Branding -->
         <div class="header">
             <div class="logo-box">
                 <img src="file_0000000051ac82068c717a63b34c9d7b.png" alt="Ticbull Logo">
             </div>
             <h1>TICBULL</h1>
-            <p class="tagline">Official Application & Game Store</p>
+            <p class="tagline">Official Android & iOS App Hub</p>
         </div>
 
         <!-- Search Bar -->
         <div class="search-box">
-            <input type="text" placeholder="Search Android, iOS, Games & Apps...">
+            <input type="text" placeholder="Search Apps, Education & Games...">
         </div>
 
-        <!-- App Categories -->
+        <!-- Categories Filter -->
         <div class="category-title">Categories</div>
         <div class="categories">
-            <div class="cat-btn active">All</div>
-            <div class="cat-btn">🤖 Android Apps</div>
-            <div class="cat-btn">🍎 iOS (iPhone)</div>
-            <div class="cat-btn">🎬 Editing Apps</div>
-            <div class="cat-btn">🎮 Games</div>
+            <div class="cat-btn active">All Apps</div>
+            <div class="cat-btn">🤖 Android (.APK)</div>
+            <div class="cat-btn">🍎 iPhone (iOS)</div>
             <div class="cat-btn">📚 Education</div>
+            <div class="cat-btn">🎮 Games</div>
         </div>
 
-        <!-- App List Section -->
-        <div class="category-title">Featured Apps</div>
-        
+        <!-- Official TICBULL App Store Downloader -->
+        <div class="category-title">Official Store App</div>
         <div class="app-card">
-            <div class="app-info">
-                <img src="file_0000000051ac82068c717a63b34c9d7b.png" class="app-icon" alt="Ticbull Studio">
+            <div class="app-header">
+                <img src="file_0000000051ac82068c717a63b34c9d7b.png" class="app-icon" alt="TICBULL App">
                 <div class="app-details">
-                    <h3>Ticbull Studio</h3>
-                    <p>Pro Video & Photo Editor</p>
-                    <span class="badge">Android / iOS</span>
+                    <h3>TICBULL Store App</h3>
+                    <p>Download Official App Store for Mobile</p>
                 </div>
             </div>
-            <a href="#" class="btn-download">Get App</a>
+            
+            <div class="download-actions">
+                <a href="file_0000000051ac82068c717a63b34c9d7b.png" download="TICBULL_Store.png" class="btn-download btn-android">🤖 Download Android App (.APK)</a>
+                <a href="https://yuviyadav16.github.io/Ticbull-" class="btn-download btn-ios">🍎 Install on iPhone (Add to Home Screen)</a>
+            </div>
+
+            <div class="notice-box">
+                🚀 New Education & Gaming apps developed by <b>mryuviyadav</b> will be published here soon!
+            </div>
         </div>
 
         <!-- Footer Credit -->
