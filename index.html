@@ -3,659 +3,296 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TICBULL - Official App Market</title>
-    
-    <!-- GOOGLE OFFICIAL FIREBASE COMPAT SDK -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
-    <!-- FONTAWESOME ICONS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
+    <title>TicBull Master Enterprise - Self-Hosted Studio</title>
     <style>
-        :root {
-            --bg-color: #080c14;
-            --card-bg: rgba(19, 27, 46, 0.7);
-            --card-solid: #131b2e;
-            --accent-green: #00e676;
-            --accent-blue: #00b0ff;
-            --accent-red: #ff0055;
-            --accent-purple: #7c4dff;
-            --text-main: #ffffff;
-            --text-sub: #94a3b8;
-            --border-color: rgba(255, 255, 255, 0.1);
-            --input-bg: rgba(0, 0, 0, 0.4);
-        }
-
-        body {
+        * {
             margin: 0;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-main);
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background-color: #020202;
+            color: #ffffff;
+            height: 100vh;
+            overflow: hidden;
             display: flex;
             flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
-            overflow-x: hidden;
-            position: relative;
         }
 
-        /* 🌈 NEON GLOW ANIMATED BACKGROUND PARTICLES */
-        .bg-glow-1 {
-            position: fixed; top: -100px; left: -100px; width: 300px; height: 300px;
-            background: radial-gradient(circle, rgba(0,230,118,0.25) 0%, rgba(0,0,0,0) 70%);
-            animation: floatGlow 10s infinite alternate ease-in-out; z-index: -1;
-        }
-        .bg-glow-2 {
-            position: fixed; bottom: -100px; right: -100px; width: 350px; height: 350px;
-            background: radial-gradient(circle, rgba(124,77,255,0.25) 0%, rgba(0,0,0,0) 70%);
-            animation: floatGlow 12s infinite alternate ease-in-out; z-index: -1;
-        }
-
-        @keyframes floatGlow {
-            0% { transform: translate(0, 0) scale(1); }
-            100% { transform: translate(50px, 50px) scale(1.2); }
-        }
-
-        /* 🔒 GATEKEEPER FIREBASE EMAIL LOCK OVERLAY */
-        #gatekeeperLock {
-            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            background: rgba(8, 12, 20, 0.95); backdrop-filter: blur(16px);
-            display: flex; justify-content: center; align-items: center; z-index: 10000;
-        }
-
-        .lock-card {
-            background: var(--card-solid); width: 90%; max-width: 380px;
-            padding: 30px 25px; border-radius: 24px; border: 1px solid var(--border-color);
-            text-align: center; box-shadow: 0 0 40px rgba(0, 230, 118, 0.25);
-            animation: popIn 0.5s ease-out;
-        }
-
-        @keyframes popIn {
-            0% { opacity: 0; transform: scale(0.8); }
-            100% { opacity: 1; transform: scale(1); }
-        }
-
-        .lock-logo-img {
-            width: 85px; height: 85px; border-radius: 20px; object-fit: cover;
-            border: 2px solid var(--accent-green); margin-bottom: 15px;
-            box-shadow: 0 0 20px rgba(0, 230, 118, 0.4);
-        }
-
-        input {
-            width: 100%; padding: 13px; margin: 8px 0; background: var(--input-bg);
-            border: 1px solid var(--border-color); border-radius: 12px; color: var(--text-main);
-            box-sizing: border-box; font-size: 0.95rem; outline: none; transition: 0.3s;
-        }
-        input:focus { border-color: var(--accent-green); box-shadow: 0 0 10px rgba(0,230,118,0.3); }
-
-        .btn-green {
-            width: 100%; padding: 14px; background: linear-gradient(135deg, #00e676, #00b0ff); color: #000;
-            border: none; border-radius: 12px; font-weight: 800; font-size: 1rem;
-            cursor: pointer; margin-top: 12px; transition: transform 0.2s, box-shadow 0.2s;
-        }
-        .btn-green:hover { transform: translateY(-2px); box-shadow: 0 5px 20px rgba(0,230,118,0.4); }
-
-        /* 🎉 WELCOME POPUP OVERLAY */
-        #welcomeModal {
-            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            background: rgba(8, 12, 20, 0.92); backdrop-filter: blur(15px);
-            display: none; justify-content: center; align-items: center; z-index: 9999;
-        }
-
-        .welcome-card {
-            background: var(--card-solid); width: 90%; max-width: 420px;
-            padding: 30px; border-radius: 28px; border: 1px solid rgba(0, 230, 118, 0.4);
-            text-align: center; box-shadow: 0 0 50px rgba(0, 230, 118, 0.3);
-            animation: zoomWelcome 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
-        @keyframes zoomWelcome {
-            0% { opacity: 0; transform: scale(0.5) rotate(-5deg); }
-            100% { opacity: 1; transform: scale(1) rotate(0deg); }
-        }
-
-        /* HEADER & NAVBAR */
-        header {
-            width: 100%; max-width: 460px; padding: 18px 20px;
-            display: flex; justify-content: space-between; align-items: center; box-sizing: border-box;
-        }
-
-        .user-badge {
-            background: rgba(0, 230, 118, 0.12); padding: 8px 16px; border-radius: 20px;
-            font-size: 0.85rem; color: var(--accent-green); border: 1px solid rgba(0, 230, 118, 0.3);
-            font-weight: 700; display: flex; align-items: center; gap: 8px;
-        }
-
-        .icon-btn { background: none; border: none; color: var(--text-main); font-size: 1.4rem; cursor: pointer; transition: 0.2s; }
-        .icon-btn:hover { color: var(--accent-green); transform: scale(1.1); }
-
-        /* HERO STORE CARD */
-        .hero-banner {
-            width: 90%; max-width: 460px; background: var(--card-bg); backdrop-filter: blur(10px);
-            border-radius: 24px; padding: 22px; box-sizing: border-box;
-            border: 1px solid var(--border-color); margin: 5px 0 15px 0;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-        }
-
-        .brand-header { display: flex; align-items: center; gap: 15px; }
-
-        .brand-logo-img {
-            width: 65px; height: 65px; border-radius: 18px; object-fit: cover;
-            border: 1px solid var(--border-color); box-shadow: 0 0 20px rgba(0, 0, 0, 0.6);
-        }
-
-        /* SEARCH BAR */
-        .search-box { width: 90%; max-width: 460px; margin-bottom: 14px; position: relative; }
-        .search-input {
-            width: 100%; padding: 14px 16px 14px 44px; background: var(--card-bg);
-            backdrop-filter: blur(10px); border: 1px solid var(--border-color);
-            border-radius: 16px; color: var(--text-main); box-sizing: border-box; font-size: 0.95rem;
-        }
-        .search-icon { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--text-sub); }
-
-        /* OS SELECTOR */
-        .os-selector { display: flex; gap: 12px; margin-bottom: 14px; width: 90%; max-width: 460px; }
-        .os-btn {
-            flex: 1; padding: 12px; border-radius: 14px; border: 1px solid var(--border-color);
-            background: var(--card-bg); color: var(--text-main); font-weight: 700; cursor: pointer;
-            display: flex; align-items: center; justify-content: center; gap: 8px; transition: 0.3s;
-        }
-        .os-btn.active { border-color: var(--accent-green); background: rgba(0, 230, 118, 0.15); color: var(--accent-green); box-shadow: 0 0 15px rgba(0, 230, 118, 0.2); }
-
-        /* CATEGORY CHIPS */
-        .category-nav { display: flex; gap: 10px; margin-bottom: 18px; overflow-x: auto; width: 90%; max-width: 460px; }
-        .cat-chip {
-            padding: 8px 18px; background: var(--card-bg); border: 1px solid var(--border-color);
-            border-radius: 20px; font-size: 0.85rem; color: var(--text-sub); cursor: pointer; white-space: nowrap; transition: 0.3s;
-        }
-        .cat-chip.active { background: var(--accent-green); color: #000; font-weight: 800; border-color: var(--accent-green); box-shadow: 0 0 12px rgba(0,230,118,0.4); }
-
-        /* APP CARDS */
-        .app-card {
-            width: 90%; max-width: 460px; background: var(--card-bg); backdrop-filter: blur(10px);
-            border-radius: 20px; padding: 18px; box-sizing: border-box; border: 1px solid var(--border-color);
-            margin-bottom: 14px; transition: transform 0.2s;
-        }
-        .app-card:hover { transform: translateY(-3px); border-color: rgba(255,255,255,0.2); }
-
-        /* SOCIAL MEDIA BUTTONS WITH ICONS */
-        .social-grid { display: flex; flex-direction: column; gap: 10px; }
-        .social-row { display: flex; gap: 10px; }
-        .social-item {
-            flex: 1; padding: 12px; border-radius: 14px; text-decoration: none; font-weight: 700;
-            font-size: 0.88rem; display: flex; align-items: center; justify-content: center; gap: 8px;
-            background: rgba(0,0,0,0.3); transition: 0.3s; color: #fff; border: 1px solid var(--border-color);
-        }
-        .social-item:hover { transform: translateY(-2px); filter: brightness(1.2); }
-
-        .btn-yt { border-color: #ff0000; color: #ff5555; background: rgba(255,0,0,0.1); }
-        .btn-insta { border-color: #e1306c; color: #ff6699; background: rgba(225,48,108,0.1); }
-        .btn-tw { border-color: #ffffff; color: #ffffff; background: rgba(255,255,255,0.1); }
-        .btn-fb { border-color: #1877f2; color: #4297ff; background: rgba(24,119,242,0.1); }
-        .btn-tg { border-color: #0088cc; color: #38b6ff; background: rgba(0,136,204,0.1); }
-
-        /* SECTIONS & FOOTER DETAILS */
-        .section-box {
-            width: 90%; max-width: 460px; background: var(--card-bg); backdrop-filter: blur(10px);
-            border-radius: 24px; padding: 22px; box-sizing: border-box; border: 1px solid var(--border-color); margin-bottom: 18px;
-        }
-
-        .section-title { font-size: 0.88rem; font-weight: 900; letter-spacing: 1px; color: var(--accent-green); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
-
-        /* MODALS */
-        .modal {
+        /* --- OWNER SECURITY LOCK --- */
+        #ownerLock {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.85); backdrop-filter: blur(10px);
-            display: none; justify-content: center; align-items: center; z-index: 2000;
+            background: #030303; display: flex; flex-direction: column;
+            align-items: center; justify-content: center; z-index: 999999;
+            transition: 0.5s ease;
+        }
+        .lock-card {
+            width: 100%; max-width: 380px; background: #0a0a0a;
+            border: 2px solid #ff6600; border-radius: 16px; padding: 25px;
+            text-align: center; box-shadow: 0 0 40px rgba(255,102,0,0.5);
+        }
+        .lock-img { width: 80px; height: 80px; border-radius: 50%; border: 2px solid #ff6600; object-fit: cover; margin-bottom: 12px; }
+        .lock-card h2 { font-size: 18px; color: #fff; margin-bottom: 4px; }
+        .lock-card p { font-size: 11px; color: #888; margin-bottom: 15px; }
+        .lock-input {
+            width: 100%; background: #020202; border: 1px solid #333;
+            border-radius: 8px; padding: 11px; color: #fff; font-size: 14px;
+            text-align: center; margin-bottom: 12px; outline: none;
+        }
+        .lock-input:focus { border-color: #ff6600; }
+        .lock-btn {
+            width: 100%; background: #ff6600; color: #fff; border: none;
+            padding: 11px; border-radius: 8px; font-size: 13px; font-weight: bold; cursor: pointer;
         }
 
-        .modal-content {
-            background: var(--card-solid); width: 90%; max-width: 400px;
-            border-radius: 24px; padding: 25px; box-sizing: border-box;
-            border: 1px solid var(--border-color); position: relative; color: var(--text-main);
+        /* --- SPLASH ANIMATION --- */
+        #splashScreen {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #020202; display: flex; flex-direction: column;
+            align-items: center; justify-content: center; z-index: 99999;
+            animation: hideSplash 0.7s ease 2.2s forwards;
         }
+        .splash-logo { width: 105px; height: 105px; border-radius: 50%; border: 3px solid #ff6600; object-fit: cover; box-shadow: 0 0 30px rgba(255,102,0,0.7); }
+        .splash-title { font-size: 21px; font-weight: 900; color: #fff; margin-top: 15px; letter-spacing: 2px; }
+        .splash-title span { color: #ff6600; }
+        .splash-owner { font-size: 11px; color: #ff6600; margin-top: 10px; font-weight: bold; }
+        @keyframes hideSplash { to { opacity: 0; visibility: hidden; } }
 
-        .close-btn { position: absolute; top: 14px; right: 20px; color: var(--text-sub); font-size: 1.6rem; cursor: pointer; }
-
-        /* 🚀 RED 'Y' 15-SEC PROGRESS RING */
-        .progress-box { display: flex; flex-direction: column; align-items: center; justify-content: center; margin: 18px 0; }
-        .y-symbol-ring { position: relative; width: 110px; height: 110px; display: flex; align-items: center; justify-content: center; }
-        .y-symbol-ring svg { width: 100%; height: 100%; transform: rotate(-90deg); }
-        .y-symbol-ring circle { fill: none; stroke-width: 8; stroke-linecap: round; }
-        .y-symbol-ring .bg-circle { stroke: rgba(255, 255, 255, 0.1); }
-        .y-symbol-ring .progress-circle {
-            stroke: var(--accent-red); stroke-dasharray: 283; stroke-dashoffset: 283;
-            transition: stroke-dashoffset 0.1s linear; filter: drop-shadow(0 0 10px var(--accent-red));
+        /* --- LAYOUT --- */
+        .master-container { display: flex; height: 100vh; width: 100vw; opacity: 0; transition: opacity 0.6s ease; }
+        .sidebar {
+            width: 270px; background: #070707; border-right: 1px solid #151515;
+            display: flex; flex-direction: column; padding: 18px; overflow-y: auto;
         }
-        .y-logo-inner { position: absolute; font-size: 2.2rem; font-weight: 900; color: var(--accent-red); }
+        .brand-box { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid #151515; }
+        .brand-logo { width: 38px; height: 38px; border-radius: 50%; border: 2px solid #ff6600; object-fit: cover; }
+        .brand-name { font-size: 15px; font-weight: 900; color: #fff; }
+        .brand-name span { color: #ff6600; }
 
-        .chat-box { height: 190px; background: var(--input-bg); border-radius: 14px; padding: 12px; overflow-y: auto; margin: 12px 0; display: flex; flex-direction: column; gap: 10px; }
-        .msg { padding: 9px 14px; border-radius: 12px; font-size: 0.88rem; max-width: 82%; }
-        .msg.bot { background: rgba(0, 230, 118, 0.15); color: var(--accent-green); border: 1px solid rgba(0,230,118,0.3); align-self: flex-start; }
-        .msg.user { background: var(--border-color); color: var(--text-main); align-self: flex-end; }
+        .nav-item {
+            padding: 10px 12px; margin-bottom: 5px; background: #0e0e0e; border-radius: 7px;
+            font-size: 12px; color: #aaa; cursor: pointer; border: 1px solid transparent;
+        }
+        .nav-item:hover, .nav-item.active { background: #ff6600; color: #fff; }
 
-        footer { text-align: center; font-size: 0.8rem; color: var(--text-sub); margin: 25px 0 40px 0; line-height: 1.6; }
+        .social-box {
+            background: #0a0a0a; border-radius: 7px; padding: 10px; margin-top: 12px;
+            font-size: 9px; color: #777; border: 1px solid #171717;
+        }
+        .social-box a { color: #ff6600; text-decoration: none; display: block; margin-top: 3px; }
+
+        /* CONTENT WORKSPACE */
+        .workspace { flex: 1; display: flex; flex-direction: column; background: #040404; }
+        .header {
+            height: 55px; background: #070707; border-bottom: 1px solid #151515;
+            display: flex; align-items: center; justify-content: space-between; padding: 0 25px;
+        }
+        .header-title { font-size: 12px; font-weight: bold; color: #ff6600; }
+        .support-tag { font-size: 10px; color: #999; background: #111; padding: 4px 10px; border-radius: 15px; border: 1px solid #222; }
+
+        .body-content { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; align-items: center; }
+
+        .panel {
+            width: 100%; max-width: 900px; background: #090909; border: 1px solid #161616;
+            border-radius: 12px; padding: 22px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); display: none;
+        }
+        .panel.active { display: block; }
+
+        .panel h2 { font-size: 16px; margin-bottom: 5px; color: #fff; }
+        .panel p { font-size: 11px; color: #888; margin-bottom: 12px; }
+
+        input[type="text"], textarea {
+            width: 100%; background: #020202; border: 1px solid #222;
+            border-radius: 7px; color: #fff; padding: 10px; font-size: 13px; outline: none; margin-bottom: 10px;
+        }
+        textarea { height: 85px; resize: none; }
+        input[type="text"]:focus, textarea:focus { border-color: #ff6600; }
+
+        .row-group { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-top: 5px; }
+        .studio-btn {
+            background: #ff6600; color: #fff; border: none; padding: 9px 20px;
+            font-size: 12px; font-weight: bold; border-radius: 7px; cursor: pointer;
+        }
+        .studio-btn:hover { background: #e05b00; }
+
+        .store-app-card {
+            background: #111; border: 1px solid #222; border-radius: 8px; padding: 12px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center;
+        }
+        .footer-tag { text-align: center; font-size: 10px; color: #555; margin-top: 15px; }
     </style>
 </head>
 <body>
 
-    <!-- NEON GLOW BACKGROUND EFFECT -->
-    <div class="bg-glow-1"></div>
-    <div class="bg-glow-2"></div>
-
-    <!-- 🔒 REAL GOOGLE FIREBASE ACCESS LOCK -->
-    <div id="gatekeeperLock">
+    <!-- SECURE LOCK -->
+    <div id="ownerLock">
         <div class="lock-card">
-            <img src="https://raw.githubusercontent.com/yuviyadav16/Ticbull-/main/file_0000000051ac82068c717a63b34c9d7b.png" class="lock-logo-img" alt="TICBULL Logo">
-            <h2 style="font-size: 1.8rem; margin: 0;">TICBULL</h2>
-            <p style="font-size: 0.85rem; color: var(--text-sub); margin: 6px 0 18px 0;">Verify your Gmail via Google Firebase to unlock Store.</p>
-
-            <div id="authStep">
-                <input type="text" id="userName" placeholder="Your Full Name">
-                <input type="email" id="userEmail" placeholder="Your Real Gmail Address">
-                <input type="password" id="userPass" placeholder="Set Account Password">
-                <button class="btn-green" id="sendOtpBtn" onclick="firebaseSignUpAndVerify()">Send Official Verification Mail</button>
-            </div>
-
-            <div id="checkEmailStep" style="display:none;">
-                <p style="font-size:0.9rem; color:var(--accent-green); font-weight:700;">📩 Google Verification Mail Sent!</p>
-                <p style="font-size:0.82rem; color:var(--text-sub);">Open your Gmail App, click on the Link sent by Google, then tap 'Check Verification Status' below.</p>
-                <button class="btn-green" onclick="checkIfUserVerified()">Check Verification Status</button>
-            </div>
+            <img src="9830.png" alt="Logo" class="lock-img">
+            <h2>TICBULL MASTER STUDIO</h2>
+            <p>Protected Enterprise Control. Enter Passkey.</p>
+            <input type="password" id="passInput" class="lock-input" placeholder="Enter Passkey (e.g., yuvi123)">
+            <button class="lock-btn" onclick="verifyMasterLock()">Unlock Master Studio 🔓</button>
         </div>
     </div>
 
-    <!-- 🎉 ANIMATED WELCOME SCREEN (AFTER LOGIN) -->
-    <div id="welcomeModal">
-        <div class="welcome-card">
-            <img src="https://raw.githubusercontent.com/yuviyadav16/Ticbull-/main/file_0000000051ac82068c717a63b34c9d7b.png" style="width:90px; height:90px; border-radius:22px; border:2px solid var(--accent-green); box-shadow:0 0 25px rgba(0,230,118,0.5);">
-            <h2 style="font-size: 1.8rem; margin: 15px 0 5px 0; color: #fff;">Welcome to TICBULL! 🎉</h2>
-            <p style="color: var(--accent-green); font-weight: 800; font-size: 1rem; margin: 0 0 15px 0;">Developed by mryuviyadav</p>
-            <p style="font-size: 0.85rem; color: var(--text-sub); margin-bottom: 20px;">
-                Your official gateway to premium Android & iOS Apps, Games & Educational Tools!
-            </p>
+    <!-- SPLASH -->
+    <div id="splashScreen">
+        <img src="9830.png" alt="Logo" class="splash-logo">
+        <div class="splash-title">TIC<span>BULL</span> STUDIO</div>
+        <div class="splash-owner">Founder & Owner: MrYuviYadav</div>
+    </div>
 
-            <div class="social-grid" style="margin-bottom: 20px;">
-                <div class="social-row">
-                    <a href="https://youtube.com/@mryuviyadav" target="_blank" class="social-item btn-yt"><i class="fa-brands fa-youtube"></i> YouTube</a>
-                    <a href="https://www.instagram.com/mryuvi_yadav" target="_blank" class="social-item btn-insta"><i class="fa-brands fa-instagram"></i> Instagram</a>
+    <div class="master-container" id="masterContainer">
+        <!-- SIDEBAR -->
+        <div class="sidebar">
+            <div class="brand-box">
+                <img src="9830.png" alt="Logo" class="brand-logo">
+                <div class="brand-name">TIC<span>BULL</span></div>
+            </div>
+
+            <div class="nav-item active" onclick="switchTab(0)">🚀 App & Web Generator Engine</div>
+            <div class="nav-item" onclick="switchTab(1)">🏪 TicBull Private Store Vault</div>
+            <div class="nav-item" onclick="switchTab(2)">⚙️ Studio Control & Settings</div>
+
+            <div class="social-box">
+                <b>Official & Support Links:</b>
+                <a href="https://youtube.com/@mryuviyadav" target="_blank">YouTube: @mryuviyadav</a>
+                <a href="https://t.me/ticbullteam" target="_blank">Telegram: @ticbullteam</a>
+                <a href="https://www.instagram.com/ticbull" target="_blank">Instagram: @ticbull</a>
+                <a href="https://x.com/mryuviyadav" target="_blank">X (Twitter): @mryuviyadav</a>
+                <a href="https://instagram.com/mryuvi_yadav" target="_blank">Insta Personal: @mryuvi_yadav</a>
+            </div>
+
+            <div style="flex-grow:1;"></div>
+            <div style="font-size:9px; color:#555; text-align:center;">Owner: MrYuviYadav</div>
+        </div>
+
+        <!-- CONTENT -->
+        <div class="workspace">
+            <div class="header">
+                <div class="header-title" id="headerTitle">TICBULL APP & WEB GENERATOR ENGINE</div>
+                <div class="support-tag">📧 ticbull.support@gmail.com</div>
+            </div>
+
+            <div class="body-content">
+                
+                <!-- TAB 0: GENERATOR & RUNTIME ENGINE -->
+                <div class="panel active" id="tab0">
+                    <h2>TicBull Application & Website Creator Engine</h2>
+                    <p>Enter your app details. The studio will build its functional runtime engine, embed your logo, watermark, and all official social links automatically.</p>
+
+                    <label style="font-size:11px; color:#aaa;">App / Website Name:</label>
+                    <input type="text" id="newAppName" placeholder="e.g., Biology NEET AI Tutor Pro">
+
+                    <label style="font-size:11px; color:#aaa;">Core Features & Logic:</label>
+                    <textarea id="newAppDesc" placeholder="Describe functionality, interactive features, runtime logic, etc..."></textarea>
+
+                    <div class="row-group">
+                        <div style="font-size:11px; color:#00ff66;">Engine Status: Ready to Auto-Inject Links & Watermark</div>
+                        <button class="studio-btn" onclick="publishToTicBullStore()">Build & Publish to Private Store 🚀</button>
+                    </div>
                 </div>
-                <div class="social-row">
-                    <a href="https://x.com/mryuviyadav" target="_blank" class="social-item btn-tw"><i class="fa-brands fa-x-twitter"></i> Twitter/X</a>
-                    <a href="https://facebook.com/mryuviyadav" target="_blank" class="social-item btn-fb"><i class="fa-brands fa-facebook"></i> Facebook</a>
+
+                <!-- TAB 1: PRIVATE STORE VAULT -->
+                <div class="panel" id="tab1">
+                    <h2>TicBull Private App Store & Vault</h2>
+                    <p>Manage, run, and update all applications built through your studio. Complete control in your hands.</p>
+                    
+                    <div id="storeAppsList">
+                        <div class="store-app-card">
+                            <div>
+                                <b style="color:#ff6600; font-size:13px;">TicBull Core Studio Engine v3.0</b>
+                                <p style="font-size:10px; color:#888; margin-top:2px;">Status: Live & Fully Operational | Owner: MrYuviYadav</p>
+                            </div>
+                            <span style="background:rgba(0,255,100,0.1); color:#00ff66; border:1px solid #00ff66; padding:4px 10px; border-radius:12px; font-size:10px; font-weight:bold;">Active</span>
+                        </div>
+                    </div>
                 </div>
-                <div class="social-row">
-                    <a href="https://t.me/mryuviyadav" target="_blank" class="social-item btn-tg"><i class="fa-paper-plane"></i> Telegram Channel</a>
+
+                <!-- TAB 2: STUDIO SETTINGS -->
+                <div class="panel" id="tab2">
+                    <h2>Studio Self-Management & Control Engine</h2>
+                    <p>Configure master parameters and system rules for your company studio.</p>
+                    <textarea style="height:100px; font-family:monospace; color:#00ff66;">// TicBull Master Enterprise Config
+const PLATFORM = "TicBull Self-Hosted Store";
+const OWNER = "MrYuviYadav";
+const YOUTUBE = "https://youtube.com/@mryuviyadav";
+const TELEGRAM = "https://t.me/ticbullteam";
+const INSTAGRAM = "https://www.instagram.com/ticbull";
+const SUPPORT = "ticbull.support@gmail.com";</textarea>
+                    <div class="row-group">
+                        <div style="font-size:10px; color:#ff6600;">System Protected</div>
+                        <button class="studio-btn" onclick="alert('Studio configuration saved successfully!')">Save Master Config 🔄</button>
+                    </div>
                 </div>
-            </div>
 
-            <button class="btn-green" onclick="enterStore()">🚀 Enter TICBULL Store</button>
-        </div>
-    </div>
-
-    <!-- MAIN NAVBAR -->
-    <header>
-        <div style="font-weight:900; font-size:1.3rem; color:var(--accent-green); display:flex; align-items:center; gap:8px;">
-            <i class="fa-solid fa-bolt"></i> TICBULL
-        </div>
-        <div class="header-actions" style="display:flex; align-items:center; gap:12px;">
-            <div class="user-badge" id="userBadge"><i class="fa-solid fa-circle-check"></i> Verified</div>
-            <button class="icon-btn" onclick="openSettings()"><i class="fa-solid fa-ellipsis-vertical"></i></button>
-        </div>
-    </header>
-
-    <!-- HERO STORE BANNER -->
-    <div class="hero-banner">
-        <div class="brand-header">
-            <img src="https://raw.githubusercontent.com/yuviyadav16/Ticbull-/main/file_0000000051ac82068c717a63b34c9d7b.png" class="brand-logo-img" alt="TICBULL Logo">
-            <div class="brand-text">
-                <h2 style="margin:0; font-size:1.3rem;">TICBULL App Store</h2>
-                <p style="margin:3px 0 0 0; font-size:0.82rem; color:var(--text-sub);">The Father of Play Store & App Store</p>
-            </div>
-        </div>
-        <button class="btn-green" onclick="openDownloadModal(1)">📱 Install TICBULL App</button>
-    </div>
-
-    <!-- SEARCH BAR -->
-    <div class="search-box">
-        <i class="fa-solid fa-magnifying-glass search-icon"></i>
-        <input type="text" class="search-input" id="searchInput" placeholder="Search apps, games, education..." oninput="handleSearch()">
-    </div>
-
-    <!-- OS SELECTOR TAB -->
-    <div class="os-selector">
-        <button class="os-btn active" id="btnAndroid" onclick="selectOS('android')"><i class="fa-brands fa-android"></i> 🤖 Android</button>
-        <button class="os-btn" id="btnIos" onclick="selectOS('ios')"><i class="fa-brands fa-apple"></i> 🍎 iOS (iPhone)</button>
-    </div>
-
-    <!-- CATEGORY FILTERS -->
-    <div class="category-nav">
-        <div class="cat-chip active" onclick="filterCat('all')">🔥 All</div>
-        <div class="cat-chip" onclick="filterCat('apps')">📱 Apps</div>
-        <div class="cat-chip" onclick="filterCat('games')">🎮 Games</div>
-        <div class="cat-chip" onclick="filterCat('education')">📚 Education</div>
-    </div>
-
-    <!-- APP CARDS CONTAINER -->
-    <div id="storeContent" style="width:100%; display:flex; flex-direction:column; align-items:center;"></div>
-
-    <!-- DETAILS & ABOUT DEVELOPER SECTION (SCROLLABLE FOOTER DETAILS) -->
-    <div class="section-box">
-        <div class="section-title"><i class="fa-solid fa-user-gear"></i> ABOUT THE DEVELOPER (MRYUVIYADAV)</div>
-        <p style="font-size:0.88rem; color:var(--text-sub); line-height:1.6; margin-top:0;">
-            Hello! I am <b>mryuviyadav</b>, the creator and developer of <b>TICBULL</b>. TICBULL was built with a vision to provide a safe, fast, and malware-free marketplace for Android & iOS users worldwide.
-        </p>
-        <p style="font-size:0.85rem; color:var(--text-sub); line-height:1.6;">
-            💡 <b>Why TICBULL?</b><br>
-            • 100% Verified & Virus-Free Applications<br>
-            • Ultra High-Speed Red 'Y' Loader Integration<br>
-            • Seamless Cross-Platform Access for Android & iPhone
-        </p>
-    </div>
-
-    <!-- FOLLOW OWNER SOCIAL MEDIA SECTION -->
-    <div class="section-box">
-        <div class="section-title"><i class="fa-solid fa-hashtag"></i> CONNECT ON SOCIAL MEDIA</div>
-        <div class="social-grid">
-            <div class="social-row">
-                <a href="https://youtube.com/@mryuviyadav" target="_blank" class="social-item btn-yt"><i class="fa-brands fa-youtube"></i> YouTube</a>
-                <a href="https://www.instagram.com/mryuvi_yadav" target="_blank" class="social-item btn-insta"><i class="fa-brands fa-instagram"></i> Instagram</a>
-            </div>
-            <div class="social-row">
-                <a href="https://x.com/mryuviyadav" target="_blank" class="social-item btn-tw"><i class="fa-brands fa-x-twitter"></i> Twitter / X</a>
-                <a href="https://facebook.com/mryuviyadav" target="_blank" class="social-item btn-fb"><i class="fa-brands fa-facebook"></i> Facebook</a>
-            </div>
-            <div class="social-row">
-                <a href="https://t.me/mryuviyadav" target="_blank" class="social-item btn-tg"><i class="fa-paper-plane"></i> Telegram Channel</a>
-                <a href="https://t.me/ticbullteam" target="_blank" class="social-item btn-tg"><i class="fa-solid fa-users"></i> Telegram Team</a>
-            </div>
-        </div>
-    </div>
-
-    <!-- CUSTOMER SUPPORT SECTION -->
-    <div class="section-box">
-        <div class="section-title"><i class="fa-solid fa-headset"></i> CUSTOMER SUPPORT & HELP</div>
-        <p style="font-size:0.85rem; color:var(--text-sub); margin-top:0; margin-bottom:12px;">
-            Facing any issue or have queries? Contact our support team directly.
-        </p>
-        <a href="mailto:Ticbull.support@gmail.com" class="social-item btn-green" style="text-decoration:none; text-align:center;">
-            ✉️ Email Support: Ticbull.support@gmail.com
-        </a>
-    </div>
-
-    <footer>
-        © 2026 <b>TICBULL</b>. All rights reserved.<br>
-        Designed & Developed with ❤️ by <span style="color:var(--accent-green); font-weight:800;">mryuviyadav</span>
-    </footer>
-
-    <!-- RED 'Y' 15-SECOND DOWNLOAD MODAL -->
-    <div class="modal" id="downloadModal">
-        <div class="modal-content" style="text-align:center;">
-            <span class="close-btn" onclick="closeModal('downloadModal')">&times;</span>
-            <h2 id="modalAppName" style="margin-bottom:2px;">App Name</h2>
-            <p id="modalAppDesc" style="font-size:0.85rem; color:var(--text-sub); margin-top:0;">Description</p>
-            <div style="font-size:0.8rem; color:var(--accent-green); margin-bottom:10px;">🛡️ 100% Malware-Free & Verified</div>
-
-            <div class="progress-box">
-                <div class="y-symbol-ring">
-                    <svg>
-                        <circle class="bg-circle" cx="55" cy="55" r="48"></circle>
-                        <circle class="progress-circle" id="redProgressRing" cx="55" cy="55" r="48"></circle>
-                    </svg>
-                    <div class="y-logo-inner">Y</div>
+                <div class="footer-tag">
+                    TicBull Master Enterprise Store &copy; 2026. Founded & Managed by MrYuviYadav. All Rights Reserved.
                 </div>
-                <div style="margin-top:12px;">
-                    <div id="progressPercent" style="font-size:1.4rem; font-weight:900; color:var(--accent-red);">0%</div>
-                    <div id="downloadSpeed" style="font-size:0.82rem; color:var(--text-sub); margin-top:3px;">Click Start to Download</div>
-                </div>
-            </div>
-            <button class="btn-green" id="startDownloadBtn" onclick="startRedYDownload15Sec()">Start High-Speed Download</button>
-        </div>
-    </div>
-
-    <!-- 3-DOT SETTINGS & AI CHAT MODAL -->
-    <div class="modal" id="settingsModal">
-        <div class="modal-content">
-            <span class="close-btn" onclick="closeModal('settingsModal')">&times;</span>
-            <h2>⚙️ Store Settings</h2>
-            <div style="display:flex; justify-content:space-between; align-items:center; margin:15px 0;">
-                <span>🔊 UI Sound Effects</span>
-                <input type="checkbox" id="soundToggle" checked style="width:20px; height:20px;">
-            </div>
-            <hr style="border-color: var(--border-color);">
-            <h3>🤖 TICBULL AI Assistant</h3>
-            <div class="chat-box" id="chatBox">
-                <div class="msg bot">Hello! Main TICBULL AI Assistant hoon. Developed by mryuviyadav! Poochiye aapka kya sawaal hai?</div>
-            </div>
-            <div style="display:flex; gap:6px;">
-                <input type="text" id="chatInput" placeholder="Ask AI something..." style="margin:0;">
-                <button style="background:var(--accent-green); border:none; padding:10px 16px; border-radius:12px; font-weight:bold; cursor:pointer;" onclick="sendAiMsg()">Send</button>
             </div>
         </div>
     </div>
 
     <script>
-        // OFFICIAL FIREBASE CONFIGURATION
-        const firebaseConfig = {
-            apiKey: "AIzaSyATGn2GApIo0TtVcEJqD7_8Si0gyny5LLg",
-            authDomain: "ticbull-f767b.firebaseapp.com",
-            projectId: "ticbull-f767b",
-            storageBucket: "ticbull-f767b.firebasestorage.app",
-            messagingSenderId: "11798716899",
-            appId: "1:11798716899:web:d136c7a46199d1864c00d6"
-        };
-
-        firebase.initializeApp(firebaseConfig);
-        const auth = firebase.auth();
-
-        let currentOS = 'android';
-        let currentCategory = 'all';
-        let activeAppDownload = null;
-
-        const appsData = [
-            { id: 1, name: "TICBULL Official App", cat: "apps", os: "android", desc: "Native Official Android Market by mryuviyadav.", file: "app.apk" },
-            { id: 2, name: "TICBULL Game Turbo", cat: "games", os: "android", desc: "Ultra FPS Booster for Android Gaming.", file: "app.apk" },
-            { id: 3, name: "TICBULL EduHub Pro", cat: "education", os: "android", desc: "Learn Coding & App Development.", file: "app.apk" },
-            { id: 4, name: "TICBULL iOS WebApp", cat: "apps", os: "ios", desc: "Native WebApp Experience for iPhone Users.", link: "#" },
-            { id: 5, name: "TICBULL iOS Gaming Suite", cat: "games", os: "ios", desc: "Premium Web Games Suite for iPhone.", link: "#" },
-            { id: 6, name: "TICBULL iOS Edu", cat: "education", os: "ios", desc: "Educational Learning Suite for iOS.", link: "#" }
-        ];
-
-        auth.onAuthStateChanged((user) => {
-            if (user && user.emailVerified) {
-                document.getElementById('gatekeeperLock').style.display = 'none';
-                document.getElementById('welcomeModal').style.display = 'flex';
-                document.getElementById('userBadge').innerHTML = `<i class="fa-solid fa-circle-check"></i> ${user.displayName || user.email}`;
-            }
-        });
-
-        function firebaseSignUpAndVerify() {
-            const name = document.getElementById('userName').value.trim();
-            const email = document.getElementById('userEmail').value.trim();
-            const pass = document.getElementById('userPass').value;
-            const btn = document.getElementById('sendOtpBtn');
-
-            if(!name || !email || !pass) {
-                alert("Please fill Name, Email and Password!");
-                return;
-            }
-
-            btn.innerText = "Sending Real Google Mail...";
-            btn.disabled = true;
-
-            auth.createUserWithEmailAndPassword(email, pass)
-                .then((userCredential) => {
-                    const user = userCredential.user;
-                    user.updateProfile({ displayName: name });
-                    user.sendEmailVerification().then(() => {
-                        document.getElementById('authStep').style.display = 'none';
-                        document.getElementById('checkEmailStep').style.display = 'block';
-                        alert(`Real Google Verification Link sent to ${email}! Check Gmail Inbox/Spam.`);
-                    });
-                })
-                .catch((error) => {
-                    alert("Auth Alert: " + error.message);
-                    btn.innerText = "Send Official Verification Mail";
-                    btn.disabled = false;
-                });
-        }
-
-        function checkIfUserVerified() {
-            const user = auth.currentUser;
-            if (user) {
-                user.reload().then(() => {
-                    if (user.emailVerified) {
-                        document.getElementById('gatekeeperLock').style.display = 'none';
-                        document.getElementById('welcomeModal').style.display = 'flex';
-                        document.getElementById('userBadge').innerHTML = `<i class="fa-solid fa-circle-check"></i> ${user.displayName || user.email}`;
-                    } else {
-                        alert("Email is not verified yet! Please click the link sent to your Gmail Inbox.");
-                    }
-                });
+        function verifyMasterLock() {
+            const pass = document.getElementById("passInput").value;
+            if(pass === "yuvi123" || pass === "mryuviyadav") {
+                document.getElementById("ownerLock").style.opacity = "0";
+                setTimeout(() => {
+                    document.getElementById("ownerLock").style.display = "none";
+                    document.getElementById("masterContainer").style.opacity = "1";
+                }, 500);
+            } else {
+                alert("Galat Passkey! Access restricted to MrYuviYadav.");
             }
         }
 
-        function enterStore() {
-            document.getElementById('welcomeModal').style.display = 'none';
-        }
-
-        function renderStore() {
-            const container = document.getElementById('storeContent');
-            const searchQuery = document.getElementById('searchInput').value.toLowerCase();
-            container.innerHTML = '';
-
-            const filtered = appsData.filter(app => {
-                const matchOS = app.os === currentOS;
-                const matchCat = currentCategory === 'all' || app.cat === currentCategory;
-                const matchSearch = app.name.toLowerCase().includes(searchQuery) || app.desc.toLowerCase().includes(searchQuery);
-                return matchOS && matchCat && matchSearch;
-            });
-
-            if(filtered.length === 0) {
-                container.innerHTML = `<p style="color:var(--text-sub); text-align:center; margin:20px;">No app available in this section yet.</p>`;
-                return;
-            }
-
-            filtered.forEach(app => {
-                const card = document.createElement('div');
-                card.className = 'app-card';
-                card.innerHTML = `
-                    <div style="display:flex; justify-content:space-between; align-items:center;">
-                        <div>
-                            <h3 style="margin:0 0 4px 0; font-size:1.1rem;">${app.name}</h3>
-                            <p style="margin:0; font-size:0.85rem; color:var(--text-sub);">${app.desc}</p>
-                        </div>
-                        <span style="font-size:0.75rem; background:rgba(0,230,118,0.15); color:var(--accent-green); padding:4px 10px; border-radius:12px; font-weight:bold;">
-                            ${app.os.toUpperCase()}
-                        </span>
-                    </div>
-                    <button class="btn-green" style="margin-top:12px;" onclick="openDownloadModal(${app.id})">
-                        ${currentOS === 'android' ? '📥 Download APK' : '🍎 Get iOS App'}
-                    </button>
-                `;
-                container.appendChild(card);
-            });
-        }
-
-        function handleSearch() { renderStore(); }
-
-        function selectOS(os) {
-            currentOS = os;
-            document.getElementById('btnAndroid').classList.toggle('active', os === 'android');
-            document.getElementById('btnIos').classList.toggle('active', os === 'ios');
-            renderStore();
-        }
-
-        function filterCat(cat) {
-            currentCategory = cat;
-            document.querySelectorAll('.cat-chip').forEach(el => el.classList.remove('active'));
-            event.target.classList.add('active');
-            renderStore();
-        }
-
-        function openDownloadModal(appId) {
-            if(currentOS === 'ios') {
-                alert("🍎 iPhone Installation Guide:\n\n1. Tap Safari 'Share' button at bottom.\n2. Select 'Add to Home Screen'.\n3. Enjoy TICBULL Native WebApp!");
-                return;
-            }
-
-            activeAppDownload = appsData.find(a => a.id === appId) || appsData[0];
-            document.getElementById('modalAppName').innerText = activeAppDownload.name;
-            document.getElementById('modalAppDesc').innerText = activeAppDownload.desc;
-
-            updateRedRing(0);
-            document.getElementById('progressPercent').innerText = "0%";
-            document.getElementById('downloadSpeed').innerText = "Click Start to Download";
-            document.getElementById('startDownloadBtn').style.display = 'block';
-
-            document.getElementById('downloadModal').style.display = 'flex';
-        }
-
-        function updateRedRing(percent) {
-            const ring = document.getElementById('redProgressRing');
-            const circumference = 283;
-            const offset = circumference - (percent / 100) * circumference;
-            ring.style.strokeDashoffset = offset;
-        }
-
-        // ⏱️ EXACT 15-SECOND DOWNLOAD LOADER
-        function startRedYDownload15Sec() {
-            document.getElementById('startDownloadBtn').style.display = 'none';
-            let elapsed = 0;
-            const totalTime = 15; // 15 Seconds
+        function switchTab(index) {
+            const panels = document.querySelectorAll('.panel');
+            const navs = document.querySelectorAll('.nav-item');
             
-            const interval = setInterval(() => {
-                elapsed += 0.1;
-                let progress = Math.floor((elapsed / totalTime) * 100);
-                const speed = (Math.random() * 2 + 4.0).toFixed(1);
+            panels.forEach(p => p.classList.remove('active'));
+            navs.forEach(n => n.classList.remove('active'));
 
-                if (progress >= 100) {
-                    progress = 100;
-                    clearInterval(interval);
-                    updateRedRing(100);
-                    document.getElementById('progressPercent').innerText = "100%";
-                    document.getElementById('progressPercent').style.color = "var(--accent-green)";
-                    document.getElementById('downloadSpeed').innerText = "✅ Download Complete! Starting Installation...";
-                    setTimeout(() => {
-                        window.location.href = activeAppDownload.file || "app.apk";
-                        closeModal('downloadModal');
-                    }, 1200);
-                } else {
-                    updateRedRing(progress);
-                    document.getElementById('progressPercent').innerText = `${progress}%`;
-                    document.getElementById('downloadSpeed').innerText = `Speed: ${speed} MB/s | Downloading...`;
-                }
-            }, 100);
+            panels[index].classList.add('active');
+            navs[index].classList.add('active');
+
+            const titles = [
+                "TICBULL APP & WEB GENERATOR ENGINE",
+                "TICBULL PRIVATE APP STORE & VAULT",
+                "TICBULL STUDIO CONTROL & SETTINGS"
+            ];
+            document.getElementById("headerTitle").innerText = titles[index];
         }
 
-        function openSettings() { document.getElementById('settingsModal').style.display = 'flex'; }
-        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+        function publishToTicBullStore() {
+            const name = document.getElementById("newAppName").value;
+            const desc = document.getElementById("newAppDesc").value;
+            const storeList = document.getElementById("storeAppsList");
 
-        function sendAiMsg() {
-            const input = document.getElementById('chatInput');
-            const box = document.getElementById('chatBox');
-            if(!input.value) return;
+            if(!name.trim() || !desc.trim()) {
+                alert("Pehle App ka Naam aur Description dono bhariye!");
+                return;
+            }
 
-            const userText = input.value;
-            box.innerHTML += `<div class="msg user">${userText}</div>`;
-            input.value = '';
+            const appCard = document.createElement("div");
+            appCard.className = "store-app-card";
+            appCard.innerHTML = `
+                <div>
+                    <b style="color:#ff6600; font-size:13px;">📱 ${name}</b>
+                    <p style="font-size:10px; color:#888; margin-top:2px;">${desc}</p>
+                    <p style="font-size:9px; color:#00ff66; margin-top:2px;">Watermark: MrYuviYadav | Links: YT @mryuviyadav, TG @ticbullteam, IG @ticbull | Support: ticbull.support@gmail.com</p>
+                </div>
+                <span style="background:rgba(255,102,0,0.1); color:#ff6600; border:1px solid #ff6600; padding:4px 10px; border-radius:12px; font-size:10px; font-weight:bold;">Published to Store</span>
+            `;
 
-            setTimeout(() => {
-                let botReply = "TICBULL is designed and developed by mryuviyadav.";
-                const query = userText.toLowerCase();
-
-                if(query.includes('who') || query.includes('owner') || query.includes('maker') || query.includes('banya')) {
-                    botReply = "TICBULL was designed and developed by mryuviyadav!";
-                } else if(query.includes('support') || query.includes('contact') || query.includes('email')) {
-                    botReply = "Official Support Email: Ticbull.support@gmail.com";
-                }
-
-                box.innerHTML += `<div class="msg bot">${botReply}</div>`;
-                box.scrollTop = box.scrollHeight;
-            }, 500);
+            storeList.prepend(appCard);
+            alert(`"${name}" successfully built and published to your TicBull Private Store!`);
+            
+            document.getElementById("newAppName").value = "";
+            document.getElementById("newAppDesc").value = "";
+            switchTab(1);
         }
-
-        renderStore();
     </script>
 </body>
 </html>
